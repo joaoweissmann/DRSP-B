@@ -1,2 +1,2 @@
-# synthetic_instance_generator
-A stochastic instance generator for the oil and gas exploration projects optimization problem
+# projects_optimization
+A set of exact and heuristic algorithms for optimize the choice of best projects under some constraints
