@@ -30,6 +30,15 @@ execute:
 	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o cplex_exemplo cplex_exemplo.o $(CCLNFLAGS)
 	#$(run) ./cplex_exemplo
 
-	$(CCC) -c $(CCFLAGS) knapsack_solver_CPLEX.cpp -o knapsack_solver_CPLEX.o
-	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o knapsack_solver_CPLEX knapsack_solver_CPLEX.o $(CCLNFLAGS)
-	$(run) ./knapsack_solver_CPLEX
+	#$(CCC) -c $(CCFLAGS) knapsack_solver_CPLEX.cpp -o knapsack_solver_CPLEX.o
+	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o knapsack_solver_CPLEX knapsack_solver_CPLEX.o $(CCLNFLAGS)
+	#$(run) ./knapsack_solver_CPLEX
+
+	#$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_CTP.cpp -o solver_mestrado_CPLEX_CTP.o
+	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_CTP solver_mestrado_CPLEX_CTP.o $(CCLNFLAGS)
+	#$(run) ./solver_mestrado_CPLEX_CTP
+
+	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_TI.cpp -o solver_mestrado_CPLEX_TI.o
+	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_TI solver_mestrado_CPLEX_TI.o $(CCLNFLAGS)
+	$(run) ./solver_mestrado_CPLEX_TI
+
