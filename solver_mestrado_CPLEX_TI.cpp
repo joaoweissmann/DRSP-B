@@ -22,7 +22,7 @@ int main()
     IloEnv env;
     try
     {
-        string filename="instancia_mestrado.dat";
+        string filename="instancia_300projetos_2sondas.dat";
         ifstream file;
         
         // reading data from file
@@ -41,7 +41,8 @@ int main()
         IloNumArray geracao(env), migracao(env), reservatorio(env), geometria(env), retencao(env), pshc(env);
         IloNumArray medias_volume_condicional(env), medias_volume_incondicional(env);
         IloNumArray medias_vpl_condicional(env), medias_vpl_incondicional(env);
-        IloNumArray custos(env), tempos_exec(env), inicio_janela(env), final_janela(env);
+        IloNumArray custos(env);
+        IloIntArray tempos_exec(env), inicio_janela(env), final_janela(env);
         IloNumArray sondas_x(env), sondas_y(env);
         file >> n_projetos >> capital_total;
         file >> coords_x >> coords_y; 
@@ -54,9 +55,22 @@ int main()
         file >> custos >> tempos_exec >> inicio_janela >> final_janela;
         file >> n_sondas >> sondas_x >> sondas_y;
         t_init = 0;
-        t_final = 365*5;
-        n_periodos = t_final - t_init + 1;
+        t_final = 5 * 12 * 4 * 7;
+        IloInt delta = 7 * 4 * 3;
+        n_periodos = ((t_final - t_init)/delta) + 1;
         // end reading data
+
+        // convertendo de dias para periodos
+        if (delta != 1)
+        {
+            for (int j=0; j<n_projetos; j++)
+            {
+                tempos_exec[j] = (tempos_exec[j] / delta) + 1;
+                inicio_janela[j] = inicio_janela[j] / delta;
+                final_janela[j] = final_janela[j] / delta;
+            }
+            t_final = t_final / delta;
+        }
 
         // diplay data
         cout << "A instância tem:" << endl;
@@ -87,11 +101,12 @@ int main()
         cout << "Número de sondas igual a " << n_sondas << endl;
         cout << "Coordenaxas x das sondas iguais a " << sondas_x << endl;
         cout << "Coordenadas y das sondas iguais a " << sondas_y << endl;
+        cout << "tempo inicial: " << t_init << " tempo final: " << t_final << " e quantidade de periodos: " << n_periodos << endl;
         // end display data
         
         IloInt lag;
         lag = n_sondas;
-
+        
         // definindo s[i][j]
         NumMatrix2D s(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
@@ -111,39 +126,24 @@ int main()
                 {
                     dist = sqrt(pow(coords_x[i-lag] - coords_x[j], 2)+pow(coords_y[i-lag] - coords_y[j], 2));
                 }
-                s[i][j] = dist;
+                if (delta != 1)
+                {
+                    s[i][j] = (dist / delta) + 1;
+                }
+                else
+                {
+                    s[i][j] = dist;
+                }
             }
         }
         cout << "s[i][j] tem tamanho: " << s.getSize() << " por " << s[1].getSize() << endl;
         cout << "s[i][j]: " << s << endl;
-
-        // definindo BigM[i][j]
-        NumMatrix2D BigM(env, n_projetos+n_sondas);
-        for (int i=0; i<n_projetos+n_sondas; i++)
-        {
-            BigM[i] = IloNumArray(env, n_projetos);
-        }
-        for (int i=0; i<n_projetos+n_sondas; i++)
-        {
-            for (int j=0; j<n_projetos; j++)
-            {
-                if (i < n_sondas)
-                {
-                    BigM[i][j] = s[i][j] + tempos_exec[j]; // - inicio_janela[j];
-                }
-                else
-                {
-                    BigM[i][j] = final_janela[i-lag] + s[i][j] + tempos_exec[j]; // - inicio_janela[j];
-                }
-            }
-        }
-        cout << "BigM[i][j] tem tamanho: " << BigM.getSize() << " por " << BigM[1].getSize() << endl;
-        cout << "BigM[i][j]: " << BigM << endl;
-    
+        
         // instanciando o modelo
         IloModel model(env);
-        
+
         // criando variáveis de decisão ---------------------------------------------
+        
         // criando a variável de decisão x_{imt}
         NumVarMatrix3D x_var(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
@@ -175,6 +175,7 @@ int main()
                 }
             }
         }
+        
         // criando a variável de decisão y_{j}
         IloNumVarArray y_var(env, n_projetos, 0, 1);
         for (int j=0; j<n_projetos; j++)
@@ -327,9 +328,6 @@ int main()
             expr6.end();
         }
         
-        /*
-        */
-
         // criando a função objetivo
         IloExpr expro(env);
         for (int j=0; j<n_projetos; j++)
@@ -349,7 +347,7 @@ int main()
         
         // printando valor obtido para a função objetivo
         env.out() << "Solution value  = " << cplex.getObjValue() << endl;
-        
+               
         // pegando valor das variáveis de decisão
         NumMatrix3D x_vals(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)

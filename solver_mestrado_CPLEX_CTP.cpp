@@ -22,7 +22,7 @@ int main()
     IloEnv env;
     try
     {
-        string filename="instancia_mestrado.dat";
+        string filename="instancia_50projetos_2sondas.dat";
         ifstream file;
         
         // reading data from file
@@ -54,9 +54,22 @@ int main()
         file >> custos >> tempos_exec >> inicio_janela >> final_janela;
         file >> n_sondas >> sondas_x >> sondas_y;
         t_init = 0;
-        t_final = 365*5;
-        n_periodos = t_final - t_init + 1;
+        t_final = 5 * 12 * 4 * 7;
+        IloInt delta = 7 * 4 * 3;
+        n_periodos = ((t_final - t_init)/delta) + 1;
         // end reading data
+
+        // convertendo de dias para periodos
+        if (delta != 1)
+        {
+            for (int j=0; j<n_projetos; j++)
+            {
+                tempos_exec[j] = (tempos_exec[j] / delta) + 1;
+                inicio_janela[j] = inicio_janela[j] / delta;
+                final_janela[j] = final_janela[j] / delta;
+            }
+            t_final = t_final / delta;
+        }
 
         // diplay data
         cout << "A instância tem:" << endl;
@@ -111,7 +124,14 @@ int main()
                 {
                     dist = sqrt(pow(coords_x[i-lag] - coords_x[j], 2)+pow(coords_y[i-lag] - coords_y[j], 2));
                 }
-                s[i][j] = dist;
+                if (delta != 1)
+                {
+                    s[i][j] = (dist / delta) + 1;
+                }
+                else
+                {
+                    s[i][j] = dist;
+                }            
             }
         }
         cout << "s[i][j] tem tamanho: " << s.getSize() << " por " << s[1].getSize() << endl;
@@ -139,7 +159,7 @@ int main()
         }
         cout << "BigM[i][j] tem tamanho: " << BigM.getSize() << " por " << BigM[1].getSize() << endl;
         cout << "BigM[i][j]: " << BigM << endl;
-    
+
         // instanciando o modelo
         IloModel model(env);
         
@@ -336,8 +356,11 @@ int main()
                         IloExpr expr8(env);
                         expr8 += c_var[j+lag][m] - (c_var[i][m] + s[i][j] + tempos_exec[j] - BigM[i][j]*(1-x_var[i][j][m])) ;
                         IloConstraint c8(expr8 >= 0);
-                        c8.setName("tmz escalonamento temporal");
+                        c8.setName("tmz escalonamento temporal lowerbound");
                         model.add(c8);
+                        //IloConstraint c91(expr8 <= final_janela[j]);
+                        //c91.setName("tmz escalonamento temporal upperbound");
+                        //model.add(c91);
                         expr8.end();
                     }
                 }
@@ -358,8 +381,11 @@ int main()
                     }
                 }
                 IloConstraint c9(expr9 >= 0);
-                c9.setName("janela de tempo");
+                c9.setName("janela de tempo lowerbound");
                 model.add(c9);
+                //IloConstraint c92(expr9 <= final_janela[j]);
+                //c92.setName("janela de tempo upperbound");
+                //model.add(c92);
                 expr9.end();
             }
         }
@@ -377,8 +403,11 @@ int main()
                     }
                 }
                 IloConstraint c10(expr10 >= 0);
-                c10.setName("janela de tempo");
+                c10.setName("janela de tempo lowerbound");
                 model.add(c10);
+                //IloConstraint c93(expr10 <= final_janela[j]);
+                //c93.setName("janela de tempo upperbound");
+                //model.add(c93);
                 expr10.end();
             }
         }
