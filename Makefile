@@ -23,22 +23,39 @@ CCLNFLAGS = -lconcert -lilocplex -l$(CPLEXLIB) -lm -lpthread -ldl
 CONCERTINCDIR = $(CONCERTDIR)/include
 CPLEXINCDIR   = $(CPLEXDIR)/include
 
-CCFLAGS = $(CCOPT) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) 
+CCFLAGS = $(CCOPT) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR)
 
-execute:
-	#$(CCC) -c $(CCFLAGS) cplex_exemplo.cpp -o cplex_exemplo.o
-	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o cplex_exemplo cplex_exemplo.o $(CCLNFLAGS)
-	#$(run) ./cplex_exemplo
+# =====================================
 
-	#$(CCC) -c $(CCFLAGS) knapsack_solver_CPLEX.cpp -o knapsack_solver_CPLEX.o
-	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o knapsack_solver_CPLEX knapsack_solver_CPLEX.o $(CCLNFLAGS)
-	#$(run) ./knapsack_solver_CPLEX
+all:
+	ctp
+	ti
 
-	#$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_CTP.cpp -o solver_mestrado_CPLEX_CTP.o
-	#$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_CTP solver_mestrado_CPLEX_CTP.o $(CCLNFLAGS)
-	#$(run) ./solver_mestrado_CPLEX_CTP
+# =====================================
 
-	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_TI.cpp -o solver_mestrado_CPLEX_TI.o
-	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_TI solver_mestrado_CPLEX_TI.o $(CCLNFLAGS)
-	$(run) ./solver_mestrado_CPLEX_TI
+ctp: solver_mestrado_CPLEX_CTP
+	echo $(ARGS) | $(run) ./solver_mestrado_CPLEX_CTP
 
+solver_mestrado_CPLEX_CTP: solver_mestrado_CPLEX_CTP.o
+	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_CTP solver_mestrado_CPLEX_CTP.o $(CCLNFLAGS)
+
+solver_mestrado_CPLEX_CTP.o: solver_mestrado_CPLEX_CTP.cpp
+	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_CTP.cpp -o solver_mestrado_CPLEX_CTP.o
+
+# ======================================
+
+ti: solver_mestrado_CPLEX_TI
+	echo $(ARGS) | $(run) ./solver_mestrado_CPLEX_TI 
+
+solver_mestrado_CPLEX_TI: solver_mestrado_CPLEX_TI.o
+	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_TI solver_mestrado_CPLEX_TI.o $(CCLNFLAGS) 
+
+solver_mestrado_CPLEX_TI.o: solver_mestrado_CPLEX_TI.cpp
+	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_TI.cpp -o solver_mestrado_CPLEX_TI.o 
+
+# ======================================
+
+clean:
+	rm -rf *.o
+	rm -rf solver_mestrado_CPLEX_CTP
+	rm -rf solver_mestrado_CPLEX_TI
