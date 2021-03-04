@@ -6,8 +6,6 @@
 
 ILOSTLBEGIN
 
-using namespace std;
-
 typedef IloArray<IloNumVarArray> NumVarMatrix2D;
 typedef IloArray<NumVarMatrix2D> NumVarMatrix3D;
 
@@ -19,55 +17,96 @@ typedef IloArray<NumMatrix2D> NumMatrix3D;
 
 int main()
 {
+    cout << "Criando ambiente CPLEX..." << endl;
     IloEnv env;
+    cout << "Ambiente CPLEX criado." << endl;
+
     try
     {
         string filename;
         cin >> filename;
-        //string filename="instancia_10projetos_2sondas_delta_t84.dat";
-        
-        ifstream file;
+        //filename="./instancias/instancia_100projetos_2sondas_delta_t28.dat";
         
         // reading data from file
-        file.open(filename);
-        if (!file)
-        {
-            cerr << "ERRO ao abrir o arquivo " << filename << endl;
-        }
+        cout << "Lendo dados de entrada..." << endl;
+        
         IloInt n_projetos, n_sondas;
         IloInt n_periodos, t_init, t_final, delta;
         IloNum capital_total;
+
+        ifstream file (filename);
+        
+        if (file.is_open())
+        {    
+            cout << "Arquivo aberto corretamente." << endl;
+            cout << "Lendo dados gerais..." << endl;
+            file >> n_projetos >> capital_total >> t_init >> t_final >> delta >> n_periodos;
+            cout << "Dados gerais lidos." << endl;
+        }
+        else
+        {
+            cout << "Não foi possível abrir o arquivo." << endl;
+            return 0;
+        }
+
+        cout << "Instanciando arrays..." << endl;
         IloNumArray coords_x(env), coords_y(env);
         IloNumArray bacias(env), nome_projetos(env);
         IloNumArray maturidades(env), qualidades_dado(env), plays(env); 
         IloNumArray soterramentos(env), pcgnas(env);
-        IloNumArray geracao(env), migracao(env), reservatorio(env), geometria(env), retencao(env), pshc(env);
+        IloNumArray geracao(env), migracao(env), reservatorio(env); 
+        IloNumArray geometria(env), retencao(env), pshc(env);
         IloNumArray medias_volume_condicional(env), medias_volume_incondicional(env);
         IloNumArray medias_vpl_condicional(env), medias_vpl_incondicional(env);
         IloNumArray custos(env);
         IloIntArray tempos_exec(env), inicio_janela(env), final_janela(env);
-        IloNumArray sondas_x(env), sondas_y(env);
-        
-        // definindo s[i][j]
-        NumMatrix2D s(env, n_projetos+n_sondas);
-        for (int i=0; i<n_projetos+n_sondas; i++)
-        {
-            s[i] = IloNumArray(env, n_projetos);
-        }
-        
-        file >> n_projetos >> capital_total >> t_init >> t_final >> delta >> n_periodos;
-        file >> coords_x >> coords_y; 
-        file >> bacias >> nome_projetos;
-        file >> maturidades >> qualidades_dado >> plays;
-        file >> soterramentos >> pcgnas;
-        file >> geracao >> migracao >> reservatorio >> geometria >> retencao >> pshc;
-        file >> medias_volume_condicional >> medias_volume_incondicional;
-        file >> medias_vpl_condicional >> medias_vpl_incondicional;
-        file >> custos >> tempos_exec >> inicio_janela >> final_janela;
-        file >> n_sondas >> sondas_x >> sondas_y;
-        file >> s;
-        // end reading data
+        cout << "Arrays instanciados." << endl;
 
+        IloInt n_vertices;
+        n_vertices = n_projetos + n_sondas;
+        
+        cout << "Definindo s[i][j]" << endl;
+        // definindo s[i][j]
+        NumMatrix2D s(env);
+        cout << "s[i][j] definido." << endl;
+
+        cout << "Lendo arrays..." << endl;
+        file >> coords_x;
+        file >> coords_y;
+        file >> bacias;
+        file >> nome_projetos;
+        file >> maturidades;
+        file >> qualidades_dado;
+        file >> plays;
+        file >> soterramentos;
+        file >> pcgnas;
+        file >> geracao;
+        file >> migracao;
+        file >> reservatorio;
+        file >> geometria;
+        file >> retencao;
+        file >> pshc;
+        file >> medias_volume_condicional;
+        file >> medias_volume_incondicional;
+        file >> medias_vpl_condicional;
+        file >> medias_vpl_incondicional;
+        file >> custos;
+        file >> tempos_exec;
+        file >> inicio_janela;
+        file >> final_janela;
+        file >> n_sondas;
+        IloNumArray sondas_x(env, n_sondas), sondas_y(env, n_sondas);
+        file >> sondas_x;
+        file >> sondas_y;
+        file >> s;
+        cout << "Arrays lidos." << endl;
+
+        // end reading data
+        
+        // closing file
+        file.close();
+        cout << "Dados de entrada lidos." << endl;
+        
         // diplay data
         cout << "A instância tem:" << endl;
         cout << n_projetos << " projetos, e capital total de " << capital_total << endl;
@@ -98,15 +137,37 @@ int main()
         cout << "Coordenaxas x das sondas iguais a " << sondas_x << endl;
         cout << "Coordenadas y das sondas iguais a " << sondas_y << endl;
         cout << "tempo inicial: " << t_init << " tempo final: " << t_final << " e quantidade de periodos: " << n_periodos << endl;
-        // end display data
-        
-        IloInt lag;
-        lag = n_sondas;
-        
         cout << "s[i][j] tem tamanho: " << s.getSize() << " por " << s[1].getSize() << endl;
         cout << "s[i][j]: " << s << endl;
+        // end display data
+        
+        // deletando dados não utilizados no modelo
+        coords_x.end();
+        coords_y.end();
+        bacias.end();
+        nome_projetos.end();
+        maturidades.end();
+        qualidades_dado.end();
+        plays.end();
+        soterramentos.end();
+        pcgnas.end();
+        geracao.end();
+        migracao.end();
+        reservatorio.end();
+        geometria.end();
+        retencao.end();
+        pshc.end();
+        medias_volume_condicional.end();
+        medias_volume_incondicional.end();
+        medias_vpl_condicional.end();
+        sondas_x.end();
+        sondas_y.end();
+
+        IloInt lag;
+        lag = n_sondas;
 
         // definindo BigM[i][j]
+        cout << "Criando BigM..." << endl;
         NumMatrix2D BigM(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
@@ -118,21 +179,50 @@ int main()
             {
                 if (i < n_sondas)
                 {
-                    BigM[i][j] = s[i][j] + tempos_exec[j]; // - inicio_janela[j];
+                    BigM[i][j] = s[i][j+lag] + tempos_exec[j] + 1; // - inicio_janela[j];
                 }
                 else
                 {
-                    BigM[i][j] = final_janela[i-lag] + s[i][j] + tempos_exec[j]; // - inicio_janela[j];
+                    BigM[i][j] = final_janela[i-lag] + s[i][j+lag] + tempos_exec[j] + 1; // - inicio_janela[j];
                 }
             }
         }
-        cout << "BigM[i][j] tem tamanho: " << BigM.getSize() << " por " << BigM[1].getSize() << endl;
-        cout << "BigM[i][j]: " << BigM << endl;
+        cout << "BigM criado." << endl;
+        
+        //cout << "BigM[i][j] tem tamanho: " << BigM.getSize() << " por " << BigM[1].getSize() << endl;
+        //cout << "BigM[i][j]: " << BigM << endl;
 
         // instanciando o modelo
+        cout << "Instanciando modelo CPLEX..." << endl;
         IloModel model(env);
+        cout << "Modelo CPLEX instanciado." << endl;
         
+        // declarando o otimizador
+        cout << "Declarando o solver CPLEX..." << endl;
+        IloCplex cplex(env);
+        cout << "Solver CPLEX declarado." << endl;
+        
+        // definindo parametros
+        cout << "Definindo parametros do CPLEX..." << endl;
+        cplex.setParam(IloCplex::Param::WorkMem, 2048); // 1024 megabytes
+        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 262144); // 131072 megabytes
+        cplex.setParam(IloCplex::Param::Emphasis::Memory, 1); // 1: conservar memoria
+        cplex.setParam(IloCplex::Param::MIP::Strategy::File, 3); // 1: em memória, 2: em disco, 3: em disco otimizado 
+        cplex.setParam(IloCplex::Param::WorkDir, ".");
+
+        cplex.setParam(IloCplex::Param::RootAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
+        cplex.setParam(IloCplex::Param::NodeAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
+        cplex.setParam(IloCplex::Param::MIP::SubMIP::SubAlg, 4); // 1: primal, 2: dual, 4: barrier
+        cplex.setParam(IloCplex::Param::MIP::SubMIP::StartAlg, 4); // 1: primal, 2: dual, 4: barrier
+        
+        cplex.setParam(IloCplex::Param::MIP::Strategy::Probe, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::Cliques, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::Covers, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::LiftProj, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
+        cout << "Parametros do CPLEX definidos." << endl;
+
         // criando variáveis de decisão ---------------------------------------------
+        cout << "Criando variáveis de decisão..." << endl;
         // criando a variável de decisão x_{ijm} 
         NumVarMatrix3D x_var(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
@@ -141,40 +231,53 @@ int main()
             for (int j=0; j<n_projetos; j++)
             {
                 x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1, ILOINT);
-                for (int m=0; m<n_sondas; m++)
-                {
-                    if (i-lag != j)
-                    {
-                        x_var[i][j][m] = IloNumVar(env, 0, 1, ILOINT, "x_var");
-                        model.add(x_var[i][j][m]);
-                    }
-                    else
-                    {
-                        x_var[i][j][m] = IloNumVar(env, 0, 0, ILOINT, "x_var");
-                        model.add(x_var[i][j][m]);
-                    }
-                }
+                //for (int m=0; m<n_sondas; m++)
+                //{
+                //    if (i-lag != j)
+                //    {
+                //        x_var[i][j][m] = IloNumVar(env, 0, 1, ILOINT, "x_var");
+                //        model.add(x_var[i][j][m]);
+                //    }
+                //    else
+                //    {
+                //        x_var[i][j][m] = IloNumVar(env, 0, 0, ILOINT, "x_var");
+                //        model.add(x_var[i][j][m]);
+                //    }
+                //}
             }
         }
-        cout << "x[i][j][m] tem tamanho: " << x_var.getSize() << " por " << x_var[0].getSize() << " por " << x_var[0][0].getSize() << endl;
-        cout << "x[i][j][m]: " << x_var << endl;
+        
+        IloInt inicio_t=0, final_t=0;
+
         // criando a variável de decisão c_{jm}
         NumVarMatrix2D c_var(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
-            c_var[i] = IloNumVarArray(env, n_sondas, t_init, t_final, ILOINT);
-            for (int m=0; m<n_sondas; m++)
-            {
-                c_var[i][m] = IloNumVar(env, t_init, t_final, ILOINT, "c_var");
-                model.add(c_var[i][m]);
-            }
-            // ----------------------------------------------- TODO: pre processar origens = 0 ?
+            c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos, ILOINT);
+            //for (int m=0; m<n_sondas; m++)
+            //{
+            //    if (i < n_sondas)
+            //    {
+            //        c_var[i][m] = IloNumVar(env, 0, 0, ILOINT, "c_var");
+            //        model.add(c_var[i][m]);
+            //    }
+            //    else
+            //    {
+            //        inicio_t = inicio_janela[i-lag];
+            //        final_t = final_janela[i-lag] - tempos_exec[i-lag] + 1;
+            //        c_var[i][m] = IloNumVar(env, inicio_t, final_t, ILOINT, "c_var");
+            //        model.add(c_var[i][m]);
+            //    }
+            //}
         }
-        cout << "C[j][m] tem tamanho: " << c_var.getSize() << " por " << c_var[0].getSize() << endl;
-        cout << "C[j][m]: " << c_var << endl;
-    
+        cout << "Variáveis de deicisão criadas." << endl;
+        
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // criando restrições ---------------------------------------------------------
         // 1. restrição de orçamento total
+        cout << "Criando restrição de orçamento total..." << endl;
         IloExpr expr1(env);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
@@ -193,9 +296,15 @@ int main()
         c1.setName("investimento total");
         model.add(c1);
         expr1.end();
+        cout << "Restrição de orçamento total criada." << endl;
         
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 2. restrição de orçamento por tipo de projeto ------------- TODO: incluir
+
         // 3. restrição de unicidade de saída da origem (forall m)
+        cout << "Criando restrição de unicidade das origens..." << endl;
         for (int m=0; m<n_sondas; m++)
         {
             IloExpr expr2(env);
@@ -214,8 +323,13 @@ int main()
             model.add(c2);
             expr2.end();
         }
+        cout << "Restrição de unicidade das origens criada." << endl;
         
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 4. restrição de cada sonda não poder sair de uma origem que não seja a sua 
+        cout << "Criando restrição para limitar origens de sondas diferentes..." << endl;
         IloExpr expr3(env);
         for (int m=0; m<n_sondas; m++)
         {
@@ -234,8 +348,13 @@ int main()
         c3.setName("sonda nao pode sair de outra origem");
         model.add(c3);
         expr3.end();
-        
+        cout << "Restrição de origens de sondas diferentes criada." << endl;
+
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 5. restrição de unicidade na execução dos projetos (forall j)
+        cout << "Criando restrição de unicidade de projetos..." << endl;
         for (int j=0; j<n_projetos; j++)
         {
             IloExpr expr4(env);
@@ -273,7 +392,13 @@ int main()
             model.add(c5);
             expr5.end();
         }
+        cout << "Restrição de unicidade de projetos criada." << endl;
+        
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 7. restrição de conservação de fluxo
+        cout << "Criando restrição de conservação de fluxo..." << endl;
         for (int m=0; m<n_sondas; m++)
         {
             for (int j=0; j<n_projetos; j++)
@@ -299,7 +424,13 @@ int main()
                 expr6.end();
             }
         }
+        cout << "Restrição de conservação de fluxo criada." << endl;
+
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 8. restrição de completion time zero para origens
+        cout << "Criando restrição de completion time zero para origens..." << endl;
         IloExpr expr7(env);
         for (int m=0; m<n_sondas; m++)
         {
@@ -312,8 +443,13 @@ int main()
         c7.setName("origens com completion time zero");
         model.add(c7);
         expr7.end();
-        
+        cout << "Restrição de completion time zero para origens criada." << endl;
+
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 9. restrição de escalonamento mtz ----- TODO: refinar limite superior da restricao: due date?
+        cout << "Criando restrição de escalonamento TMZ..." << endl;
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
             for (int j=0; j<n_projetos; j++)
@@ -323,7 +459,7 @@ int main()
                     if (i-lag != j)
                     {
                         IloExpr expr8(env);
-                        expr8 += c_var[j+lag][m] - (c_var[i][m] + s[i][j] + tempos_exec[j] - BigM[i][j]*(1-x_var[i][j][m])) ;
+                        expr8 += c_var[j+lag][m] - (c_var[i][m] + s[i][j+lag] + tempos_exec[j] - BigM[i][j]*(1-x_var[i][j][m])) ;
                         IloConstraint c8(expr8 >= 0);
                         c8.setName("tmz escalonamento temporal lowerbound");
                         model.add(c8);
@@ -335,7 +471,13 @@ int main()
                 }
             }
         }
+        cout << "Restrição de escalonamento TMZ criada." << endl;
+
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // 10. restrição de janela de tempo -------- TODO: refinar limite superior das restrições: due date?
+        cout << "Criando restrição de janela de tempo..." << endl;
         for (int m=0; m<n_sondas; m++)
         {
             for (int j=0; j<n_projetos; j++)
@@ -346,7 +488,7 @@ int main()
                 {
                     if (i-lag != j)
                     {
-                        expr9 += - ((inicio_janela[j]+tempos_exec[j])*x_var[i][j][m]);
+                        expr9 += - ((inicio_janela[j]+tempos_exec[j]-1)*x_var[i][j][m]);
                     }
                 }
                 IloConstraint c9(expr9 >= 0);
@@ -380,8 +522,10 @@ int main()
                 expr10.end();
             }
         }
+        cout << "Restrição de janela de tempo criada." << endl;
 
         // criando a função objetivo
+        cout << "Criando função objetivo..." << endl;
         IloExpr expro(env);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
@@ -398,10 +542,15 @@ int main()
         }
         model.add(IloMaximize(env, expro));
         expro.end();
+        cout << "Função objetivo criada." << endl;
         
-        // declarando o otimizador
-        IloCplex cplex(model);
+        // verificando uso de memória
+        cout << "Memory usage after creating constraints: " << env.getMemoryUsage() / (1024. * 1024.) << " MB" << endl;
+
         // resolvendo o modelo
+        cout << "Extracting model..." << endl;
+        cplex.extract(model);
+        cout << "Model extracted!" << endl;
         cplex.solve();
         
         // printando status da otimização
@@ -410,6 +559,7 @@ int main()
         // printando valor obtido para a função objetivo
         env.out() << "Solution value  = " << cplex.getObjValue() << endl;
         
+        /*
         // pegando valor das variáveis de decisão
         NumMatrix3D x_vals(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
@@ -439,21 +589,22 @@ int main()
         //env.out() << "x[i][j][m] = " << x_vals << endl;
         //env.out() << "c[j][m]    = " << c_vals << endl;
         
-        // exportando modelo
-        cplex.exportModel("modeloCTP_mestrado_joao.lp");
-        
+        */
 
-        // closing file
-        file.close();
+        // exportando modelo
+        //cplex.exportModel("modeloCTP_mestrado_joao.lp");
+        
+        env.end();
     }
     catch (IloException& e) 
     {
         cerr << "Erro na chamada da API: " << e << endl;
+        env.end();
     }
     catch (...) 
     {
         cerr << "Erro desconhecido" << endl;
+        env.end();
     }
-    env.end();
     return 0;
 }

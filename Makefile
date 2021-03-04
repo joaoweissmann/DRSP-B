@@ -55,6 +55,29 @@ solver_mestrado_CPLEX_TI.o: solver_mestrado_CPLEX_TI.cpp
 
 # ======================================
 
+# ====================================
+#ti:
+#	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_TI.cpp -o solver_mestrado_CPLEX_TI.o
+#	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_TI solver_mestrado_CPLEX_TI.o $(CCLNFLAGS)
+#	echo $(ARGS) | $(run) ./solver_mestrado_CPLEX_TI 
+#
+#ctp:
+#	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_CTP.cpp -o solver_mestrado_CPLEX_CTP.o
+#	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_CTP solver_mestrado_CPLEX_CTP.o $(CCLNFLAGS)
+#	echo $(ARGS) | $(run) ./solver_mestrado_CPLEX_CTP
+# ======================================
+
+#ti:
+#	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_TI.cpp -o solver_mestrado_CPLEX_TI.o
+#	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_TI solver_mestrado_CPLEX_TI.o $(CCLNFLAGS)
+#	$(run) ./solver_mestrado_CPLEX_TI 
+#
+#ctp:
+#	$(CCC) -c $(CCFLAGS) solver_mestrado_CPLEX_CTP.cpp -o solver_mestrado_CPLEX_CTP.o
+#	$(CCC) $(CCFLAGS) $(CCLNDIRS) -o solver_mestrado_CPLEX_CTP solver_mestrado_CPLEX_CTP.o $(CCLNFLAGS)
+#	$(run) ./solver_mestrado_CPLEX_CTP
+#
+
 clean:
 	rm -rf *.o
 	rm -rf solver_mestrado_CPLEX_CTP
