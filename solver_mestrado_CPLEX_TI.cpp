@@ -27,6 +27,9 @@ int main()
         cin >> filename;
         //filename="./instancias/instancia_100projetos_2sondas_delta_t28.dat";
         
+        IloTimer timer(env);
+        timer.start();
+
         // reading data from file
         cout << "Lendo dados de entrada..." << endl;
         
@@ -178,21 +181,24 @@ int main()
         
         // definindo parametros
         cout << "Definindo parametros do CPLEX..." << endl;
-        cplex.setParam(IloCplex::Param::WorkMem, 2048); // 1024 megabytes
-        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 262144); // 131072 megabytes
+
+        cplex.setParam(IloCplex::Param::TimeLimit, 7200); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
+
+        cplex.setParam(IloCplex::Param::WorkMem, 8000); // 1024 megabytes
+        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 100000); // 131072 megabytes
         cplex.setParam(IloCplex::Param::Emphasis::Memory, 1); // 1: conservar memoria
         cplex.setParam(IloCplex::Param::MIP::Strategy::File, 3); // 1: em memória, 2: em disco, 3: em disco otimizado 
         cplex.setParam(IloCplex::Param::WorkDir, ".");
 
-        cplex.setParam(IloCplex::Param::RootAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
-        cplex.setParam(IloCplex::Param::NodeAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
-        cplex.setParam(IloCplex::Param::MIP::SubMIP::SubAlg, 4); // 1: primal, 2: dual, 4: barrier
-        cplex.setParam(IloCplex::Param::MIP::SubMIP::StartAlg, 4); // 1: primal, 2: dual, 4: barrier
+        //cplex.setParam(IloCplex::Param::RootAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
+        //cplex.setParam(IloCplex::Param::NodeAlgorithm, 0); // 1: primal, 2: dual, 4: barrier, 6: concurrent
+        //cplex.setParam(IloCplex::Param::MIP::SubMIP::SubAlg, 4); // 1: primal, 2: dual, 4: barrier
+        //cplex.setParam(IloCplex::Param::MIP::SubMIP::StartAlg, 4); // 1: primal, 2: dual, 4: barrier
         
-        cplex.setParam(IloCplex::Param::MIP::Strategy::Probe, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
-        //cplex.setParam(IloCplex::Param::MIP::Cuts::Cliques, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
-        //cplex.setParam(IloCplex::Param::MIP::Cuts::Covers, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
-        //cplex.setParam(IloCplex::Param::MIP::Cuts::LiftProj, 3); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Strategy::Probe, 2); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::Cliques, 1); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::Covers, 1); // 1: moderado, 2: agressivo, 3: muito agressivo
+        //cplex.setParam(IloCplex::Param::MIP::Cuts::LiftProj, 2); // 1: moderado, 2: agressivo, 3: muito agressivo
         cout << "Parametros do CPLEX definidos." << endl;
 
         // criando variáveis de decisão ---------------------------------------------
@@ -440,11 +446,21 @@ int main()
         cout << "Model extracted!" << endl;
         cplex.solve();
         
+        ofstream outfile;
+        outfile.open("resultados_automatico.txt", ios_base::app);
+        outfile << "TI " << filename << " " << cplex.getObjValue() << " " << cplex.getStatus() << " " << cplex.getBestObjValue() << " " << cplex.getMIPRelativeGap() << " " << timer.getTime() << endl;
+
+        // printando tempo de execução
+        env.out() << "Tempo de execução = " << timer.getTime() << endl;
+        
         // printando status da otimização
         env.out() << "Solution status = " << cplex.getStatus() << endl;
         
         // printando valor obtido para a função objetivo
-        env.out() << "Solution value  = " << cplex.getObjValue() << endl;
+        env.out() << "Solution value = " << cplex.getObjValue() << endl;
+
+        // printando valor do GAP
+        env.out() << "GAP = " << cplex.getMIPRelativeGap() << endl;
         
         /*
         // pegando valor das variáveis de decisão
@@ -479,7 +495,7 @@ int main()
         // exportando modelo
         //cplex.exportModel("modelo_TI_mestrado_joao.lp");
 
-
+        outfile.close();
         env.end();
     }
     catch (IloException& e) 

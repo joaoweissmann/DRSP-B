@@ -1,0 +1,10 @@
+
+rm -rf resultados_automatico.txt
+
+yourfilenames=`ls ./instancias/*`
+
+for eachfile in $yourfilenames
+do
+   make ctp ARGS=$eachfile
+   make ti ARGS=$eachfile
+done
