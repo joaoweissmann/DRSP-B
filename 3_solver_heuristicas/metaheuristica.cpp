@@ -18,6 +18,7 @@ struct DadosEntrada
 
 void printDadosEntrada(DadosEntrada dados)
 {
+    cout << endl;
     cout << "A instância tem: " << endl;
     cout << dados.n_projetos << " projetos" << endl;
     cout << dados.capital_total << " como orçamento total" << endl;
@@ -28,6 +29,54 @@ void printDadosEntrada(DadosEntrada dados)
     cout << dados.n_sondas << " sondas disponíveis" << endl;
     cout << endl;
     
+    cout << "Dados lidos de projetos:" << endl;
+    for (int j=0; j<dados.propriedades_proj; j++)
+    {
+        for (int i=0; i<dados.n_projetos; i++)
+        {
+            cout << *(dados.projetos + j + i*dados.propriedades_proj) << " ";
+        } cout << endl;
+    } cout << endl;
+
+    cout << "Dados lidos dos projetos: " << endl;
+    for (auto itr=dados.mapProjetos.begin(); itr!=dados.mapProjetos.end(); ++itr)
+    {
+        cout << "Propriedade " << itr->first << " : ";
+        for (int i=0; i<dados.n_projetos; i++)
+        {
+            cout << *(dados.projetos + itr->second + i*dados.propriedades_proj) << " ";
+        }
+        cout << endl;
+    } cout << endl;
+
+    cout << "dados lidos de sondas: " << endl;
+    for (int j=0; j<dados.propriedades_sondas; j++)
+    {
+        for (int i=0; i<dados.n_sondas; i++)
+        {
+            cout << *(dados.sondas + j + i*dados.propriedades_sondas) << " ";
+        } cout << endl;
+    } cout << endl;
+
+    cout << "dados lidos de sondas: " << endl;
+    for (auto itr=dados.mapSondas.begin(); itr!=dados.mapSondas.end(); ++itr)
+    {
+        cout << "Propriedade " << itr->first << ": ";
+        for (int i=0; i<dados.n_sondas; i++)
+        {
+            cout << *(dados.sondas + itr->second + i*dados.propriedades_sondas) << " ";
+            //cout << sondas[i][itr->second] << " " ;
+        } cout << endl;
+    } cout << endl;
+    
+    cout << "deslocamentos lidos: " << endl;
+    for (int i=0; i<dados.n_projetos+dados.n_sondas; i++)
+    {
+        for (int j=0; j<dados.n_projetos+dados.n_sondas; j++)
+        {
+            cout << *(dados.desloc + j + i*(dados.n_projetos+dados.n_sondas)) << " ";
+        } cout << endl;
+    } cout << endl;
 
 }
 
@@ -38,6 +87,7 @@ DadosEntrada read_data(string filename)
 
     if (infile.is_open())
     {
+        cout << endl << endl;
         cout << "Arquivo aberto corretamente." << endl;
         cout << "Lendo dados..." << endl;
         cout << endl;
@@ -48,45 +98,20 @@ DadosEntrada read_data(string filename)
         // ler primeira linha com dados gerais
         infile >> n_projetos >> capital_total >> t_init >> t_final >> delta >> n_periodos;
 
-        cout << "A instância tem: " << endl;
-        cout << n_projetos << " projetos" << endl;
-        cout << capital_total << " como orçamento total" << endl;
-        cout << t_init << " como o tempo inicial" << endl;
-        cout << t_final << " como o tempo final" << endl;
-        cout << delta << " como delta tempo" << endl;
-        cout << n_periodos << " períodos de tempo" << endl;
-        cout << endl;
-
         // array projetos (n_projetos, propriedades_proj)
         int propriedades_proj=23;
 
         // double projetos[n_projetos][propriedades_proj];
-
         double * projetos = new double[n_projetos * propriedades_proj];
-
-        //double ** projetos = new double * [n_projetos];
-        //for (int i=0; i<n_projetos; i++)
-        //{
-        //    projetos[i] = new double[propriedades_proj];
-        //}
 
         for (int j=0; j<propriedades_proj; j++)
         {
             for (int i=0; i<n_projetos; i++)
             {
+                //infile >> projetos[i][j];
                 infile >> *(projetos + j + i*propriedades_proj);
             }
         }
-        
-        cout << "dados lidos de projetos: " << endl;
-        for (int j=0; j<propriedades_proj; j++)
-        {
-            for (int i=0; i<n_projetos; i++)
-            {
-                cout << *(projetos + j + i*propriedades_proj) << " " ;
-            }
-            cout << endl;
-        } cout << endl;
         
         // criar mapa de propriedade para índice de projetos
         map <string, int> mapProp2Indice;
@@ -114,75 +139,38 @@ DadosEntrada read_data(string filename)
         mapProp2Indice.insert(pair<string,int>("inicio_janela", 21));
         mapProp2Indice.insert(pair<string,int>("final_janela", 22));
 
-        cout << "Dados lidos dos projetos: " << endl;
-        for (auto itr=mapProp2Indice.begin(); itr!=mapProp2Indice.end(); ++itr)
-        {
-            cout << "Propriedade " << itr->first << " : ";
-            for (int i=0; i<n_projetos; i++)
-            {
-                //cout << projetos[i][itr->second] << " " ;
-                cout << *(projetos + itr->second + i*propriedades_proj) << " ";
-            }
-            cout << endl;
-        } cout << endl;
-
         // array sondas (n_sondas, 2)
         int n_sondas;
         infile >> n_sondas;
         int propriedades_sondas=2;
         
-        double sondas[n_sondas][2];
+        // double sondas[n_sondas][2];
+        double * sondas = new double [n_sondas*propriedades_sondas];
         for (int j=0; j<propriedades_sondas; j++)
         {
             for (int i=0; i<n_sondas; i++)
             {
-                infile >> sondas[i][j];
+                infile >> *(sondas + j + i*propriedades_sondas);
+                // infile >> sondas[i][j];
             }
         }
-
-        cout << "dados lidos de sondas: " << endl;
-        for (int j=0; j<propriedades_sondas; j++)
-        {
-            for (int i=0; i<n_sondas; i++)
-            {
-                cout << sondas[i][j] << " ";
-            } cout << endl;
-        } cout << endl;
-
-
+        
         // criar mapa de propriedade para índice de sondas
         map<string, int> mapSondas;
         mapSondas.insert(pair<string, int>("coord_x", 0));
         mapSondas.insert(pair<string, int>("coord_y", 1)); 
 
-        cout << "dados lidos de sondas: " << endl;
-        for (auto itr=mapSondas.begin(); itr!=mapSondas.end(); ++itr)
-        {
-            cout << "Propriedade " << itr->first << ": ";
-            for (int i=0; i<n_sondas; i++)
-            {
-                cout << sondas[i][itr->second] << " " ;
-            } cout << endl;
-        } cout << endl;
-
         // array desloc ((n_projetos+n_sondas), (n_projetos+n_sondas))
-        double desloc[n_projetos+n_sondas][n_projetos+n_sondas];
+        // double desloc[n_projetos+n_sondas][n_projetos+n_sondas];
+        double * desloc = new double [(n_projetos+n_sondas)*(n_projetos+n_sondas)];
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
             for (int j=0; j<n_projetos+n_sondas; j++)
             {
-                infile >> desloc[i][j];
+                infile >> *(desloc + j + i*(n_projetos+n_sondas));
+                // infile >> desloc[i][j];
             }
         }
-
-        cout << "deslocamentos lidos: " << endl;
-        for (int i=0; i<n_projetos+n_sondas; i++)
-        {
-            for (int j=0; j<n_projetos+n_sondas; j++)
-            {
-                cout << desloc[i][j] << " ";
-            } cout << endl;
-        } cout << endl;
 
         // fechar aquivo
         infile.close();
@@ -199,19 +187,12 @@ DadosEntrada read_data(string filename)
         result.delta = delta;
         result.capital_total = capital_total;
         result.projetos = projetos;
-        result.sondas = &sondas[0][0];
-        result.desloc = &desloc[0][0];
+        result.sondas = sondas;
+        result.desloc = desloc;
         result.mapProjetos = mapProp2Indice;
         result.mapSondas = mapSondas;
 
-        cout << "testando com ponteiros (dentro da função):" << endl;
-        for (int j=0; j<result.propriedades_proj; j++)
-        {
-            for (int i=0; i<n_projetos; i++)
-            {
-                cout << *(result.projetos + j + i*result.propriedades_proj) << " ";
-            } cout << endl;
-        } cout << endl;
+        cout << "Dados lidos." << endl;
 
         return (result);
     }
@@ -230,16 +211,7 @@ int main()
     DadosEntrada dados;
     dados = read_data(filename);
 
-    // verificando dados lidos
-    cout << "testando com ponteiros (fora da função):" << endl;
-    for (int j=0; j<dados.propriedades_proj; j++)
-    {
-        for (int i=0; i<dados.n_projetos; i++)
-        {
-            cout << *(dados.projetos + j + i*dados.propriedades_proj) << " ";
-        } cout << endl;
-    } cout << endl;
-    //printDadosEntrada(dados);
+    printDadosEntrada(dados);
 
     return 0;
 }
