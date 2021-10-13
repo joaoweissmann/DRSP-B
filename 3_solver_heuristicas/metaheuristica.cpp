@@ -59,13 +59,22 @@ DadosEntrada read_data(string filename)
 
         // array projetos (n_projetos, propriedades_proj)
         int propriedades_proj=23;
-        double projetos[n_projetos][propriedades_proj];
+
+        // double projetos[n_projetos][propriedades_proj];
+
+        double * projetos = new double[n_projetos * propriedades_proj];
+
+        //double ** projetos = new double * [n_projetos];
+        //for (int i=0; i<n_projetos; i++)
+        //{
+        //    projetos[i] = new double[propriedades_proj];
+        //}
 
         for (int j=0; j<propriedades_proj; j++)
         {
             for (int i=0; i<n_projetos; i++)
             {
-                infile >> projetos[i][j];
+                infile >> *(projetos + j + i*propriedades_proj);
             }
         }
         
@@ -74,7 +83,7 @@ DadosEntrada read_data(string filename)
         {
             for (int i=0; i<n_projetos; i++)
             {
-                cout << projetos[i][j] << " " ;
+                cout << *(projetos + j + i*propriedades_proj) << " " ;
             }
             cout << endl;
         } cout << endl;
@@ -111,7 +120,8 @@ DadosEntrada read_data(string filename)
             cout << "Propriedade " << itr->first << " : ";
             for (int i=0; i<n_projetos; i++)
             {
-                cout << projetos[i][itr->second] << " " ;
+                //cout << projetos[i][itr->second] << " " ;
+                cout << *(projetos + itr->second + i*propriedades_proj) << " ";
             }
             cout << endl;
         } cout << endl;
@@ -188,7 +198,7 @@ DadosEntrada read_data(string filename)
         result.t_final = t_final;
         result.delta = delta;
         result.capital_total = capital_total;
-        result.projetos = &projetos[0][0];
+        result.projetos = projetos;
         result.sondas = &sondas[0][0];
         result.desloc = &desloc[0][0];
         result.mapProjetos = mapProp2Indice;
@@ -221,7 +231,7 @@ int main()
     dados = read_data(filename);
 
     // verificando dados lidos
-    cout << "testando com ponteiros (dentro da função):" << endl;
+    cout << "testando com ponteiros (fora da função):" << endl;
     for (int j=0; j<dados.propriedades_proj; j++)
     {
         for (int i=0; i<dados.n_projetos; i++)
