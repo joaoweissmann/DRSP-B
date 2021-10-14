@@ -10,9 +10,12 @@ struct DadosEntrada
     int propriedades_proj, propriedades_sondas;
     int t_init, t_final, delta;
     double capital_total;
-    double * projetos;
-    double * sondas;
-    double * desloc;
+    // double * projetos;
+    vector<vector<double>> projetos;
+    // double * sondas;
+    vector<vector<double>> sondas;
+    // double * desloc;
+    vector<vector<double>> desloc;
     map<string, int> mapProjetos, mapSondas;
 };
 
@@ -34,7 +37,8 @@ void printDadosEntrada(DadosEntrada dados)
     {
         for (int i=0; i<dados.n_projetos; i++)
         {
-            cout << *(dados.projetos + j + i*dados.propriedades_proj) << " ";
+            // cout << *(dados.projetos + j + i*dados.propriedades_proj) << " ";
+            cout << dados.projetos[i][j] << " ";
         } cout << endl;
     } cout << endl;
 
@@ -44,7 +48,8 @@ void printDadosEntrada(DadosEntrada dados)
         cout << "Propriedade " << itr->first << " : ";
         for (int i=0; i<dados.n_projetos; i++)
         {
-            cout << *(dados.projetos + itr->second + i*dados.propriedades_proj) << " ";
+            // cout << *(dados.projetos + itr->second + i*dados.propriedades_proj) << " ";
+            cout << dados.projetos[i][itr->second] << " ";
         }
         cout << endl;
     } cout << endl;
@@ -54,7 +59,8 @@ void printDadosEntrada(DadosEntrada dados)
     {
         for (int i=0; i<dados.n_sondas; i++)
         {
-            cout << *(dados.sondas + j + i*dados.propriedades_sondas) << " ";
+            // cout << *(dados.sondas + j + i*dados.propriedades_sondas) << " ";
+            cout << dados.sondas[i][j] << " ";
         } cout << endl;
     } cout << endl;
 
@@ -64,8 +70,8 @@ void printDadosEntrada(DadosEntrada dados)
         cout << "Propriedade " << itr->first << ": ";
         for (int i=0; i<dados.n_sondas; i++)
         {
-            cout << *(dados.sondas + itr->second + i*dados.propriedades_sondas) << " ";
-            //cout << sondas[i][itr->second] << " " ;
+            // cout << *(dados.sondas + itr->second + i*dados.propriedades_sondas) << " ";
+            cout << dados.sondas[i][itr->second] << " " ;
         } cout << endl;
     } cout << endl;
     
@@ -74,7 +80,8 @@ void printDadosEntrada(DadosEntrada dados)
     {
         for (int j=0; j<dados.n_projetos+dados.n_sondas; j++)
         {
-            cout << *(dados.desloc + j + i*(dados.n_projetos+dados.n_sondas)) << " ";
+            // cout << *(dados.desloc + j + i*(dados.n_projetos+dados.n_sondas)) << " ";
+            cout << dados.desloc[i][j] << " ";
         } cout << endl;
     } cout << endl;
 
@@ -102,14 +109,22 @@ DadosEntrada read_data(string filename)
         int propriedades_proj=23;
 
         // double projetos[n_projetos][propriedades_proj];
-        double * projetos = new double[n_projetos * propriedades_proj];
+        // double * projetos = new double[n_projetos * propriedades_proj];
+        vector<vector<double>> projetos;
+
+        // resize
+        projetos.resize(n_projetos);
+        for (int i=0; i<n_projetos; i++)
+        {
+            projetos[i].resize(propriedades_proj);
+        }
 
         for (int j=0; j<propriedades_proj; j++)
         {
             for (int i=0; i<n_projetos; i++)
             {
-                //infile >> projetos[i][j];
-                infile >> *(projetos + j + i*propriedades_proj);
+                infile >> projetos[i][j];
+                // infile >> *(projetos + j + i*propriedades_proj);
             }
         }
         
@@ -145,13 +160,20 @@ DadosEntrada read_data(string filename)
         int propriedades_sondas=2;
         
         // double sondas[n_sondas][2];
-        double * sondas = new double [n_sondas*propriedades_sondas];
+        // double * sondas = new double [n_sondas*propriedades_sondas];
+        vector<vector<double>> sondas;
+        sondas.resize(n_sondas);
+        for (int i=0; i<n_sondas; i++)
+        {
+            sondas[i].resize(propriedades_sondas);
+        }
+        
         for (int j=0; j<propriedades_sondas; j++)
         {
             for (int i=0; i<n_sondas; i++)
             {
-                infile >> *(sondas + j + i*propriedades_sondas);
-                // infile >> sondas[i][j];
+                // infile >> *(sondas + j + i*propriedades_sondas);
+                infile >> sondas[i][j];
             }
         }
         
@@ -162,13 +184,20 @@ DadosEntrada read_data(string filename)
 
         // array desloc ((n_projetos+n_sondas), (n_projetos+n_sondas))
         // double desloc[n_projetos+n_sondas][n_projetos+n_sondas];
-        double * desloc = new double [(n_projetos+n_sondas)*(n_projetos+n_sondas)];
+        // double * desloc = new double [(n_projetos+n_sondas)*(n_projetos+n_sondas)];
+        vector<vector<double>> desloc;
+        desloc.resize(n_projetos+n_sondas);
+        for (int i=0; i<(n_projetos+n_sondas); i++)
+        {
+            desloc[i].resize(n_projetos+n_sondas);
+        }
+        
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
             for (int j=0; j<n_projetos+n_sondas; j++)
             {
-                infile >> *(desloc + j + i*(n_projetos+n_sondas));
-                // infile >> desloc[i][j];
+                // infile >> *(desloc + j + i*(n_projetos+n_sondas));
+                infile >> desloc[i][j];
             }
         }
 
