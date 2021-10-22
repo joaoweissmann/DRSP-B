@@ -1,32 +1,24 @@
 
+
 #include <bits/stdc++.h>
-#include "dados_de_entrada.h"
 
-using namespace std;
+#include "DadosDeEntrada.h"
 
-// função para ler os dados de entrada das instâncias
-DadosEntrada::DadosEntrada(string filename)
+DadosDeEntrada::DadosDeEntrada(std::string filename)
 {
-    ifstream infile (filename);
+    std::ifstream infile (filename);
 
     if (infile.is_open())
     {
-        cout << endl << endl;
-        cout << "Arquivo aberto corretamente." << endl;
-        cout << "Lendo dados..." << endl;
-        cout << endl;
+        cout << std::endl << std::endl;
+        cout << "Arquivo aberto corretamente." << std::endl;
+        cout << "Lendo dados..." << std::endl;
+        cout << std::endl;
         
-        int n_projetos, t_init, t_final, delta, n_periodos;
-        double capital_total;
-        
-        // ler primeira linha com dados gerais
         infile >> n_projetos >> capital_total >> t_init >> t_final >> delta >> n_periodos;
 
-        int propriedades_proj=23;
+        propriedades_proj=23;
 
-        vector<vector<double>> projetos;
-
-        // resize
         projetos.resize(n_projetos);
         for (int i=0; i<n_projetos; i++)
         {
@@ -42,37 +34,38 @@ DadosEntrada::DadosEntrada(string filename)
         }
         
         // criar mapa de propriedade para índice de projetos
-        map <string, int> mapProp2Indice;
-        mapProp2Indice.insert(pair<string,int>("coord_x", 0));
-        mapProp2Indice.insert(pair<string,int>("coord_y", 1));
-        mapProp2Indice.insert(pair<string,int>("bacia", 2));
-        mapProp2Indice.insert(pair<string,int>("nome", 3));
-        mapProp2Indice.insert(pair<string,int>("maturidade", 4));
-        mapProp2Indice.insert(pair<string,int>("qualidade", 5));
-        mapProp2Indice.insert(pair<string,int>("play", 6));
-        mapProp2Indice.insert(pair<string,int>("soterramento", 7));
-        mapProp2Indice.insert(pair<string,int>("pcgna", 8));
-        mapProp2Indice.insert(pair<string,int>("geracao", 9));
-        mapProp2Indice.insert(pair<string,int>("migracao", 10));
-        mapProp2Indice.insert(pair<string,int>("reservatorio", 11));
-        mapProp2Indice.insert(pair<string,int>("geometria", 12));
-        mapProp2Indice.insert(pair<string,int>("retencao", 13));
-        mapProp2Indice.insert(pair<string,int>("pshc", 14));
-        mapProp2Indice.insert(pair<string,int>("mc_vol", 15));
-        mapProp2Indice.insert(pair<string,int>("mi_vol", 16));
-        mapProp2Indice.insert(pair<string,int>("mc_vpl", 17));
-        mapProp2Indice.insert(pair<string,int>("mi_vpl", 18));
-        mapProp2Indice.insert(pair<string,int>("custo", 19));
-        mapProp2Indice.insert(pair<string,int>("temp_exec", 20));
-        mapProp2Indice.insert(pair<string,int>("inicio_janela", 21));
-        mapProp2Indice.insert(pair<string,int>("final_janela", 22));
+        // map <string, int> mapProp2Indice;
+        "coord_x", 0));
+        "coord_y", 1));
+        "bacia", 2));
+        "nome", 3));
+        "maturidade", 4));
+        "qualidade", 5));
+        "play", 6));
+        "soterramento", 7));
+        "pcgna", 8));
+        "geracao", 9));
+        "migracao", 10));
+        "reservatorio", 11));
+        "geometria", 12));
+        "retencao", 13));
+        "pshc", 14));
+        "mc_vol", 15));
+        "mi_vol", 16));
+        "mc_vpl", 17));
+        "mi_vpl", 18));
+        "custo", 19));
+        "temp_exec", 20));
+        "inicio_janela", 21));
+        "final_janela", 22));
 
         // array sondas (n_sondas, 2)
-        int n_sondas;
+        // int n_sondas;
         infile >> n_sondas;
-        int propriedades_sondas=2;
+        // int propriedades_sondas=2;
+        propriedades_sondas=2;
         
-        vector<vector<double>> sondas;
+        // vector<vector<double>> sondas;
         sondas.resize(n_sondas);
         for (int i=0; i<n_sondas; i++)
         {
@@ -88,12 +81,12 @@ DadosEntrada::DadosEntrada(string filename)
         }
         
         // criar mapa de propriedade para índice de sondas
-        map<string, int> mapSondas;
+        // map<string, int> mapSondas;
         mapSondas.insert(pair<string, int>("coord_x", 0));
         mapSondas.insert(pair<string, int>("coord_y", 1)); 
 
         // array desloc ((n_projetos+n_sondas), (n_projetos+n_sondas))
-        vector<vector<double>> desloc;
+        // vector<vector<double>> desloc;
         desloc.resize(n_projetos+n_sondas);
         for (int i=0; i<(n_projetos+n_sondas); i++)
         {
