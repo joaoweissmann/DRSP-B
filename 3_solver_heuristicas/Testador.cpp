@@ -1,3 +1,7 @@
+// TODO: testar projetos map
+// TODO: testar sondas map
+// TODO: testar dados de entrada
+// TODO: testar leitos de dados
 
 
 #include <bits/stdc++.h>
@@ -40,10 +44,49 @@ void Testador::testarProjeto()
 
 void Testador::testarSonda()
 {
-    // TODO
+    Sonda sonda1;
+    sonda1.print();
+
+    sonda1.setNome(7);
+    sonda1.setCoordX(70);
+    sonda1.setCoordY(77);
+
+    sonda1.print();
+
+    Sonda sonda2{3, 30, 33};
+    sonda2.print();
 }
 
 void Testador::testarVertice()
 {
+    Sonda sonda1(3, 30, 33);
+    Projeto projeto1{25, 40, 3, 7, 1, 2, 3, 4500, 0.5, 0.9, 0.8, 0.7, 0.8, 0.7, 0.3, 500, 150, 1000, 200, 50, 5, 0, 100};
+    int nSondas, nProjetos;
+    nSondas = 5;
+    nProjetos = 10;
+    Vertice vertice1{nSondas, nProjetos};
+
+    std::cout << std::endl;
+    std::cout << "Minha instância tem " << nSondas << " sondas e " << nProjetos << " projetos." << std::endl;
+    std::cout << "O índice do vértice representado pela sonda " << sonda1.getNome() << " é: " 
+                                                        << vertice1.getVerticeIndexBySonda(sonda1.getNome()) << std::endl;
+    std::cout << "O índice do vértice representado pelo projeto " << projeto1.getNome() << " é: "
+                                                        << vertice1.getVerticeIndexByProjeto(projeto1.getNome()) << std::endl;
+    
+    std::cout << "O índice do vértice representado pela sonda " << sonda1.getNome() << " é: " 
+                                                        << vertice1.getVerticeIndex(sonda1) << std::endl;
+    std::cout << "O índice do vértice representado pelo projeto " << projeto1.getNome() << " é: "
+                                                        << vertice1.getVerticeIndex(projeto1) << std::endl;
+    std::cout << std::endl;
+}
+
+void Testador::testarDadosDeEntrada()
+{
     // TODO
 }
+
+void Testador::testarLeitorDeDados()
+{
+    // TODO
+}
+

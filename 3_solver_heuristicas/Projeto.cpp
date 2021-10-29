@@ -1,3 +1,5 @@
+// TODO: debug mode
+// TODO: asserts
 
 
 #include <bits/stdc++.h>
@@ -28,6 +30,29 @@ Projeto::Projeto()
     _tempExec = 0;
     _inicioJanela = 0;
     _finalJanela = 0;
+    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
+    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
+    _mapPropIdx.insert(std::pair<std::string, int>("bacia", 2));
+    _mapPropIdx.insert(std::pair<std::string, int>("nome", 3));
+    _mapPropIdx.insert(std::pair<std::string, int>("maturidade", 4));
+    _mapPropIdx.insert(std::pair<std::string, int>("qualidade", 5));
+    _mapPropIdx.insert(std::pair<std::string, int>("play", 6));
+    _mapPropIdx.insert(std::pair<std::string, int>("soterramento", 7));
+    _mapPropIdx.insert(std::pair<std::string, int>("pcgna", 8));
+    _mapPropIdx.insert(std::pair<std::string, int>("geracao", 9));
+    _mapPropIdx.insert(std::pair<std::string, int>("migracao", 10));
+    _mapPropIdx.insert(std::pair<std::string, int>("reservatorio", 11));
+    _mapPropIdx.insert(std::pair<std::string, int>("geometria", 12));
+    _mapPropIdx.insert(std::pair<std::string, int>("retencao", 13));
+    _mapPropIdx.insert(std::pair<std::string, int>("pshc", 14));
+    _mapPropIdx.insert(std::pair<std::string, int>("mcVol", 15));
+    _mapPropIdx.insert(std::pair<std::string, int>("miVol", 16));
+    _mapPropIdx.insert(std::pair<std::string, int>("mcVpl", 17));
+    _mapPropIdx.insert(std::pair<std::string, int>("miVpl", 18));
+    _mapPropIdx.insert(std::pair<std::string, int>("custos", 19));
+    _mapPropIdx.insert(std::pair<std::string, int>("tempExec", 20));
+    _mapPropIdx.insert(std::pair<std::string, int>("inicioJanela", 21));
+    _mapPropIdx.insert(std::pair<std::string, int>("finalJanela", 22));
 }
 
 Projeto::Projeto(double coordX, double coordY, int bacia, int nome, int maturidade, int qualidade, int play, double soterramento,
@@ -58,6 +83,29 @@ Projeto::Projeto(double coordX, double coordY, int bacia, int nome, int maturida
     _tempExec = tempExec;
     _inicioJanela = inicioJanela;
     _finalJanela = finalJanela;
+    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
+    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
+    _mapPropIdx.insert(std::pair<std::string, int>("bacia", 2));
+    _mapPropIdx.insert(std::pair<std::string, int>("nome", 3));
+    _mapPropIdx.insert(std::pair<std::string, int>("maturidade", 4));
+    _mapPropIdx.insert(std::pair<std::string, int>("qualidade", 5));
+    _mapPropIdx.insert(std::pair<std::string, int>("play", 6));
+    _mapPropIdx.insert(std::pair<std::string, int>("soterramento", 7));
+    _mapPropIdx.insert(std::pair<std::string, int>("pcgna", 8));
+    _mapPropIdx.insert(std::pair<std::string, int>("geracao", 9));
+    _mapPropIdx.insert(std::pair<std::string, int>("migracao", 10));
+    _mapPropIdx.insert(std::pair<std::string, int>("reservatorio", 11));
+    _mapPropIdx.insert(std::pair<std::string, int>("geometria", 12));
+    _mapPropIdx.insert(std::pair<std::string, int>("retencao", 13));
+    _mapPropIdx.insert(std::pair<std::string, int>("pshc", 14));
+    _mapPropIdx.insert(std::pair<std::string, int>("mcVol", 15));
+    _mapPropIdx.insert(std::pair<std::string, int>("miVol", 16));
+    _mapPropIdx.insert(std::pair<std::string, int>("mcVpl", 17));
+    _mapPropIdx.insert(std::pair<std::string, int>("miVpl", 18));
+    _mapPropIdx.insert(std::pair<std::string, int>("custos", 19));
+    _mapPropIdx.insert(std::pair<std::string, int>("tempExec", 20));
+    _mapPropIdx.insert(std::pair<std::string, int>("inicioJanela", 21));
+    _mapPropIdx.insert(std::pair<std::string, int>("finalJanela", 22));
 }
 
 double Projeto::getCoordX()
@@ -173,6 +221,17 @@ int Projeto::getInicioJanela()
 int Projeto::getFinalJanela()
 {
     return _finalJanela;
+}
+
+std::map<std::string, int> Projeto::getMapPropIdx()
+{
+    return _mapPropIdx;
+}
+
+int Projeto::getPropIdx(std::string s)
+{
+    auto it = _mapPropIdx.find(s);
+    return it->second;
 }
 
 void Projeto::setCoordX(double value)

@@ -1,3 +1,4 @@
+// TODO: debug mode
 
 
 #include <bits/stdc++.h>
@@ -30,6 +31,7 @@ class Projeto
         int _tempExec;
         int _inicioJanela;
         int _finalJanela;
+        std::map <std::string, int> _mapPropIdx;
     public:
         // construtores
         Projeto();
@@ -62,6 +64,8 @@ class Projeto
         int getTempExec();
         int getInicioJanela();
         int getFinalJanela();
+        std::map<std::string, int> getMapPropIdx();
+        int getPropIdx(std::string);
 
         // sets
         void setCoordX(double);
