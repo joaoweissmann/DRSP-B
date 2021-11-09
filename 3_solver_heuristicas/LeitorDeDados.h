@@ -8,8 +8,8 @@
 class LeitorDeDados
 {
     private:
-        std::map <std::string, int> _mapPropIdx;
-        std::map<std::string, int> _mapPropIdx;
+        std::map <int, std::string> _mapProjPropIdx;
+        std::map <int, std::string> _mapSondasPropIdx;
     public:
         LeitorDeDados();
         DadosDeEntrada lerDadosDeEntrada(std::string);

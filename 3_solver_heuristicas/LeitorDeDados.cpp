@@ -5,37 +5,36 @@
 
 LeitorDeDados::LeitorDeDados()
 {
-    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
-    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
-    _mapPropIdx.insert(std::pair<std::string, int>("bacia", 2));
-    _mapPropIdx.insert(std::pair<std::string, int>("nome", 3));
-    _mapPropIdx.insert(std::pair<std::string, int>("maturidade", 4));
-    _mapPropIdx.insert(std::pair<std::string, int>("qualidade", 5));
-    _mapPropIdx.insert(std::pair<std::string, int>("play", 6));
-    _mapPropIdx.insert(std::pair<std::string, int>("soterramento", 7));
-    _mapPropIdx.insert(std::pair<std::string, int>("pcgna", 8));
-    _mapPropIdx.insert(std::pair<std::string, int>("geracao", 9));
-    _mapPropIdx.insert(std::pair<std::string, int>("migracao", 10));
-    _mapPropIdx.insert(std::pair<std::string, int>("reservatorio", 11));
-    _mapPropIdx.insert(std::pair<std::string, int>("geometria", 12));
-    _mapPropIdx.insert(std::pair<std::string, int>("retencao", 13));
-    _mapPropIdx.insert(std::pair<std::string, int>("pshc", 14));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVol", 15));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVol", 16));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVpl", 17));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVpl", 18));
-    _mapPropIdx.insert(std::pair<std::string, int>("custos", 19));
-    _mapPropIdx.insert(std::pair<std::string, int>("tempExec", 20));
-    _mapPropIdx.insert(std::pair<std::string, int>("inicioJanela", 21));
-    _mapPropIdx.insert(std::pair<std::string, int>("finalJanela", 22));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(0, "coordX"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(1, "coordY"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(2, "bacia"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(3, "nome"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(4, "maturidade"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(5, "qualidade"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(6, "play"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(7, "soterramento"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(8, "pcgna"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(9, "geracao"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(10, "migracao"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(11, "reservatorio"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(12, "geometria"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(13, "retencao"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(14, "pshc"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(15, "mcVol"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(16, "miVol"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(17, "mcVpl"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(18, "miVpl"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(19, "custos"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(20, "tempExec"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(21, "inicioJanela"));
+    _mapProjPropIdx.insert(std::pair<int, std::string>(22, "finalJanela"));
 
-    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
-    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
+    _mapSondasPropIdx.insert(std::pair<int, std::string>(0, "coordX"));
+    _mapSondasPropIdx.insert(std::pair<int, std::string>(1, "coordY"));
 }
 
 DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
 {
-
     DadosDeEntrada dataset;
 
     std::ifstream infile (filename);
@@ -47,21 +46,9 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
         std::cout << "Lendo dados..." << std::endl;
         std::cout << std::endl;
         
-        std::cout << std::endl << std::endl;
-        std::cout << "Lendo dados gerais" << std::endl;
-        std::cout << std::endl;
-
         int nProjetos, tInit, tFinal, delta, nPeriodos;
         double capitalTotal;
         infile >> nProjetos >> capitalTotal >> tInit >> tFinal >> delta >> nPeriodos;
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Dados gerais lidos" << std::endl;
-        std::cout << std::endl;
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Inserindo dados gerais dentro do dataset" << std::endl;
-        std::cout << std::endl;
 
         dataset.setNProjetos(nProjetos);
         dataset.setCapitalTotal(capitalTotal);
@@ -70,52 +57,161 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
         dataset.setDelta(delta);
         dataset.setNPeriodos(nPeriodos);
 
-        std::cout << std::endl << std::endl;
-        std::cout << "Dados gerais inseridos no dataset" << std::endl;
-        std::cout << std::endl;
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Inserindo no dataset propriedadesProj" << std::endl;
-        std::cout << std::endl;
-
         int propriedadesProj=23;
         dataset.setPropriedadesProj(propriedadesProj);
 
-        std::cout << std::endl << std::endl;
-        std::cout << "propriedadesProj inserido no dataset" << std::endl;
-        std::cout << std::endl;
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Criando vetor de double para ler matriz de projetos" << std::endl;
-        std::cout << std::endl;
-
-        std::vector<std::vector<double>> projetos;
+        std::vector<Projeto> projetos;
         projetos.resize(nProjetos);
         for (int i=0; i<nProjetos; i++)
         {
-            projetos[i].resize(propriedadesProj);
+            projetos[i] = Projeto{};
         }
-        for (int j=0; j<propriedadesProj; j++)
+        for (int i=0; i<propriedadesProj; i++)
         {
-            for (int i=0; i<nProjetos; i++)
+            for (int j=0; j<nProjetos; j++)
             {
-                infile >> projetos[i][j];
+                if (_mapProjPropIdx[i] == "coordX")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setCoordX(temp);
+                }
+                if (_mapProjPropIdx[i] == "coordY")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setCoordY(temp);
+                }
+                if (_mapProjPropIdx[i] == "bacia")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setBacia(temp);
+                }
+                if (_mapProjPropIdx[i] == "nome")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setNome(temp);
+                }
+                if (_mapProjPropIdx[i] == "maturidade")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setMaturidade(temp);
+                }
+                if (_mapProjPropIdx[i] == "qualidade")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setQualidade(temp);
+                }
+                if (_mapProjPropIdx[i] == "play")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setPlay(temp);
+                }
+                if (_mapProjPropIdx[i] == "soterramento")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setSoterramento(temp);
+                }
+                if (_mapProjPropIdx[i] == "pcgna")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setPcgna(temp);
+                }
+                if (_mapProjPropIdx[i] == "geracao")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setGeracao(temp);
+                }
+                if (_mapProjPropIdx[i] == "migracao")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setMigracao(temp);
+                }
+                if (_mapProjPropIdx[i] == "reservatorio")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setReservatorio(temp);
+                }
+                if (_mapProjPropIdx[i] == "geometria")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setGeometria(temp);
+                }
+                if (_mapProjPropIdx[i] == "retencao")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setRetencao(temp);
+                }
+                if (_mapProjPropIdx[i] == "pshc")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setPshc(temp);
+                }
+                if (_mapProjPropIdx[i] == "mcVol")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setMcVol(temp);
+                }
+                if (_mapProjPropIdx[i] == "miVol")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setMiVol(temp);
+                }
+                if (_mapProjPropIdx[i] == "mcVpl")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setMcVpl(temp);
+                }
+                if (_mapProjPropIdx[i] == "miVpl")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setMiVpl(temp);
+                }
+                if (_mapProjPropIdx[i] == "custos")
+                {
+                    double temp;
+                    infile >> temp;
+                    projetos[j].setCusto(temp);
+                }
+                if (_mapProjPropIdx[i] == "tempExec")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setTempExec(temp);
+                }
+                if (_mapProjPropIdx[i] == "inicioJanela")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setInicioJanela(temp);
+                }
+                if (_mapProjPropIdx[i] == "finalJanela")
+                {
+                    int temp;
+                    infile >> temp;
+                    projetos[j].setFinalJanela(temp);
+                }
             }
         }
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Matriz de projetos lida" << std::endl;
-        std::cout << std::endl;
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Inserindo matriz de projetos no dataset" << std::endl;
-        std::cout << std::endl;
-
+        
         dataset.setProjetos(projetos);
-
-        std::cout << std::endl << std::endl;
-        std::cout << "Matriz de projetos inserida no dataset" << std::endl;
-        std::cout << std::endl;
 
         int nSondas;
         infile >> nSondas;
@@ -123,17 +219,30 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
         int propriedadesSondas=2;
         dataset.setPropriedadesSondas(propriedadesSondas);
         
-        std::vector<std::vector<double>> sondas;
+        std::vector<Sonda> sondas;
         sondas.resize(nSondas);
         for (int i=0; i<nSondas; i++)
         {
-            sondas[i].resize(propriedadesSondas);
+            sondas[i] = Sonda{};
         }
-        for (int j=0; j<propriedadesSondas; j++)
+        for (int i=0; i<propriedadesSondas; i++)
         {
-            for (int i=0; i<nSondas; i++)
+            for (int j=0; j<nSondas; j++)
             {
-                infile >> sondas[i][j];
+                sondas[j].setNome(j);
+
+                if (_mapSondasPropIdx[i] == "coordX")
+                {
+                    double temp;
+                    infile >> temp;
+                    sondas[j].setCoordX(temp);
+                }
+                if (_mapSondasPropIdx[i] == "coordY")
+                {
+                    double temp;
+                    infile >> temp;
+                    sondas[j].setCoordY(temp);
+                }
             }
         }
         dataset.setSondas(sondas);

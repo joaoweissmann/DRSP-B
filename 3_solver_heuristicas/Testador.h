@@ -6,6 +6,7 @@
 #include "Sonda.h"
 #include "CalculadorDeDesloc.h"
 #include "DadosDeEntrada.h"
+#include "LeitorDeDados.h"
 
 class Testador
 {
