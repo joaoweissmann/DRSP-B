@@ -1,9 +1,7 @@
-// TODO: debug mode
-
+#ifndef SONDA_H
+#define SONDA_H
 
 #include <bits/stdc++.h>
-
-#pragma once
 
 class Sonda
 {
@@ -11,18 +9,17 @@ class Sonda
         int _nome;
         double _coordX;
         double _coordY;
-        std::map<std::string, int> _mapPropIdx;
     public:
         // construtores
         Sonda();
         Sonda(int, double, double);
 
+        void copyFrom(Sonda);
+
         // gets
         int getNome();
         double getCoordX();
         double getCoordY();
-        std::map<std::string, int> getMapPropIdx();
-        int getPropIdx(std::string);
 
         // sets
         void setNome(int);
@@ -33,3 +30,4 @@ class Sonda
         void print();
 };
 
+#endif

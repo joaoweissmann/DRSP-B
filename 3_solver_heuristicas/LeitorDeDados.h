@@ -1,4 +1,3 @@
-// TODO: debug mode
 
 
 #include <bits/stdc++.h>
@@ -8,7 +7,11 @@
 
 class LeitorDeDados
 {
+    private:
+        std::map <std::string, int> _mapPropIdx;
+        std::map<std::string, int> _mapPropIdx;
     public:
+        LeitorDeDados();
         DadosDeEntrada lerDadosDeEntrada(std::string);
 };
 

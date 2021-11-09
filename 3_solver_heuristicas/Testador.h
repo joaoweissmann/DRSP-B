@@ -1,19 +1,20 @@
-
+#ifndef TESTADOR_H
+#define TESTADOR_H
 
 #include <bits/stdc++.h>
 #include "Projeto.h"
 #include "Sonda.h"
-#include "Vertice.h"
-
-#pragma once
+#include "CalculadorDeDesloc.h"
+#include "DadosDeEntrada.h"
 
 class Testador
 {
     public:
         void testarProjeto();
         void testarSonda();
-        void testarVertice();
+        void testarCalculadorDeDesloc();
         void testarDadosDeEntrada();
         void testarLeitorDeDados();
 };
 
+#endif

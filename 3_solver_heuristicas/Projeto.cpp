@@ -1,5 +1,3 @@
-// TODO: debug mode
-// TODO: asserts
 
 
 #include <bits/stdc++.h>
@@ -30,29 +28,6 @@ Projeto::Projeto()
     _tempExec = 0;
     _inicioJanela = 0;
     _finalJanela = 0;
-    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
-    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
-    _mapPropIdx.insert(std::pair<std::string, int>("bacia", 2));
-    _mapPropIdx.insert(std::pair<std::string, int>("nome", 3));
-    _mapPropIdx.insert(std::pair<std::string, int>("maturidade", 4));
-    _mapPropIdx.insert(std::pair<std::string, int>("qualidade", 5));
-    _mapPropIdx.insert(std::pair<std::string, int>("play", 6));
-    _mapPropIdx.insert(std::pair<std::string, int>("soterramento", 7));
-    _mapPropIdx.insert(std::pair<std::string, int>("pcgna", 8));
-    _mapPropIdx.insert(std::pair<std::string, int>("geracao", 9));
-    _mapPropIdx.insert(std::pair<std::string, int>("migracao", 10));
-    _mapPropIdx.insert(std::pair<std::string, int>("reservatorio", 11));
-    _mapPropIdx.insert(std::pair<std::string, int>("geometria", 12));
-    _mapPropIdx.insert(std::pair<std::string, int>("retencao", 13));
-    _mapPropIdx.insert(std::pair<std::string, int>("pshc", 14));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVol", 15));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVol", 16));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVpl", 17));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVpl", 18));
-    _mapPropIdx.insert(std::pair<std::string, int>("custos", 19));
-    _mapPropIdx.insert(std::pair<std::string, int>("tempExec", 20));
-    _mapPropIdx.insert(std::pair<std::string, int>("inicioJanela", 21));
-    _mapPropIdx.insert(std::pair<std::string, int>("finalJanela", 22));
 }
 
 Projeto::Projeto(double coordX, double coordY, int bacia, int nome, int maturidade, int qualidade, int play, double soterramento,
@@ -60,52 +35,245 @@ Projeto::Projeto(double coordX, double coordY, int bacia, int nome, int maturida
         double pshc, double mcVol, double miVol, double mcVpl, double miVpl, double custo,
         int tempExec, int inicioJanela, int finalJanela)
 {
+    if (coordX < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "coordX fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << coordX << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(coordX >= 0);
     _coordX = coordX;
+    if (coordY < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "coordY fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << coordY << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(coordY >= 0);
     _coordY = coordY;
+    if (bacia < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "bacia fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << bacia << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(bacia >= 0);
     _bacia = bacia;
+    if (nome < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "nome fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << nome << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(nome >= 0);
     _nome = nome;
+    if (maturidade < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "maturidade fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << maturidade << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(maturidade >= 0);
     _maturidade = maturidade;
+    if (qualidade < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "qualidade fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << qualidade << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(qualidade >= 0);
     _qualidade = qualidade;
+    if (play < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "play fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << play << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(play >= 0);
     _play = play;
+    if (soterramento < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "soterramento fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << soterramento << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(soterramento >= 0);
     _soterramento = soterramento;
+    if ((pcgna < 0) || (pcgna > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "pcgna fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << pcgna << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((pcgna >= 0) && (pcgna <= 1));
     _pcgna = pcgna;
+    if ((geracao < 0) || (geracao > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "geracao fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << geracao << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((geracao >= 0) && (geracao <= 1));
     _geracao = geracao;
+    if ((migracao < 0) || (migracao > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "migracao fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << migracao << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((migracao >= 0) && (migracao <= 1));
     _migracao = migracao;
+    if ((reservatorio < 0) || (reservatorio > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "reservatorio fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << reservatorio << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((reservatorio >= 0) && (reservatorio <= 1));
     _reservatorio = reservatorio;
+    if ((geometria < 0) || (geometria > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "geometria fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << geometria << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((geometria >= 0) && (geometria <= 1));
     _geometria = geometria;
+    if ((retencao < 0) || (retencao > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "retencao fornecida é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << retencao << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((retencao >= 0) && (retencao <= 1));
     _retencao = retencao;
+    if ((pshc < 0) || (pshc > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "pshc fornecido é menor do que zero ou maior que um." << std::endl;
+        std::cout << "Valor fornecido: " << pshc << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((pshc >= 0) && (pshc <= 1));
     _pshc = pshc;
+    if (mcVol < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "mcVol fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << mcVol << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(mcVol >= 0);
     _mcVol = mcVol;
+    if (miVol < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "miVol fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << miVol << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(miVol >= 0);
     _miVol = miVol;
     _mcVpl = mcVpl;
     _miVpl = miVpl;
+    if (custo < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "custo fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << custo << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(custo >= 0);
     _custo = custo;
+    if (tempExec < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "tempExec fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << tempExec << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(tempExec >= 0);
     _tempExec = tempExec;
+    if (inicioJanela < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "inicioJanela fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << inicioJanela << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(inicioJanela >= 0);
     _inicioJanela = inicioJanela;
+    if (finalJanela < inicioJanela)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "finalJanela fornecido é menor do que o inicioJanela." << std::endl;
+        std::cout << "Valor fornecido: " << finalJanela << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(finalJanela >= inicioJanela);
     _finalJanela = finalJanela;
-    _mapPropIdx.insert(std::pair<std::string, int>("coordX", 0));
-    _mapPropIdx.insert(std::pair<std::string, int>("coordY", 1));
-    _mapPropIdx.insert(std::pair<std::string, int>("bacia", 2));
-    _mapPropIdx.insert(std::pair<std::string, int>("nome", 3));
-    _mapPropIdx.insert(std::pair<std::string, int>("maturidade", 4));
-    _mapPropIdx.insert(std::pair<std::string, int>("qualidade", 5));
-    _mapPropIdx.insert(std::pair<std::string, int>("play", 6));
-    _mapPropIdx.insert(std::pair<std::string, int>("soterramento", 7));
-    _mapPropIdx.insert(std::pair<std::string, int>("pcgna", 8));
-    _mapPropIdx.insert(std::pair<std::string, int>("geracao", 9));
-    _mapPropIdx.insert(std::pair<std::string, int>("migracao", 10));
-    _mapPropIdx.insert(std::pair<std::string, int>("reservatorio", 11));
-    _mapPropIdx.insert(std::pair<std::string, int>("geometria", 12));
-    _mapPropIdx.insert(std::pair<std::string, int>("retencao", 13));
-    _mapPropIdx.insert(std::pair<std::string, int>("pshc", 14));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVol", 15));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVol", 16));
-    _mapPropIdx.insert(std::pair<std::string, int>("mcVpl", 17));
-    _mapPropIdx.insert(std::pair<std::string, int>("miVpl", 18));
-    _mapPropIdx.insert(std::pair<std::string, int>("custos", 19));
-    _mapPropIdx.insert(std::pair<std::string, int>("tempExec", 20));
-    _mapPropIdx.insert(std::pair<std::string, int>("inicioJanela", 21));
-    _mapPropIdx.insert(std::pair<std::string, int>("finalJanela", 22));
+}
+
+void Projeto::copyFrom(Projeto p)
+{
+    _coordX = p.getCoordX();
+    _coordY = p.getCoordY();
+    _bacia = p.getBacia();
+    _nome = p.getNome();
+    _maturidade = p.getMaturidade();
+    _qualidade = p.getQualidade();
+    _play = p.getPlay();
+    _soterramento = p.getSoterramento();
+    _pcgna = p.getPcgna();
+    _geracao = p.getGeracao();
+    _migracao = p.getMigracao();
+    _reservatorio = p.getReservatorio();
+    _geometria = p.getGeometria();
+    _retencao = p.getRetencao();
+    _pshc = p.getPshc();
+    _mcVol = p.getMcVol();
+    _miVol = p.getMiVol();
+    _mcVpl = p.getMcVpl();
+    _miVpl = p.getMiVpl();
+    _custo = p.getCusto();
+    _tempExec = p.getTempExec();
+    _inicioJanela = p.getInicioJanela();
+    _finalJanela = p.getFinalJanela();
 }
 
 double Projeto::getCoordX()
@@ -223,99 +391,241 @@ int Projeto::getFinalJanela()
     return _finalJanela;
 }
 
-std::map<std::string, int> Projeto::getMapPropIdx()
-{
-    return _mapPropIdx;
-}
-
-int Projeto::getPropIdx(std::string s)
-{
-    auto it = _mapPropIdx.find(s);
-    return it->second;
-}
-
 void Projeto::setCoordX(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "coordX fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _coordX = value;
 }
 
 void Projeto::setCoordY(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "coordY fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _coordY = value;
 }
 
 void Projeto::setBacia(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "bacia fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _bacia = value;
 }
 
 void Projeto::setNome(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "nome fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _nome = value;
 }
 
 void Projeto::setMaturidade(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "maturidade fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _maturidade = value;
 }
 
 void Projeto::setQualidade(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "qualidade fornecida é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _qualidade = value;
 }
 
 void Projeto::setPlay(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "play fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _play = value;
 }
 
 void Projeto::setSoterramento(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "soterramento fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _soterramento = value;
 }
 
 void Projeto::setPcgna(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "pcgna fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _pcgna = value;
 }
 
 void Projeto::setGeracao(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "geracao fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _geracao = value;
 }
 
 void Projeto::setMigracao(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "migracao fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _migracao = value;
 }
 
 void Projeto::setReservatorio(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "reservatorio fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _reservatorio = value;
 }
 
 void Projeto::setGeometria(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "geometria fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _geometria = value;
 }
 
 void Projeto::setRetencao(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "retencao fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _retencao = value;
 }
 
 void Projeto::setPshc(double value)
 {
+    if ((value < 0) || (value > 1))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "pshc fornecida é menor do que zero ou maior do que um." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((value >= 0) && (value <= 1));
     _pshc = value;
 }
 
 void Projeto::setMcVol(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "mcVol fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _mcVol = value;
 }
 
 void Projeto::setMiVol(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "miVol fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _miVol = value;
 }
 
@@ -331,21 +641,57 @@ void Projeto::setMiVpl(double value)
 
 void Projeto::setCusto(double value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "custo fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _custo = value;
 }
 
 void Projeto::setTempExec(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "tempExec fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _tempExec = value;
 }
 
 void Projeto::setInicioJanela(int value)
 {
+    if (value < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "inicioJanela fornecido é menor do que zero." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= 0);
     _inicioJanela = value;
 }
 
 void Projeto::setFinalJanela(int value)
 {
+    if (value < _inicioJanela)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "finalJanela fornecido é menor do que o inicioJanela." << std::endl;
+        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(value >= _inicioJanela);
     _finalJanela = value;
 }
 

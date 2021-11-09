@@ -1,9 +1,7 @@
-// TODO: debug mode
-
+#ifndef PROJETO_H
+#define PROJETO_H
 
 #include <bits/stdc++.h>
-
-#pragma once
 
 class Projeto
 {
@@ -31,7 +29,6 @@ class Projeto
         int _tempExec;
         int _inicioJanela;
         int _finalJanela;
-        std::map <std::string, int> _mapPropIdx;
     public:
         // construtores
         Projeto();
@@ -39,6 +36,8 @@ class Projeto
                 double, double, double, double, double, double,
                 double, double, double, double, double, double,
                 int, int, int);
+        
+        void copyFrom(Projeto);
 
         // gets
         double getCoordX();
@@ -64,8 +63,6 @@ class Projeto
         int getTempExec();
         int getInicioJanela();
         int getFinalJanela();
-        std::map<std::string, int> getMapPropIdx();
-        int getPropIdx(std::string);
 
         // sets
         void setCoordX(double);
@@ -96,3 +93,4 @@ class Projeto
         void print();
 };
 
+#endif

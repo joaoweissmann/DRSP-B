@@ -1,5 +1,3 @@
-// TODO: debug mode
-// TODO: asserts
 
 
 #include <bits/stdc++.h>
@@ -16,9 +14,100 @@ DadosDeEntrada::DadosDeEntrada()
     _tFinal = 0;
     _delta = 0;
     _capitalTotal = 0;
-    _projetos.resize(0); // TODO: isso funciona?
-    _sondas.resize(0); // TODO: isso funciona?
-    _desloc.resize(0); // TODO: isso funciona?
+    _projetos.resize(0);
+    _sondas.resize(0); 
+    _desloc.resize(0);
+}
+
+DadosDeEntrada::DadosDeEntrada(int nProjetos, int nSondas, int nPeriodos, int propriedadesProj, int propriedadesSondas,
+                               int tInit, int tFinal, int delta, double capitalTotal, std::vector<Projeto> projetos, 
+                               std::vector<Sonda> sondas, std::vector<std::vector<double>> desloc)
+{
+    _nPeriodos = nPeriodos;
+    _propriedadesProj = propriedadesProj;
+    _propriedadesSondas = propriedadesSondas;
+    _tInit = tInit;
+    _tFinal = tFinal;
+    _delta = delta;
+    _capitalTotal = capitalTotal;
+
+    if (nProjetos != projetos.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "nProjetos não compatível com tamanho do vetor projetos." << std::endl;
+        std::cout << "nProjetos: " << nProjetos << std::endl;
+        std::cout << "projetos.size(): " << projetos.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(nProjetos == projetos.size());
+    _nProjetos = nProjetos;
+    _projetos.resize(nProjetos);
+    for (int i=0; i<nProjetos; i++)
+    {
+        _projetos[i] = Projeto();
+    }
+    for (int i=0; i<nProjetos; i++)
+    {
+        _projetos[i].copyFrom(projetos[i]);
+    }
+
+    if (nSondas != sondas.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "nSondas não compatível com tamanho do vetor sondas." << std::endl;
+        std::cout << "nSondas: " << nSondas << std::endl;
+        std::cout << "sondas.size(): " << sondas.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(nSondas == sondas.size());
+    _nSondas = nSondas;
+    _sondas.resize(nSondas);
+    for (int i=0; i<nSondas; i++)
+    {
+        _sondas[i] = Sonda();
+    }
+    for (int i=0; i<nSondas; i++)
+    {
+        _sondas[i].copyFrom(sondas[i]);
+    }
+
+    if ((nProjetos+nSondas) != desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "(nProjetos+nSondas) não compatível com tamanho do vetor desloc." << std::endl;
+        std::cout << "(nProjetos+nSondas): " << (nProjetos+nSondas) << std::endl;
+        std::cout << "desloc.size(): " << desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert((nProjetos+nSondas) == desloc.size());
+    for (int i=0; i<(nProjetos+nSondas); i++)
+    {
+        if ((nProjetos+nSondas) != desloc[i].size())
+        {
+            std::cout << std::endl;
+            std::cout << "################## ATENÇÃO #################" << std::endl;
+            std::cout << "(nProjetos+nSondas) não compatível com tamanho do vetor desloc[" << i << "]." << std::endl;
+            std::cout << "(nProjetos+nSondas): " << (nProjetos+nSondas) << std::endl;
+            std::cout << "desloc[" << i << "].size(): " << desloc[i].size() << std::endl;
+            std::cout << "############################################" << std::endl;
+        }
+        assert((nProjetos+nSondas) == desloc[i].size());
+    }
+    _desloc.resize((nSondas+nProjetos));
+    for (int i=0; i<(nSondas+nProjetos); i++)
+    {
+        _desloc[i].resize((nSondas+nProjetos));
+    }
+    for (int i=0; i<(nSondas+nProjetos); i++)
+    {
+        for (int j=0; j<(nSondas+nProjetos); j++)
+        {
+            _desloc[i][j] = desloc[i][j];
+        }
+    }
 }
 
 int DadosDeEntrada::getNProjetos()
@@ -73,6 +162,16 @@ std::vector<Projeto> DadosDeEntrada::getProjetos()
 
 Projeto DadosDeEntrada::getProjeto(int i)
 {
+    if (i >= _projetos.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << i << std::endl;
+        std::cout << "projetos.size(): " << _projetos.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(i < _projetos.size());
     return _projetos[i];
 }
 
@@ -83,6 +182,16 @@ std::vector<Sonda> DadosDeEntrada::getSondas()
 
 Sonda DadosDeEntrada::getSonda(int i)
 {
+    if (i >= _sondas.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << i << std::endl;
+        std::cout << "sondas.size(): " << _sondas.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(i < _sondas.size());
     return _sondas[i];
 }
 
@@ -91,33 +200,255 @@ std::vector<std::vector<double>> DadosDeEntrada::getDesloc()
     return _desloc;
 }
 
-double DadosDeEntrada::getDesloc(int i, int j)
-{
-    return _desloc[i][j];
-}
-
 double DadosDeEntrada::getDesloc(Sonda s, Projeto p)
 {
-    Vertice v{_nSondas, _nProjetos};
     int sondaIndex, projIndex;
-    sondaIndex = v.getVerticeIndex(s);
-    projIndex = v.getVerticeIndex(p);
+    sondaIndex = s.getNome();
+    projIndex = p.getNome() + _nSondas;
+
+    if (sondaIndex >= _nSondas)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "nSondas: " << _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _nSondas);
+
+    if (projIndex >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < (_nProjetos + _nSondas));
+
+    if (sondaIndex >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _desloc.size());
+
+    if (projIndex >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < _desloc[0].size());
+
     return _desloc[sondaIndex][projIndex];
 }
 
 double DadosDeEntrada::getDesloc(Projeto p1, Projeto p2)
 {
-    Vertice v{_nSondas, _nProjetos};
     int proj1Index, proj2Index;
-    proj1Index = v.getVerticeIndex(p1);
-    proj2Index = v.getVerticeIndex(p2);
+    proj1Index = p1.getNome() + _nSondas;
+    proj2Index = p2.getNome() + _nSondas;
+
+    if (proj1Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "nSondas + nProjetos: " << _nSondas + _nProjetos << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < (_nSondas + _nProjetos));
+
+    if (proj2Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto 2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < (_nProjetos + _nSondas));
+
+    if (proj1Index >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < _desloc.size());
+
+    if (proj2Index >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < _desloc[0].size());
+
+    return _desloc[proj1Index][proj2Index];
+}
+
+double DadosDeEntrada::getDeslocIdx2Idx(int idx1, int idx2)
+{
+    if (idx1 >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice1 fornecido inválido." << std::endl;
+        std::cout << "Índice1: " << idx1 << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(idx1 < _desloc.size());
+
+    if (idx2 >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice2 fornecido inválido." << std::endl;
+        std::cout << "Índice2: " << idx2 << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(idx2 < _desloc[0].size());
+
+    return _desloc[idx1][idx2];
+}
+
+double DadosDeEntrada::getDeslocSonda2Proj(int sNome, int pNome)
+{
+    int sondaIndex, projIndex;
+    sondaIndex = sNome;
+    projIndex = pNome + _nSondas;
+
+    if (sondaIndex >= _nSondas)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "nSondas: " << _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _nSondas);
+
+    if (projIndex >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < (_nProjetos + _nSondas));
+
+    if (sondaIndex >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _desloc.size());
+
+    if (projIndex >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < _desloc[0].size());
+
+    return _desloc[sondaIndex][projIndex];
+}
+
+double DadosDeEntrada::getDeslocProj2Proj(int p1Nome, int p2Nome)
+{
+    int proj1Index, proj2Index;
+    proj1Index = p1Nome + _nSondas;
+    proj2Index = p2Nome + _nSondas;
+
+    if (proj1Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "nSondas + nProjetos: " << _nSondas + _nProjetos << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < (_nSondas + _nProjetos));
+
+    if (proj2Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto 2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < (_nProjetos + _nSondas));
+
+    if (proj1Index >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < _desloc.size());
+
+    if (proj2Index >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < _desloc[0].size());
+
     return _desloc[proj1Index][proj2Index];
 }
 
 void DadosDeEntrada::setNProjetos(int value)
 {
     _nProjetos = value;
+    
     _projetos.resize(_nProjetos);
+    for (int i=0; i<_nProjetos; i++)
+    {
+        _projetos[i] = Projeto{};
+    }
+
     _desloc.resize((_nSondas+_nProjetos));
     for (int i=0; i<(_nSondas+_nProjetos); i++)
     {
@@ -128,7 +459,13 @@ void DadosDeEntrada::setNProjetos(int value)
 void DadosDeEntrada::setNSondas(int value)
 {
     _nSondas = value;
+    
     _sondas.resize(_nSondas);
+    for (int i=0; i<_nSondas; i++)
+    {
+        _sondas[i] = Sonda{};
+    }
+    
     _desloc.resize((_nSondas+_nProjetos));
     for (int i=0; i<(_nSondas+_nProjetos); i++)
     {
@@ -171,124 +508,103 @@ void DadosDeEntrada::setCapitalTotal(double value)
     _capitalTotal = value;
 }
 
-void DadosDeEntrada::setProjetos(std::vector<std::vector<double>> v)
-{
-    Projeto p;
-    for (int i=0; i<_nProjetos; i++)
-    {
-        _projetos[i].setBacia(v[i][p.getPropIdx("bacia")]);
-        _projetos[i].setCoordX(v[i][p.getPropIdx("coordX")]);
-        _projetos[i].setCoordY(v[i][p.getPropIdx("coordY")]);
-        _projetos[i].setCusto(v[i][p.getPropIdx("custo")]);
-        _projetos[i].setFinalJanela(v[i][p.getPropIdx("finalJanela")]);
-        _projetos[i].setGeometria(v[i][p.getPropIdx("geometria")]);
-        _projetos[i].setGeracao(v[i][p.getPropIdx("geracao")]);
-        _projetos[i].setInicioJanela(v[i][p.getPropIdx("inicioJanela")]);
-        _projetos[i].setMaturidade(v[i][p.getPropIdx("maturidade")]);
-        _projetos[i].setMcVol(v[i][p.getPropIdx("mcVol")]);
-        _projetos[i].setMcVpl(v[i][p.getPropIdx("mcVpl")]);
-        _projetos[i].setMigracao(v[i][p.getPropIdx("migracao")]);
-        _projetos[i].setMiVol(v[i][p.getPropIdx("miVol")]);
-        _projetos[i].setMiVpl(v[i][p.getPropIdx("miVpl")]);
-        _projetos[i].setNome(v[i][p.getPropIdx("nome")]);
-        _projetos[i].setPcgna(v[i][p.getPropIdx("pcgna")]);
-        _projetos[i].setPlay(v[i][p.getPropIdx("play")]);
-        _projetos[i].setPshc(v[i][p.getPropIdx("pshc")]);
-        _projetos[i].setQualidade(v[i][p.getPropIdx("qualidade")]);
-        _projetos[i].setReservatorio(v[i][p.getPropIdx("reservatorio")]);
-        _projetos[i].setRetencao(v[i][p.getPropIdx("retencao")]);
-        _projetos[i].setSoterramento(v[i][p.getPropIdx("soterramento")]);
-        _projetos[i].setTempExec(v[i][p.getPropIdx("tempExec")]);
-    }
-}
-
 void DadosDeEntrada::setProjetos(std::vector<Projeto> v)
 {
+    if (v.size() != _projetos.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Tamanho do vetor de projetos fornecido inválido." << std::endl;
+        std::cout << "Tamanho: " << v.size() << std::endl;
+        std::cout << "projetos.size(): " << _projetos.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(v.size() == _projetos.size());
+
     for (int i=0; i<_nProjetos; i++)
     {
-        _projetos[i].setBacia(v[i].getBacia());
-        _projetos[i].setCoordX(v[i].getCoordX());
-        _projetos[i].setCoordY(v[i].getCoordY());
-        _projetos[i].setCusto(v[i].getCusto());
-        _projetos[i].setFinalJanela(v[i].getFinalJanela());
-        _projetos[i].setGeometria(v[i].getGeometria());
-        _projetos[i].setGeracao(v[i].getGeracao());
-        _projetos[i].setInicioJanela(v[i].getInicioJanela());
-        _projetos[i].setMaturidade(v[i].getMaturidade());
-        _projetos[i].setMcVol(v[i].getMcVol());
-        _projetos[i].setMcVpl(v[i].getMcVpl());
-        _projetos[i].setMigracao(v[i].getMigracao());
-        _projetos[i].setMiVol(v[i].getMiVol());
-        _projetos[i].setMiVpl(v[i].getMiVpl());
-        _projetos[i].setNome(v[i].getNome());
-        _projetos[i].setPcgna(v[i].getPcgna());
-        _projetos[i].setPlay(v[i].getPlay());
-        _projetos[i].setPshc(v[i].getPshc());
-        _projetos[i].setQualidade(v[i].getQualidade());
-        _projetos[i].setReservatorio(v[i].getReservatorio());
-        _projetos[i].setRetencao(v[i].getRetencao());
-        _projetos[i].setSoterramento(v[i].getSoterramento());
-        _projetos[i].setTempExec(v[i].getTempExec());
+        _projetos[i].copyFrom(v[i]);
     }
 }
 
 void DadosDeEntrada::setProjeto(Projeto v, int i)
 {
-    _projetos[i].setBacia(v.getBacia());
-    _projetos[i].setCoordX(v.getCoordX());
-    _projetos[i].setCoordY(v.getCoordY());
-    _projetos[i].setCusto(v.getCusto());
-    _projetos[i].setFinalJanela(v.getFinalJanela());
-    _projetos[i].setGeometria(v.getGeometria());
-    _projetos[i].setGeracao(v.getGeracao());
-    _projetos[i].setInicioJanela(v.getInicioJanela());
-    _projetos[i].setMaturidade(v.getMaturidade());
-    _projetos[i].setMcVol(v.getMcVol());
-    _projetos[i].setMcVpl(v.getMcVpl());
-    _projetos[i].setMigracao(v.getMigracao());
-    _projetos[i].setMiVol(v.getMiVol());
-    _projetos[i].setMiVpl(v.getMiVpl());
-    _projetos[i].setNome(v.getNome());
-    _projetos[i].setPcgna(v.getPcgna());
-    _projetos[i].setPlay(v.getPlay());
-    _projetos[i].setPshc(v.getPshc());
-    _projetos[i].setQualidade(v.getQualidade());
-    _projetos[i].setReservatorio(v.getReservatorio());
-    _projetos[i].setRetencao(v.getRetencao());
-    _projetos[i].setSoterramento(v.getSoterramento());
-    _projetos[i].setTempExec(v.getTempExec());
-}
-
-void DadosDeEntrada::setSondas(std::vector<std::vector<double>> v)
-{
-    Sonda s;
-    for (int i=0; i<_nSondas; i++)
+    if (i >= _projetos.size())
     {
-        _sondas[i].setCoordX(v[i][s.getPropIdx("coordX")]);
-        _sondas[i].setCoordY(v[i][s.getPropIdx("coordY")]);
-        _sondas[i].setNome(i);
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << i << std::endl;
+        std::cout << "projetos.size(): " << _projetos.size() << std::endl;
+        std::cout << "############################################" << std::endl;
     }
+    assert(i < _projetos.size());
+
+    _projetos[i].copyFrom(v);
 }
 
 void DadosDeEntrada::setSondas(std::vector<Sonda> v)
 {
+    if (v.size() != _sondas.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Tamanho do vetor de sondas fornecido inválido." << std::endl;
+        std::cout << "Tamanho: " << v.size() << std::endl;
+        std::cout << "sondas.size(): " << _sondas.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(v.size() == _sondas.size());
+
     for (int i=0; i<_nSondas; i++)
     {
-        _sondas[i].setCoordX(v[i].getCoordX());
-        _sondas[i].setCoordY(v[i].getCoordY());
-        _sondas[i].setNome(v[i].getNome());
+        _sondas[i].copyFrom(v[i]);
     }
 }
 
 void DadosDeEntrada::setSonda(Sonda v, int i)
 {
-    _sondas[i].setCoordX(v.getCoordX());
-    _sondas[i].setCoordY(v.getCoordY());
-    _sondas[i].setNome(v.getNome());
+    if (i >= _sondas.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << i << std::endl;
+        std::cout << "sondas.size(): " << _sondas.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(i < _sondas.size());
+
+    _sondas[i].copyFrom(v);
 }
 
 void DadosDeEntrada::setDesloc(std::vector<std::vector<double>> v)
 {
+    if (v.size() != _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Vetor de deslocamentos fornecido inválido." << std::endl;
+        std::cout << "Tamanho: " << v.size() << std::endl;
+        std::cout << "projetos.size(): " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(v.size() == _desloc.size());
+    
+    for (int i=0; i<(_nSondas+_nProjetos); i++)
+    {
+        if (v[i].size() != _desloc[i].size())
+        {
+            std::cout << std::endl;
+            std::cout << "################## ATENÇÃO #################" << std::endl;
+            std::cout << "Vetor de deslocamentos fornecido inválido." << std::endl;
+            std::cout << "Tamanho: " << v[i].size() << std::endl;
+            std::cout << "projetos.size(): " << _desloc[i].size() << std::endl;
+            std::cout << "############################################" << std::endl;
+        }
+        assert(v[i].size() == _desloc[i].size());
+    }
+
     for (int i=0; i<(_nSondas+_nProjetos); i++)
     {
         for (int j=0; j<(_nSondas+_nProjetos); j++)
@@ -298,9 +614,243 @@ void DadosDeEntrada::setDesloc(std::vector<std::vector<double>> v)
     }
 }
 
-void DadosDeEntrada::setDesloc(int i, int j, double value)
+void DadosDeEntrada::setDesloc(Sonda s, Projeto p, double v)
 {
-    _desloc[i][j] = value;
+    int sondaIndex, projIndex;
+    sondaIndex = s.getNome();
+    projIndex = p.getNome() + _nSondas;
+
+    if (sondaIndex >= _nSondas)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "nSondas: " << _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _nSondas);
+
+    if (projIndex >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < (_nProjetos + _nSondas));
+
+    if (sondaIndex >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _desloc.size());
+
+    if (projIndex >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < _desloc[0].size());
+
+    _desloc[sondaIndex][projIndex] = v;
+}
+
+void DadosDeEntrada::setDesloc(Projeto p1, Projeto p2, double v)
+{
+    int proj1Index, proj2Index;
+    proj1Index = p1.getNome() + _nSondas;
+    proj2Index = p2.getNome() + _nSondas;
+
+    if (proj1Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "nSondas + nProjetos: " << _nSondas + _nProjetos << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < (_nSondas + _nProjetos));
+
+    if (proj2Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto 2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < (_nProjetos + _nSondas));
+
+    if (proj1Index >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < _desloc.size());
+
+    if (proj2Index >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < _desloc[0].size());
+
+    _desloc[proj1Index][proj2Index] = v;
+}
+
+void DadosDeEntrada::setDeslocIdx2Idx(int idx1, int idx2, double v)
+{
+    if (idx1 >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice1 fornecido inválido." << std::endl;
+        std::cout << "Índice1: " << idx1 << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(idx1 < _desloc.size());
+
+    if (idx2 >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice2 fornecido inválido." << std::endl;
+        std::cout << "Índice2: " << idx2 << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(idx2 < _desloc[0].size());
+
+    _desloc[idx1][idx2] = v;
+}
+
+void DadosDeEntrada::setDeslocSonda2Proj(int sNome, int pNome, double v)
+{
+    int sondaIndex, projIndex;
+    sondaIndex = sNome;
+    projIndex = pNome + _nSondas;
+
+    if (sondaIndex >= _nSondas)
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "nSondas: " << _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _nSondas);
+
+    if (projIndex >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < (_nProjetos + _nSondas));
+
+    if (sondaIndex >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de sonda fornecido inválido." << std::endl;
+        std::cout << "Índice: " << sondaIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(sondaIndex < _desloc.size());
+
+    if (projIndex >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice de projeto fornecido inválido." << std::endl;
+        std::cout << "Índice: " << projIndex << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(projIndex < _desloc[0].size());
+
+    _desloc[sondaIndex][projIndex] = v;
+}
+
+void DadosDeEntrada::setDeslocProj2Proj(int p1Nome, int p2Nome, double v)
+{
+    int proj1Index, proj2Index;
+    proj1Index = p1Nome + _nSondas;
+    proj2Index = p2Nome + _nSondas;
+
+    if (proj1Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "nSondas + nProjetos: " << _nSondas + _nProjetos << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < (_nSondas + _nProjetos));
+
+    if (proj2Index >= (_nProjetos + _nSondas))
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto 2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "nProjetos + _nSondas: " << _nProjetos + _nSondas << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < (_nProjetos + _nSondas));
+
+    if (proj1Index >= _desloc.size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto1 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj1Index << std::endl;
+        std::cout << "desloc.size: " << _desloc.size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj1Index < _desloc.size());
+
+    if (proj2Index >= _desloc[0].size())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "Índice do projeto2 fornecido inválido." << std::endl;
+        std::cout << "Índice: " << proj2Index << std::endl;
+        std::cout << "desloc.size: " << _desloc[0].size() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert(proj2Index < _desloc[0].size());
+
+    _desloc[proj1Index][proj2Index] = v;
 }
 
 void DadosDeEntrada::print()
@@ -343,6 +893,7 @@ void DadosDeEntrada::print()
         std::cout << _projetos[i].getTempExec() << " ";
         std::cout << _projetos[i].getInicioJanela() << " ";
         std::cout << _projetos[i].getFinalJanela() << " ";
+        std::cout << std::endl;
     } std::cout << std::endl;
 
     std::cout << "dados lidos de sondas: " << std::endl;
@@ -350,6 +901,7 @@ void DadosDeEntrada::print()
     {
         std::cout << _sondas[i].getCoordX() << " ";
         std::cout << _sondas[i].getCoordY() << " ";
+        std::cout << std::endl;
     } std::cout << std::endl;
     
     std::cout << "deslocamentos lidos: " << std::endl;

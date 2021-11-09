@@ -1,12 +1,9 @@
-// TODO: debug mode
-
+#ifndef DADOS_DE_ENTRADA_H
+#define DADOS_DE_ENTRADA_H
 
 #include <bits/stdc++.h>
 #include "Sonda.h"
 #include "Projeto.h"
-#include "Vertice.h"
-
-#pragma once
 
 class DadosDeEntrada
 {
@@ -20,7 +17,9 @@ class DadosDeEntrada
         std::vector<std::vector<double>> _desloc;
     public:
         DadosDeEntrada();
-
+        DadosDeEntrada(int, int, int, int, int, int, int, int, double, 
+                        std::vector<Projeto>, std::vector<Sonda>, std::vector<std::vector<double>>);
+        
         int getNProjetos();
         int getNSondas();
         int getNPeriodos();
@@ -35,9 +34,11 @@ class DadosDeEntrada
         std::vector<Sonda> getSondas();
         Sonda getSonda(int);
         std::vector<std::vector<double>> getDesloc();
-        double getDesloc(int, int);
         double getDesloc(Sonda, Projeto);
         double getDesloc(Projeto, Projeto);
+        double getDeslocIdx2Idx(int, int);
+        double getDeslocSonda2Proj(int, int);
+        double getDeslocProj2Proj(int, int);
         
         void setNProjetos(int);
         void setNSondas(int);
@@ -48,15 +49,18 @@ class DadosDeEntrada
         void setTFinal(int);
         void setDelta(int);
         void setCapitalTotal(double);
-        void setProjetos(std::vector<std::vector<double>>);
         void setProjetos(std::vector<Projeto>);
         void setProjeto(Projeto, int);
-        void setSondas(std::vector<std::vector<double>>);
         void setSondas(std::vector<Sonda>);
         void setSonda(Sonda, int);
         void setDesloc(std::vector<std::vector<double>>);
-        void setDesloc(int, int, double);
+        void setDesloc(Sonda, Projeto, double);
+        void setDesloc(Projeto, Projeto, double);
+        void setDeslocIdx2Idx(int, int, double);
+        void setDeslocSonda2Proj(int, int, double);
+        void setDeslocProj2Proj(int, int, double);
 
         void print();
 };
 
+#endif
