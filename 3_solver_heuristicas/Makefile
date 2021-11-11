@@ -1,31 +1,36 @@
-# TODO: colocar variáveis guardando lista de arquivos
-# TODO: colocar mais opções do compilador
+
+
+objects = main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o
+
+headers = Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
+
+CFLAGS = -std=c++11 -O2 -Wall
 
 all: metaheuristicas
 
-metaheuristicas: main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o
-	g++ -o metaheuristicas main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o
+metaheuristicas: $(objects)
+	g++ -o metaheuristicas $(CFLAGS) $(objects)
 
-main.o: main.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o main.o main.cpp
+main.o: main.cpp $(headers)
+	g++ -c -o main.o $(CFLAGS) main.cpp
 
-Testador.o: Testador.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o Testador.o Testador.cpp
+Testador.o: Testador.cpp $(headers)
+	g++ -c -o Testador.o $(CFLAGS) Testador.cpp
 
-Projeto.o: Projeto.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o Projeto.o Projeto.cpp
+Projeto.o: Projeto.cpp $(headers)
+	g++ -c -o Projeto.o $(CFLAGS) Projeto.cpp
 
-Sonda.o: Sonda.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o Sonda.o Sonda.cpp
+Sonda.o: Sonda.cpp $(headers)
+	g++ -c -o Sonda.o $(CFLAGS) Sonda.cpp
 
-CalculadorDeDesloc.o: CalculadorDeDesloc.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o CalculadorDeDesloc.o CalculadorDeDesloc.cpp
+CalculadorDeDesloc.o: CalculadorDeDesloc.cpp $(headers)
+	g++ -c -o CalculadorDeDesloc.o $(CFLAGS) CalculadorDeDesloc.cpp
 
-DadosDeEntrada.o: DadosDeEntrada.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o DadosDeEntrada.o DadosDeEntrada.cpp
+DadosDeEntrada.o: DadosDeEntrada.cpp $(headers)
+	g++ -c -o DadosDeEntrada.o $(CFLAGS) DadosDeEntrada.cpp
 
-LeitorDeDados.o: LeitorDeDados.cpp Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
-	g++ -c -o LeitorDeDados.o LeitorDeDados.cpp
+LeitorDeDados.o: LeitorDeDados.cpp $(headers)
+	g++ -c -o LeitorDeDados.o $(CFLAGS) LeitorDeDados.cpp
 
 clean:
 	rm -rf *.o *~ metaheuristicas
