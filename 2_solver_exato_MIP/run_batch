@@ -1,7 +1,7 @@
 
 rm -rf resultados_automatico.txt
 
-yourfilenames=`ls ./instancias/*`
+yourfilenames=`ls /home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/*`
 
 for eachfile in $yourfilenames
 do

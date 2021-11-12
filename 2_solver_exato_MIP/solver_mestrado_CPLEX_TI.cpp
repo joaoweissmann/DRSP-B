@@ -33,7 +33,7 @@ int main()
         // reading data from file
         cout << "Lendo dados de entrada..." << endl;
         
-        IloInt n_projetos, n_sondas;
+        int n_projetos, n_sondas;
         IloInt n_periodos, t_init, t_final, delta;
         IloNum capital_total;
 
@@ -53,55 +53,202 @@ int main()
         }
 
         cout << "Instanciando arrays..." << endl;
-        IloNumArray coords_x(env), coords_y(env);
-        IloNumArray bacias(env), nome_projetos(env);
-        IloNumArray maturidades(env), qualidades_dado(env), plays(env); 
-        IloNumArray soterramentos(env), pcgnas(env);
-        IloNumArray geracao(env), migracao(env), reservatorio(env); 
-        IloNumArray geometria(env), retencao(env), pshc(env);
-        IloNumArray medias_volume_condicional(env), medias_volume_incondicional(env);
-        IloNumArray medias_vpl_condicional(env), medias_vpl_incondicional(env);
-        IloNumArray custos(env);
-        IloIntArray tempos_exec(env), inicio_janela(env), final_janela(env);
+        IloNumArray coords_x(env, n_projetos), coords_y(env, n_projetos);
+        IloNumArray bacias(env, n_projetos), nome_projetos(env, n_projetos);
+        IloNumArray maturidades(env, n_projetos), qualidades_dado(env, n_projetos), plays(env, n_projetos); 
+        IloNumArray soterramentos(env, n_projetos), pcgnas(env, n_projetos);
+        IloNumArray geracao(env, n_projetos), migracao(env, n_projetos), reservatorio(env, n_projetos); 
+        IloNumArray geometria(env, n_projetos), retencao(env, n_projetos), pshc(env, n_projetos);
+        IloNumArray medias_volume_condicional(env, n_projetos), medias_volume_incondicional(env, n_projetos);
+        IloNumArray medias_vpl_condicional(env, n_projetos), medias_vpl_incondicional(env, n_projetos);
+        IloNumArray custos(env, n_projetos);
+        IloIntArray tempos_exec(env, n_projetos), inicio_janela(env, n_projetos), final_janela(env, n_projetos);
         cout << "Arrays instanciados." << endl;
 
-        IloInt n_vertices;
+        cout << "Lendo arrays..." << endl;
+
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            coords_x[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            coords_y[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            bacias[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            nome_projetos[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            maturidades[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            qualidades_dado[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            plays[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            soterramentos[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            pcgnas[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            geracao[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            migracao[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            reservatorio[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            geometria[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            retencao[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            pshc[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            medias_volume_condicional[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            medias_volume_incondicional[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            medias_vpl_condicional[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            medias_vpl_incondicional[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            custos[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            tempos_exec[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            inicio_janela[i] = temp;
+        }
+        for (int i=0; i<n_projetos; i++)
+        {
+            double temp;
+            file >> temp;
+            final_janela[i] = temp;
+        }
+
+        file >> n_sondas;
+
+        int n_vertices;
         n_vertices = n_projetos + n_sondas;
         
         cout << "Definindo s[i][j]" << endl;
+        
         // definindo s[i][j]
-        NumMatrix2D s(env);
+        // NumMatrix2D s(env, n_vertices);
+        // for (int i=0; i<n_vertices; i++)
+        // {
+        //     s[i] = IloNumArray(env, n_vertices);
+        // }
+        
+        double s[n_vertices][n_vertices];
+        
         cout << "s[i][j] definido." << endl;
 
-        cout << "Lendo arrays..." << endl;
-        file >> coords_x;
-        file >> coords_y;
-        file >> bacias;
-        file >> nome_projetos;
-        file >> maturidades;
-        file >> qualidades_dado;
-        file >> plays;
-        file >> soterramentos;
-        file >> pcgnas;
-        file >> geracao;
-        file >> migracao;
-        file >> reservatorio;
-        file >> geometria;
-        file >> retencao;
-        file >> pshc;
-        file >> medias_volume_condicional;
-        file >> medias_volume_incondicional;
-        file >> medias_vpl_condicional;
-        file >> medias_vpl_incondicional;
-        file >> custos;
-        file >> tempos_exec;
-        file >> inicio_janela;
-        file >> final_janela;
-        file >> n_sondas;
         IloNumArray sondas_x(env, n_sondas), sondas_y(env, n_sondas);
-        file >> sondas_x;
-        file >> sondas_y;
-        file >> s;
+
+        for (int i=0; i<n_sondas; i++)
+        {
+            double temp;
+            file >> temp;
+            sondas_x[i] = temp;
+        }
+        for (int i=0; i<n_sondas; i++)
+        {
+            double temp;
+            file >> temp;
+            sondas_y[i] = temp;
+        }
+
+        for (int i=0; i<n_vertices; i++)
+        {
+            for (int j=0; j<n_vertices; j++)
+            {
+                double temp;
+                file >> temp;
+                s[i][j] = temp;
+            }
+        }
+
         cout << "Arrays lidos." << endl;
 
         // end reading data
@@ -140,8 +287,16 @@ int main()
         cout << "Coordenaxas x das sondas iguais a " << sondas_x << endl;
         cout << "Coordenadas y das sondas iguais a " << sondas_y << endl;
         cout << "tempo inicial: " << t_init << " tempo final: " << t_final << " e quantidade de periodos: " << n_periodos << endl;
-        cout << "s[i][j] tem tamanho: " << s.getSize() << " por " << s[1].getSize() << endl;
-        cout << "s[i][j]: " << s << endl;
+        //cout << "s[i][j] tem tamanho: " << s.size() << " por " << s[1].size() << endl;
+        //cout << "s[i][j]: " << s << endl;
+        cout << "s[i][j]: " << endl;
+        for (int i=0; i<n_vertices; i++)
+        {
+            for (int j=0; j<n_vertices; j++)
+            {
+                cout << s[i][j] << " ";
+            } cout << endl;
+        } cout << endl;
         // end display data
         
         // deletando dados não utilizados no modelo

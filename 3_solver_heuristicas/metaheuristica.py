@@ -57,6 +57,8 @@ def Read_data(path):
         26: sondas_y
     }
     
+    setup = []
+    
     with open(path, 'r') as f:
         for i, line in enumerate(f):
             if i == 0:
@@ -69,17 +71,15 @@ def Read_data(path):
             elif i == 24:
                 n_sondas = int(line.split()[0])
             elif i <= 26:
-                for elem in line.split('[')[1].split(']')[0].split(','):
+                for elem in line.split():
                     try:
                         data[i].append(float(elem))
                     except:
                         data[i].append(elem)
             elif i > 26:
-                setup = []
-                for k, l in enumerate(line.split('[[')[1].split('], [')):
-                    setup.append([])
-                    for elem in l.split(']]')[0].split(', '):
-                        setup[k].append(float(elem))
+                setup.append([])
+                for elem in line.split():
+                    setup[i - 27].append(float(elem))
     
     return n_projetos, n_sondas, n_periodos, t_init, t_final, delta_t, custo_total, data, setup
 
