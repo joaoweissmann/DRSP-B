@@ -2,36 +2,22 @@
 
 #include <bits/stdc++.h>
 
-class Solucao
+class Organizando
 {
-    private:
-        std::vector<std::list<int>> s;
-        std::vector<std::vector<int>> sondas;
-        std::vector<std::vector<int>> candidatos;
-        double fitness;
-        double custo;
-        int total_free;
-        int total_setup;
-        int max_free;
     public:
-        Solucao();
         
-        // processador de solução
-        void print_solucao();
-        void verifica_solucao();
-        
-        // modificador de solução
-        void add_projeto_posicao();
-        void tenta_chegar_proj_para_tras();
-        void tenta_chegar_proj_para_frente();
-        void tenta_inserir_node_de_projeto();
-        void tenta_colocar_diff_para_frente();
-        void tenta_colocar_diff_para_tras();
-        void atualiza_lista_de_atividades();
-        void tenta_realocar_projetos_vizinhos();
-        void tenta_inserir_node_de_janela();
-        void verifica_setup_removendo_projeto();
-        void remove_projeto_posicao();
+        // verificador de solucao
+        void verificarSondas();
+        void verificarMaxFree();
+        void verificarTotalFree();
+        void verificarTotalSetup();
+        void verificarFuncaoObjetivo();
+        void verificarRestricaoOrcamento();
+        void verificarRestricaoUnicidadeProjetos();
+        void verificarRestricaoTimeWindows();
+        void verificarRestricaoSchedulling();
+        void verificarRestricaoContinuidade();
+        void verificarSolucao();
         
         // util global
         void construir_RCL();
