@@ -19,17 +19,23 @@
 #include <bits/stdc++.h>
 #include "LeitorDeDados.h"
 
-enum projProp {coordXProj, coordYProj, bacia, nome, maturidade, qualidade, play, soterramento,
-              pcgna, geracao, migracao, reservatorio, geometria, retencao, pshc, mcVol, 
-              miVol, mcVpl, miVpl, custos, inicioJanela, finalJanela, tempExec
-              };
+namespace projProp
+{
+    enum projProp {coordX, coordY, bacia, nome, maturidade, qualidade, play, soterramento,
+                pcgna, geracao, migracao, reservatorio, geometria, retencao, pshc, mcVol, 
+                miVol, mcVpl, miVpl, custos, inicioJanela, finalJanela, tempExec
+                };
+}
 
-enum sondaProp {coordXSonda, coordYSonda};
+namespace sondaProp
+{
+    enum sondaProp {coordX, coordY};
+}
 
 LeitorDeDados::LeitorDeDados()
 {
-    _mapProjPropIdx.insert(std::pair<int, int>(0, projProp::coordXProj));
-    _mapProjPropIdx.insert(std::pair<int, int>(1, projProp::coordYProj));
+    _mapProjPropIdx.insert(std::pair<int, int>(0, projProp::coordX));
+    _mapProjPropIdx.insert(std::pair<int, int>(1, projProp::coordY));
     _mapProjPropIdx.insert(std::pair<int, int>(2, projProp::bacia));
     _mapProjPropIdx.insert(std::pair<int, int>(3, projProp::nome));
     _mapProjPropIdx.insert(std::pair<int, int>(4, projProp::maturidade));
@@ -52,8 +58,8 @@ LeitorDeDados::LeitorDeDados()
     _mapProjPropIdx.insert(std::pair<int, int>(21, projProp::inicioJanela));
     _mapProjPropIdx.insert(std::pair<int, int>(22, projProp::finalJanela));
 
-    _mapSondasPropIdx.insert(std::pair<int, int>(0, sondaProp::coordXSonda));
-    _mapSondasPropIdx.insert(std::pair<int, int>(1, sondaProp::coordYSonda));
+    _mapSondasPropIdx.insert(std::pair<int, int>(0, sondaProp::coordX));
+    _mapSondasPropIdx.insert(std::pair<int, int>(1, sondaProp::coordY));
 }
 
 DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
@@ -96,12 +102,12 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
             {
                 switch (_mapProjPropIdx[i])
                 {
-                    case projProp::coordXProj:
+                    case projProp::coordX:
                         // double temp;
                         infile >> temp;
                         projetos[j].setCoordX(temp);
                         break;
-                    case projProp::coordYProj:
+                    case projProp::coordY:
                         // double temp;
                         infile >> temp;
                         projetos[j].setCoordY(temp);
@@ -237,12 +243,12 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
 
                 switch (_mapSondasPropIdx[i])
                 {
-                    case sondaProp::coordXSonda:
+                    case sondaProp::coordX:
                         // double temp;
                         infile >> temp;
                         sondas[j].setCoordX(temp);
                         break;
-                    case sondaProp::coordYSonda:
+                    case sondaProp::coordY:
                         // double temp;
                         infile >> temp;
                         sondas[j].setCoordY(temp);

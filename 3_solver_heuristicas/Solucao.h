@@ -33,16 +33,24 @@ class Solucao
         // Variable comments:
         // 
         // TODO
-        std::map<int, std::list<int>> _alocacoes;
-
-        std::map<int, int> _mapProj2Inicio;
-        std::map<int, int> _mapProj2Final;
         
-        std::set<int, std::greater<int>> _projetosUsados;
-        std::map<int, int> _mapProj2Sonda;
+        // TODO: ajustar estrutura de dados
+        // TODO: mudar para elementos da classe Alocacao
+        // TODO: Como um set/map checa/compara objetos de uma classe definida pelo usuário?
+        std::unordered_map<Sonda, std::list<Projeto>> _alocacoes;
 
-        std::map<int, int> _mapSonda2TotalFree;
-        std::map<int, int> _mapSonda2MaxFree;
+        // TODO: ajustar estrutura de dados
+        // TODO: Como um set/map checa/compara objetos de uma classe definida pelo usuário?
+        std::unordered_set<Projeto> _projetosAlocados;
+
+        // TODO: ajustar estrutura de dados
+        std::vector<Projeto> _projetosNaoAlocados;
+
+        // TODO: ajustar estrutura de dados
+        std::unordered_set<int> _sondasDisponiveis;
+        
+        std::map<Sonda, int> _mapSonda2TotalFree;
+        std::map<Sonda, int> _mapSonda2MaxFree;
 
         double _fitness;
         double _custo;
@@ -50,9 +58,7 @@ class Solucao
         int _totalSetup;
         int _maxFree;
 
-        std::map<int, std::vector<int>> _candidatos;
-        
-        std::set<int, std::greater<int>> _sondasDisponiveis;
+        bool feasible;
         
     public:
         // Function comments:
@@ -62,59 +68,7 @@ class Solucao
 
         Solucao(DadosDeEntrada, std::map<int, std::list<int>>, std::map<int, int>, std::map<int, int>);
 
-        std::map<int, std::list<int>> getAlocacoes();
-        std::list<int> getAlocacoes(int);
-        std::list<int> getAlocacoes(Sonda);
-        int getAlocacao(int, int);
-        int getAlocacao(Sonda, int);
-
-        std::map<int, int> getMapProj2Inicio();
-        int getInicioDeProjeto(int);
-        int getInicioDeProjeto(Projeto);
-
-        std::map<int, int> getMapProj2Final();
-        int getFinalDeProjeto(int);
-        int getFinalDeProjeto(Projeto);
-
-        std::set<int, std::greater<int>> getProjetosUsados();
-        bool getSeProjetoAlocado(int);
-        bool getSeProjetoAlocado(Projeto);
-
-        std::map<int, int> getMapProj2Sonda();
-        int getSondaDeProjeto(int);
-        int getSondaDeProjeto(Projeto);
-
-        std::map<int, int> getMapSonda2TotalFree();
-        int getTotalFree(int);
-        int getTotalFree(Sonda);
-
-        std::map<int, int> getMapSonda2MaxFree();
-        int getMaxFree(int);
-        int getMaxFree(Sonda);
-
-        double getFitness();
-        double getCusto();
-        int getTotalFree();
-        int getTotalSetup();
-        int getMaxFree();
-
-        std::map<int, std::vector<int>> getCandidatos();
-        std::vector<int> getCandidatos(int);
-        std::vector<int> getCandidatos(Sonda);
-        
-        std::set<int, std::greater<int>> getSondasDisponiveis();
-        bool getSeSondaDisponivel(int);
-        bool getSeSondaDisponivel(Sonda);
-
-        void setAlocacoes(std::map<int, std::list<int>>);
-
-        void setMapProj2Inicio(std::map<int, int>);
-        void setInicioDeProjeto(Projeto);
-        void setInicioDeProjeto(int);
-
-        void setMapProj2Final(std::map<int, int>);
-        void setFinalDeProjeto(Projeto);
-        void setFinalDeProjeto(int);
+        // TODO: gets e sets
 
         void inserirNoInicio(Sonda, Projeto, int, int);
         void inserirNoInicio(int, int, int, int);
