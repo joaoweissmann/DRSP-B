@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// File comments:
-// 
-// TODO: descrever conteúdo do arquivo, em alto nível
-
 #include <bits/stdc++.h>
 #include "LeitorDeDados.h"
 

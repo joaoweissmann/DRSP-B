@@ -12,19 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// File comments:
-// 
-// TODO
-
 #ifndef MODIFICADOR_DE_SOLUCAO
 #define MODIFICADOR_DE_SOLUCAO
 
 #include <bits/stdc++.h>
 #include "Solucao.h"
 
-// Class comments:
-// 
-// TODO
 class ModificadorDeSolucao
 {
     public:

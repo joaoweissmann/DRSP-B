@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// File comments:
-// 
-// TODO: descrever conteúdo do arquivo, em alto nível
-
 #ifndef TESTADOR_H
 #define TESTADOR_H
 
@@ -25,6 +21,8 @@
 #include "CalculadorDeDesloc.h"
 #include "DadosDeEntrada.h"
 #include "LeitorDeDados.h"
+#include "Intervalo.h"
+#include "Alocacao.h"
 
 class Testador
 {
@@ -34,6 +32,8 @@ class Testador
         void testarCalculadorDeDesloc();
         void testarDadosDeEntrada();
         void testarLeitorDeDados();
+        void testarIntervalo();
+        void testarAlocacao();
 };
 
 #endif

@@ -13,119 +13,114 @@
 // limitations under the License.
 
 #include <bits/stdc++.h>
-#include "Sonda.h"
+#include "Intervalo.h"
 
-Sonda::Sonda()
+Intervalo::Intervalo()
 {
-    _nome = 0;
-    _coordX = 0;
-    _coordY = 0;
+    _inicio = 0;
+    _final = 0;
 }
 
-Sonda::Sonda(int nome, double coordX, double coordY)
+Intervalo::Intervalo(int inicio, int final)
 {
-    if (nome < 0)
+    if (inicio < 0)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "nome fornecido é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << nome << std::endl;
+        std::cout << "inicio < 0" << std::endl;
+        std::cout << "Valor fornecido: " << inicio << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(nome >= 0);
-    _nome = nome;
-    if (coordX < 0)
+    assert (inicio >= 0);
+
+    if (final < 0)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "coordX fornecida é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << coordX << std::endl;
+        std::cout << "final < 0" << std::endl;
+        std::cout << "Valor fornecido: " << final << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(coordX >= 0);
-    _coordX = coordX;
-    if (coordY < 0)
+    assert (final >= 0);
+
+    if (inicio > final)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "coordY fornecida é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << coordY << std::endl;
+        std::cout << "inicio > final" << std::endl;
+        std::cout << "Valores fornecido (inicio, final): " << inicio << "," << final << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(coordY >= 0);
-    _coordY = coordY;
+    assert (inicio <= final);
+
+    _inicio = inicio;
+    _final = final;
 }
 
-void Sonda::copyFrom(Sonda s)
+int Intervalo::getInicio()
 {
-    _nome = s.getNome();
-    _coordX = s.getCoordX();
-    _coordY = s.getCoordY();
+    return _inicio;
 }
 
-int Sonda::getNome()
+int Intervalo::getFinal()
 {
-    return _nome;
+    return _final;
 }
 
-double Sonda::getCoordX()
+void Intervalo::setIntervalo(int inicio, int final)
 {
-    return _coordX;
-}
-
-double Sonda::getCoordY()
-{
-    return _coordY;
-}
-
-void Sonda::setNome(int value)
-{
-    if (value < 0)
+    if (inicio < 0)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "nome fornecido é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "inicio < 0" << std::endl;
+        std::cout << "Valor fornecido: " << inicio << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(value >= 0);
-    _nome = value;
-}
+    assert (inicio >= 0);
 
-void Sonda::setCoordX(double value)
-{
-    if (value < 0)
+    if (final < 0)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "coordX fornecida é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "final < 0" << std::endl;
+        std::cout << "Valor fornecido: " << final << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(value >= 0);
-    _coordX = value;
-}
+    assert (final >= 0);
 
-void Sonda::setCoordY(double value)
-{
-    if (value < 0)
+    if (inicio > final)
     {
         std::cout << std::endl;
         std::cout << "################## ATENÇÃO #################" << std::endl;
-        std::cout << "coordY fornecida é menor do que zero." << std::endl;
-        std::cout << "Valor fornecido: " << value << std::endl;
+        std::cout << "inicio > final" << std::endl;
+        std::cout << "Valores fornecido (inicio, final): " << inicio << "," << final << std::endl;
         std::cout << "############################################" << std::endl;
     }
-    assert(value >= 0);
-    _coordY = value;
+    assert (inicio <= final);
+
+    _inicio = inicio;
+    _final = final;
 }
 
-void Sonda::print()
+int Intervalo::getTamanho()
+{
+    return _final - _inicio + 1;
+}
+
+void Intervalo::copyFrom(Intervalo value)
+{
+    _inicio = value.getInicio();
+    _final = value.getFinal();
+}
+
+void Intervalo::print()
 {
     std::cout << std::endl;
-    std::cout << "A sonda de nome " << _nome << ", tem:" << std::endl;
-    std::cout << "CoordX: " << _coordX << std::endl;
-    std::cout << "CoordY: " << _coordY << std::endl;
+    std::cout << "O intervalo tem :" << std::endl;
+    std::cout << "Início: " << _inicio << std::endl;
+    std::cout << "Final: " << _final << std::endl;
+    std::cout << "Tamanho: " << this->getTamanho() << std::endl;;
     std::cout << std::endl;
 }
 

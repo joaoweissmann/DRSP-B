@@ -12,20 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef INTERVALO
+#define INTERVALO
+
 #include <bits/stdc++.h>
-#include "Testador.h"
 
-int main()
+class Intervalo
 {
-    Testador test;
-    test.testarProjeto();
-    test.testarSonda();
-    test.testarCalculadorDeDesloc();
-    test.testarDadosDeEntrada();
-    test.testarLeitorDeDados();
-    test.testarIntervalo();
-    test.testarAlocacao();
+    private:
+        int _inicio;
+        int _final;
+        
+    public:
+        Intervalo();
+        Intervalo(int, int);
 
-    return 0;
+        int getInicio();
+        int getFinal();
+
+        void setIntervalo(int, int);
+
+        int getTamanho();
+
+        void copyFrom(Intervalo);
+
+        void print();
 };
+
+#endif
 

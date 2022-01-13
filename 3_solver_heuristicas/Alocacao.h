@@ -12,20 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef ALOCACAO
+#define ALOCACAO
+
 #include <bits/stdc++.h>
-#include "Testador.h"
+#include "Projeto.h"
+#include "Sonda.h"
+#include "Intervalo.h"
 
-int main()
+class Alocacao
 {
-    Testador test;
-    test.testarProjeto();
-    test.testarSonda();
-    test.testarCalculadorDeDesloc();
-    test.testarDadosDeEntrada();
-    test.testarLeitorDeDados();
-    test.testarIntervalo();
-    test.testarAlocacao();
+    private:
+        Projeto _projeto;
+        Sonda _sonda;
+        Intervalo _intervalo;
 
-    return 0;
+    public:
+        Alocacao();
+        Alocacao(Projeto, Sonda, Intervalo);
+
+        Projeto getProjeto();
+        Sonda getSonda();
+        Intervalo getIntervalo();
+
+        void setProjeto(Projeto);
+        void setSonda(Sonda);
+        void setIntervalo(Intervalo);
+
+        void print();
 };
+
+#endif
 

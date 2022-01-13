@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// File comments:
-// 
-// TODO: descrever conteúdo do arquivo, em alto nível
-
 #include <bits/stdc++.h>
 #include "Testador.h"
 
@@ -289,5 +285,45 @@ void Testador::testarLeitorDeDados()
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
     dataset.print();
+}
+
+void Testador::testarIntervalo()
+{
+    Intervalo x1{};
+    x1.print();
+
+    Intervalo x2{1, 3};
+    x2.print();
+
+    x1.setIntervalo(2, 5);
+    x1.print();
+
+}
+
+void Testador::testarAlocacao()
+{
+    Alocacao alocacao1{};
+    alocacao1.print();
+
+    Projeto projeto1{};
+    Sonda sonda1{};
+    Intervalo intervalo1{};
+    Alocacao alocacao2{projeto1, sonda1, intervalo1};
+    alocacao2.print();
+
+    Projeto projeto2{25, 40, 3, 7, 1, 2, 3, 4500, 0.5, 0.9, 0.8, 0.7, 0.8, 0.7, 0.3, 500, 150, 1000, 200, 50, 5, 0, 100};
+    Sonda sonda2{3, 30, 33};
+    Intervalo intervalo2{7, 22};
+    Alocacao alocacao3{projeto2, sonda2, intervalo2};
+    alocacao3.print();
+
+    alocacao1.setProjeto(projeto2);
+    alocacao1.print();
+
+    alocacao1.setSonda(sonda2);
+    alocacao1.print();
+
+    alocacao1.setIntervalo(intervalo2);
+    alocacao1.print();
 }
 

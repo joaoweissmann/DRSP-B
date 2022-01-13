@@ -317,39 +317,6 @@ Estruturas de dados:
 ---------------------------------
 TODO:
 
-Documentar classes já feitas
-
-Rever estruturas de dados das classes já feitas
-
-Classe Projeto: 
-    - adicionar critério guloso já computado dentro da classe
-    - codar overload do operador < e >
-
-Classe Sonda:
-    - adicionar critério culoso já computado dentro da classe
-    - codar overload do operador < e >
-
-Classe Intervalo
-    - Membros
-        - inicio
-        - final
-        - tamanho
-    - codar overload do operador < e >
-
-Classe Alocacao:
-    - Membros
-        - Projeto
-        - Sonda
-        - Intervalo
-        - deslocamento
-        - GAP frente
-        - GAP trás
-    - Métodos
-        - gets e sets
-        - calcular tamanho da alocação
-        - isFeasible()
-    - codar overload do operador < e >
-
 Classe Alocacoes:
     - Membros:
         - vector / list de Alocacao (fazer os dois)
@@ -395,16 +362,15 @@ class Test
 CRONOGRAMA
 
 Janeiro
-    - Documentar classes já feitas
-    - Rever estruturas de dados das classes já feitas
-    - Alterar classe Projeto
-    - Alterar classe Sonda
-    - Escrever classe Intervalo
-    - Escrever classe Alocacao
-    - Escrever classe Alocacoes
+    - Documentar classes já feitas: ---------------------------------------------------------- OK
+    - Rever estruturas de dados das classes já feitas: ---------------------------------------- OK
+    - Alterar classe Projeto: ------------------------------------------------------------------ OK
+    - Alterar classe Sonda: ------------------------------------------------------------------- OK
+    - Escrever classe Intervalo --------------------------------------------------------------- OK
+    - Escrever classe Alocacao --------------------------------------------------------------- OK
+    - Escrever classe Alocacoes ********************************************************
         - AlocacoesVector
         - AlocacoesList
-        - AlocacoesMap
     - Escrever classe Solucao
 
 Fevereiro

@@ -12,13 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# File comments:
-# 
-# TODO: descrever conteúdo do arquivo, em alto nível
+objects = main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o Intervalo.o Alocacao.o
 
-objects = main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o
-
-headers = Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h
+headers = Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h Intervalo.h Alocacao.h
 
 CFLAGS = -std=c++11 -O2 -Wall
 
@@ -47,6 +43,12 @@ DadosDeEntrada.o: DadosDeEntrada.cpp $(headers)
 
 LeitorDeDados.o: LeitorDeDados.cpp $(headers)
 	g++ -c -o LeitorDeDados.o $(CFLAGS) LeitorDeDados.cpp
+
+Intervalo.o: Intervalo.cpp $(headers)
+	g++ -c -o Intervalo.o $(CFLAGS) Intervalo.cpp
+
+Alocacao.o: Alocacao.cpp $(headers)
+	g++ -c -o Alocacao.o $(CFLAGS) Alocacao.cpp
 
 clean:
 	rm -rf *.o *~ metaheuristicas
