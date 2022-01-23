@@ -30,6 +30,27 @@ Alocacao::Alocacao(Projeto projeto, Sonda sonda, Intervalo intervalo)
 
     _projeto.copyFrom(projeto);
     _sonda.copyFrom(sonda);
+
+    if (intervalo.getInicio() < projeto.getInicioJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "inicio < release" << std::endl;
+        std::cout << "Valores fornecidos: " << intervalo.getInicio() << " < " << projeto.getInicioJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (intervalo.getInicio() >= projeto.getInicioJanela());
+
+    if (intervalo.getFinal() > projeto.getFinalJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "final > due" << std::endl;
+        std::cout << "Valores fornecidos: " << intervalo.getFinal() << " > " << projeto.getFinalJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (intervalo.getFinal() <= projeto.getFinalJanela());
+
     _intervalo.copyFrom(intervalo);
 }
 
@@ -50,6 +71,26 @@ Intervalo Alocacao::getIntervalo()
 
 void Alocacao::setProjeto(Projeto projeto)
 {
+    if (_intervalo.getInicio() < projeto.getInicioJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "inicio < release" << std::endl;
+        std::cout << "Valores fornecidos: " << _intervalo.getInicio() << " < " << projeto.getInicioJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (_intervalo.getInicio() >= projeto.getInicioJanela());
+
+    if (_intervalo.getFinal() > projeto.getFinalJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "final > due" << std::endl;
+        std::cout << "Valores fornecidos: " << _intervalo.getFinal() << " > " << projeto.getFinalJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (_intervalo.getFinal() <= projeto.getFinalJanela());
+
     _projeto.copyFrom(projeto);
 }
 
@@ -60,6 +101,26 @@ void Alocacao::setSonda(Sonda sonda)
 
 void Alocacao::setIntervalo(Intervalo intervalo)
 {
+    if (intervalo.getInicio() < _projeto.getInicioJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "inicio < release" << std::endl;
+        std::cout << "Valores fornecidos: " << intervalo.getInicio() << " < " << _projeto.getInicioJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (intervalo.getInicio() >= _projeto.getInicioJanela());
+
+    if (intervalo.getFinal() > _projeto.getFinalJanela())
+    {
+        std::cout << std::endl;
+        std::cout << "################## ATENÇÃO #################" << std::endl;
+        std::cout << "final > due" << std::endl;
+        std::cout << "Valores fornecidos: " << intervalo.getFinal() << " > " << _projeto.getFinalJanela() << std::endl;
+        std::cout << "############################################" << std::endl;
+    }
+    assert (intervalo.getFinal() <= _projeto.getFinalJanela());
+
     _intervalo.copyFrom(intervalo);
 }
 

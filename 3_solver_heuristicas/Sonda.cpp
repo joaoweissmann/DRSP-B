@@ -56,6 +56,11 @@ Sonda::Sonda(int nome, double coordX, double coordY)
     _coordY = coordY;
 }
 
+bool Sonda::operator<(const Sonda & s) const
+{
+    return this->_nome < s._nome;
+}
+
 void Sonda::copyFrom(Sonda s)
 {
     _nome = s.getNome();

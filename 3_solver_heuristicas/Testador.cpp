@@ -325,5 +325,37 @@ void Testador::testarAlocacao()
 
     alocacao1.setIntervalo(intervalo2);
     alocacao1.print();
+
+    projeto2.setInicioJanela(7);
+    projeto2.setFinalJanela(23);
+    intervalo2.setIntervalo(11, 20);
+    Alocacao alocacao4{projeto2, sonda2, intervalo2};
+    alocacao4.print();
+
+}
+
+void Testador::testarAlocacoes()
+{
+    std::cout << "################### Testando classe alocações ###################" << std::endl;
+
+    std::set<Sonda> sondas1;
+    Sonda sonda1{1, 0, 0};
+    Sonda sonda2{2, 10, 10};
+    sondas1.insert(sonda1);
+    sondas1.insert(sonda2);
+
+    AlocacoesVector alocacoesVector1{sondas1};
+    Alocacoes * ptrAlocacoesVector1 = & alocacoesVector1;
+    alocacoesVector1.print();
+
+    std::cout << "NSondas das alocações: " << ptrAlocacoesVector1->getNSondas() << std::endl;
+
+    AlocacoesList alocacoesList1{sondas1};
+    Alocacoes * ptrAlocacoesList1 = & alocacoesList1;
+    alocacoesList1.print();
+
+    std::cout << "NSondas das alocações: " << ptrAlocacoesList1->getNSondas() << std::endl;
+
+    std::cout << "################### Teste concluído ###################" << std::endl;
 }
 

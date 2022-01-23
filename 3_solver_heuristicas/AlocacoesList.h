@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ALOCACOES_VECTOR
-#define ALOCACOES_VECTOR
+#ifndef ALOCACOES_LIST
+#define ALOCACOES_LIST
 
 #include <bits/stdc++.h>
 #include "Alocacoes.h"
 
-class AlocacoesVector: public Alocacoes
+class AlocacoesList: public Alocacoes
 {
     private:
-        std::map<Sonda, std::vector<Alocacao>> _alocacoes;
-
+        std::map<Sonda, std::list<Alocacao>> _alocacoes;
+    
     public:
-        AlocacoesVector(std::set<Sonda>);
-        AlocacoesVector(std::map<Sonda, std::vector<Alocacao>>);
+        AlocacoesList(std::set<Sonda>);
+        AlocacoesList(std::map<Sonda, std::list<Alocacao>>);
         void print();
 
         int getNSondas();

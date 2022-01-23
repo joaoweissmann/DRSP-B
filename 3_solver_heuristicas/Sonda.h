@@ -28,6 +28,8 @@ class Sonda
         Sonda();
         Sonda(int, double, double);
 
+        bool operator<(const Sonda & s) const;
+
         void copyFrom(Sonda);
 
         // gets

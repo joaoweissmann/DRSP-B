@@ -23,6 +23,9 @@
 #include "LeitorDeDados.h"
 #include "Intervalo.h"
 #include "Alocacao.h"
+#include "Alocacoes.h"
+#include "AlocacoesVector.h"
+#include "AlocacoesList.h"
 
 class Testador
 {
@@ -34,6 +37,7 @@ class Testador
         void testarLeitorDeDados();
         void testarIntervalo();
         void testarAlocacao();
+        void testarAlocacoes();
 };
 
 #endif

@@ -322,14 +322,23 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
-Check de janela na classe Alocacao
+Anotar lições aprendidas no mestrado
+
+Escrever pseudo-códigos
+
+Melhorar prints das funções e testes
+
+Passar cronograma pro David
 
 Classe Alocacoes:
-    - Vector: pelas anotações
+    - interface para vector e list -------------------------------------------------------------- OK
+    - implementações individuais para vector e list **************************************
+    - testar interface sem métodos complexos para vector e list
+    - add gets individuais vect e list
+    - incluir métodos complexos
         - começar sem realocações
         - modo sem e com realocações
         - incluir realocações
-    - List: adaptar operações a partir da classe com vector
 
 Classe Solucao:
     - Membros
@@ -344,6 +353,7 @@ Classe Solucao:
 
 ---------------------------------
 Observações e dúvidas:
+
 
 
 ---------------------------------
@@ -373,8 +383,6 @@ Janeiro
     - Escrever classe Intervalo --------------------------------------------------------------- OK
     - Escrever classe Alocacao --------------------------------------------------------------- OK
     - Escrever classe Alocacoes ********************************************************
-        - AlocacoesVector
-        - AlocacoesList
     - Escrever classe Solucao
 
 Fevereiro
@@ -419,3 +427,7 @@ Março
     
 Férias
 
+----------------------------------
+LIÇÕES APRENDIDAS
+
+- 

@@ -25,6 +25,7 @@ int main()
     test.testarLeitorDeDados();
     test.testarIntervalo();
     test.testarAlocacao();
+    test.testarAlocacoes();
 
     return 0;
 };
