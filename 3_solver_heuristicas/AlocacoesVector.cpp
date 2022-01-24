@@ -49,20 +49,14 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
 
 AlocacoesVector AlocacoesVector::copyFrom(AlocacoesVector alocacoes)
 {
-    std::map<Sonda, std::vector<Alocacao>> vetorAloc = alocacoes.getAlocacoes();
-    for (std::map<Sonda, std::vector<Alocacao>>::iterator itr=vetorAloc.begin(); itr!=vetorAloc.end(); ++itr)
-    {
-        _alocacoes.insert(std::pair<Sonda, std::vector<Alocacao>>(itr->first, itr->second));
-    }
+    AlocacoesVector x{alocacoes.getAlocacoes()};
+    return x;
 }
 
 AlocacoesVector AlocacoesVector::copyFrom(AlocacoesList alocacoes)
 {
-    std::map<Sonda, std::vector<Alocacao>> vetorAloc = alocacoes.getAlocacoes();
-    for (std::map<Sonda, std::vector<Alocacao>>::iterator itr=vetorAloc.begin(); itr!=vetorAloc.end(); ++itr)
-    {
-        _alocacoes.insert(std::pair<Sonda, std::vector<Alocacao>>(itr->first, itr->second));
-    }
+    AlocacoesVector x{alocacoes.getAlocacoes()};
+    return x;
 }
 
 void AlocacoesVector::print()
