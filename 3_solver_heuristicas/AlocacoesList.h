@@ -17,6 +17,7 @@
 
 #include <bits/stdc++.h>
 #include "Alocacoes.h"
+#include "AlocacoesVector.h"
 
 class AlocacoesList: public Alocacoes
 {
@@ -26,15 +27,17 @@ class AlocacoesList: public Alocacoes
     public:
         AlocacoesList(std::set<Sonda>);
         AlocacoesList(std::map<Sonda, std::list<Alocacao>>);
+        AlocacoesList(std::map<Sonda, std::vector<Alocacao>>);
+        AlocacoesList copyFrom(AlocacoesList);
+        AlocacoesList copyFrom(AlocacoesVector);
         void print();
 
         int getNSondas();
-        /*
         std::set<Sonda> getSondas();
-
+        
         std::map<Sonda, std::vector<Alocacao>> getAlocacoes();
         std::vector<Alocacao> getAlocacoes(Sonda);
-
+        /*
         int getNAlocacoes(Sonda);
         Alocacao getAlocacao(Sonda, int);
         Alocacao getAlocacao(Sonda, Projeto);

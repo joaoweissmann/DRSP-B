@@ -23,12 +23,12 @@ class Alocacoes
     public:
         
         virtual int getNSondas() = 0;
-        /*
         virtual std::set<Sonda> getSondas() = 0;
-
+        
         virtual std::map<Sonda, std::vector<Alocacao>> getAlocacoes() = 0;
         virtual std::vector<Alocacao> getAlocacoes(Sonda) = 0;
 
+        /*
         virtual int getNAlocacoes(Sonda) = 0;
         virtual Alocacao getAlocacao(Sonda, int) = 0;
         virtual Alocacao getAlocacao(Sonda, Projeto) = 0;

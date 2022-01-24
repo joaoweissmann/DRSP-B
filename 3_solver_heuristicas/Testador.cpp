@@ -344,17 +344,71 @@ void Testador::testarAlocacoes()
     sondas1.insert(sonda1);
     sondas1.insert(sonda2);
 
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
     AlocacoesVector alocacoesVector1{sondas1};
     Alocacoes * ptrAlocacoesVector1 = & alocacoesVector1;
+    std::cout << "As alocações (vector) são:" << std::endl;
     alocacoesVector1.print();
-
-    std::cout << "NSondas das alocações: " << ptrAlocacoesVector1->getNSondas() << std::endl;
-
+    std::cout << std::endl;
     AlocacoesList alocacoesList1{sondas1};
     Alocacoes * ptrAlocacoesList1 = & alocacoesList1;
+    std::cout << "As alocações (list) são:" << std::endl;
     alocacoesList1.print();
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
 
-    std::cout << "NSondas das alocações: " << ptrAlocacoesList1->getNSondas() << std::endl;
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << "NSondas das alocações (vector): " << ptrAlocacoesVector1->getNSondas() << std::endl;
+    std::cout << std::endl;
+    std::cout << "NSondas das alocações (list): " << ptrAlocacoesList1->getNSondas() << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << "As sondas que estão nas alocações (vector) são:" << std::endl;
+    std::set<Sonda> sondas999;
+    sondas999 = ptrAlocacoesVector1->getSondas();
+    for (std::set<Sonda>::iterator itr=sondas999.begin(); itr!=sondas999.end(); ++itr)
+    {
+        Sonda s = *itr;
+        s.print();
+    }
+    std::cout << std::endl;
+    std::cout << "As sondas que estão nas alocações (list) são:" << std::endl;
+    sondas999 = ptrAlocacoesList1->getSondas();
+    for (std::set<Sonda>::iterator itr=sondas999.begin(); itr!=sondas999.end(); ++itr)
+    {
+        Sonda s = *itr;
+        s.print();
+    }
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+
+    // ...
+    
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::map<Sonda, std::vector<Alocacao>> mapaVector = ptrAlocacoesVector1->getAlocacoes();
+    AlocacoesVector alocsVector{mapaVector};
+    std::cout << "As alocações (vector) são:";
+    alocsVector.print();
+    std::cout << std::endl;
+    std::map<Sonda, std::vector<Alocacao>> mapaVector = ptrAlocacoesList1->getAlocacoes();
+    AlocacoesList alocsList{mapaVector};
+    std::cout << "As alocações (vector) são:";
+    alocsList.print();
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
 
     std::cout << "################### Teste concluído ###################" << std::endl;
 }

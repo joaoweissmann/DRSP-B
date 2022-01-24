@@ -31,6 +31,21 @@ AlocacoesList::AlocacoesList(std::map<Sonda, std::list<Alocacao>> alocacoes)
     }
 }
 
+AlocacoesList::AlocacoesList(std::map<Sonda, std::vector<Alocacao>>)
+{
+    // TODO
+}
+
+AlocacoesList AlocacoesList::copyFrom(AlocacoesVector)
+{
+    // TODO
+}
+
+AlocacoesList AlocacoesList::copyFrom(AlocacoesList)
+{
+    // TODO
+}
+
 void AlocacoesList::print()
 {
     std::cout << std::endl;
@@ -55,31 +70,72 @@ void AlocacoesList::print()
 
 int AlocacoesList::getNSondas()
 {
-    return 777;
+    return _alocacoes.size();
 }
 
+std::set<Sonda> AlocacoesList::getSondas()
+{
+    std::set<Sonda> sondas;
+
+    for (std::map<Sonda, std::list<Alocacao>>::iterator itr=_alocacoes.begin(); itr!=_alocacoes.end(); ++itr)
+    {
+        sondas.insert(itr->first);
+    }
+
+    return sondas;
+}
+
+std::map<Sonda, std::vector<Alocacao>> AlocacoesList::getAlocacoes()
+{
+    std::map<Sonda, std::vector<Alocacao>> alocsNew;
+
+    Sonda sonda{};
+    for (std::map<Sonda, std::list<Alocacao>>::iterator itr = _alocacoes.begin(); itr != _alocacoes.end(); ++itr)
+    {
+        sonda = itr->first;
+        std::vector<Alocacao> vetor;
+        alocsNew.insert(std::pair<Sonda, std::vector<Alocacao>>(sonda, vetor));
+        std::list<Alocacao> alocSonda = itr->second;
+        Alocacao x{};
+        for (std::list<Alocacao>::iterator it = alocSonda.begin(); it != alocSonda.end(); ++it)
+        {
+            x = *it;
+            vetor.push_back(x); 
+        }
+    }
+
+    return alocsNew;
+}
+
+std::vector<Alocacao> AlocacoesList::getAlocacoes(Sonda sonda)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator itr = _alocacoes.find(sonda);
+    if (itr == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não está nas alocações." << std::endl;
+        std::vector<Alocacao> vetor;
+        return vetor;
+    }
+    else
+    {
+        std::vector<Alocacao> vetor;
+        std::list<Alocacao> alocSonda = itr->second;
+        Alocacao x{};
+        for (std::list<Alocacao>::iterator it = alocSonda.begin(); it != alocSonda.end(); ++it)
+        {
+            x = *it;
+            vetor.push_back(x);
+        }
+        return vetor;
+    }
+}
 /*
-std::map<Sonda, std::vector<Alocacao>> Alocacoes::getAlocacoes()
-{
-    // TODO
-}
-
-std::vector<Alocacao> Alocacoes::getAlocacoes(Sonda)
-{
-    // TODO
-}
-
 void Alocacoes::setAlocacoes(std::map<Sonda, std::vector<Alocacao>>)
 {
     // TODO
 }
 
 void Alocacoes::setAlocacoes(Sonda, std::vector<Alocacao>)
-{
-    // TODO
-}
-
-std::set<Sonda> Alocacoes::getSondas()
 {
     // TODO
 }

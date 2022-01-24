@@ -35,13 +35,64 @@ Algoritmos
 
 - busca janela viável na sonda
 
+    for (alocações de uma sonda)
+        getDesloc()
+        getDeltaDesloc()
+        se (tamanho da janela é suficiente)
+            escolheIntervalo()
+            se (desloc não muda)
+                alocar()
+            se (desloc diminui)
+                alocar()
+            se (desloc aumenta)
+                tentaColocarDiferencaParaTras()
+                tentaColocarDiferencaParaFrente()
+            senão
+                tentaRealocarProjetosVizinhos()
+    
+    tentaColocarDiferencaParaFrente()
+        testaViabilidadeAumentoFinal()
+        se (for viável por janela e conflito)
+            alocar()
+        se (for viável só por janela)
+            tentaPostergarProximoProjeto()
+            se (for viável postergar)
+                alocar()
+                
+    tentaColocarDiferencaParaTras()
+        testaViabilidadeReduzindoInicio()
+        se (for viável por janela e conflito)
+            alocar()
+        se (for viável só por janela)
+            tentaAnteciparProximoProjeto()
+            se (for viável antecipar)
+                alocar()
+                
+    tentaRealocarProjetosVizinhos()
+        verificarIntercecaoJanelaProjeto()
+        se (tem intercecção)
+            verificaQuantoPossoAnteciparProjetoAnterior()
+            verificaQuantoPossoPostergarProjetoPosterior()
+            verificaEspacoNecessarioAbrir()
+            se (antecipar anterior basta)
+                alocar()
+            se (postergar posterior basta)
+                alocar()
+            se (antecipar e postergar basta)
+                tentarAnterciparPrimeiro()
+                se (viável antecipar primeiro)
+                    alocar()
+                tentaPostergarPrimeiro()
+                se (viável postergar primeiro)
+                    alocar()
+    
     Opção 1: apenas busca espaço viável: O(n)
 
     Opção 2: busca espaço e, caso não consiga, tenta movimentar vizinhos imediatos (primeiro da esquerda ou direita): O(n)
 
     Opção 3: busca espaço e, caso não consiga, tenta movimentar vizinhos em cascata: O(n2)
 
-    Opção 4: busca espaço e, caso não consiga, tenta movimentar vizinhos em cascata apenas para espaço mais promissor: O(2n)
+    Opção 4: busca espaço e, caso não consiga, tenta movimentar vizinhos em cascata apenas para espaço mais promissor: O(n)
     
     Observação: fazer função que percorra todos os elementos (default) e uma que aceite uma lista de índices restritos a serem percorridos.
     Observação: essa lista de índices pode ser um pré-processamento já filtrando apenas locais viáveis
@@ -324,17 +375,16 @@ TODO:
 
 Anotar lições aprendidas no mestrado
 
-Escrever pseudo-códigos
-
 Melhorar prints das funções e testes
 
-Passar cronograma pro David
+add construtor list que recebe vector e construtor vector que recebe list ------------------ FAZENDO
+
+add copyFrom ----------------------------------------------------------------------------- FAZENDO
 
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
-    - implementações individuais para vector e list **************************************
-    - testar interface sem métodos complexos para vector e list
-    - add gets individuais vect e list
+    - implementações individuais para vector e list ------------------------------------------ FAZENDO
+    - testar interface sem métodos complexos para vector e list ----------------------------- FAZENDO
     - incluir métodos complexos
         - começar sem realocações
         - modo sem e com realocações
@@ -354,7 +404,24 @@ Classe Solucao:
 ---------------------------------
 Observações e dúvidas:
 
+Para poder usar set de uma classe criada por mim, tive que sobreescrever operador de comparação. Tentei primeiro sem sobreescrever e deu erro de compilação. Provavelmente o mesmo acontece para qualquer container que precise comparar quais objetos são maiores/menores (ordenação), como map.
 
+Implementando a interface (classe abstrata) e duas classes derivadas, percebi que todos os métodos definidos como virtuais na classe abstrata precisam também estar definidos nas classes derivadas. Tentei deixar os métodos apenas definidos sem implementação e deu erro. Agora estou fazendo um método por vez nas duas classes.
+
+Todos os métodos virtuais precisam ser sobreescritos nas classes derivadas. Além disso, separando as classes em arquivos diferentes, o escopo na hora de implementar os métodos dentro dos arquivos das classes derivadas deve ser o escopo das classes derivadas (escopo::nomeMetodo).
+
+Os métodos que são virtuais e sobreescritos nas classes derivadas, chamo através de ponteiros, mas se houverem métodos nas classes derivadas que não são virtuais, preciso chamar através da própria instância da classe.
+
+Ao usar iterators, em set e vector posso acessar os valores/objetos com *(iterator), assim como posso acessar os métodos dos objetos com *(iterator).metodo(). Se for um map, posso acessar os valores/objetos com iterator->first/second, mas não posso chamar métodos com iterator->first/second.metodo(). Tive que fazer uma cópia do objeto numa nova instância e aí sim chamar o método.
+
+Para poder chamar métodos herdados da classe abstrata e métodos só de cada classe, instanciei um objeto da classe primeiro e criei um ponteiro apontando para a instância. 
+
+    Interface * ptrClasseA = new A{};
+    
+    A objetoA{};
+    Interface * ptrClasseA = & objetoA;
+
+Porque algumas pessoas usam itr++ e outras pessoas usam ++itr, para incrementar iterators?
 
 ---------------------------------
 HOW TO
@@ -382,7 +449,7 @@ Janeiro
     - Alterar classe Sonda: ------------------------------------------------------------------- OK
     - Escrever classe Intervalo --------------------------------------------------------------- OK
     - Escrever classe Alocacao --------------------------------------------------------------- OK
-    - Escrever classe Alocacoes ********************************************************
+    - Escrever classe Alocacoes -------------------------------------------------------------- FAZENDO
     - Escrever classe Solucao
 
 Fevereiro
@@ -390,19 +457,6 @@ Fevereiro
     - Escrever classe construtor heurístico
     - Escrever classe pré-processamento
     - Escrever classe movimentador em vizinhanças
-        - shift_1x0_interrota
-        - shift_2x0_interrota
-        - swap_1x1_interrota
-        - swap_2x1_interrota
-        - swap_2x2_interrota
-        - reinsercao_1_intrarota
-        - reinsercao_2_intrarota
-        - inserir_novo_fo
-        - swap_1x1_fo
-        - swap_1x2_fo
-        - swap_2x1_fo
-        - swap_2x2_fo
-        - perturbacao
     - Escrever classe busca local
         - VND
         - RVND
@@ -419,10 +473,6 @@ Março
     - Testar alpha e critério guloso
     - Testar hiperparâmetros
     - Realizar experimentos
-        - Heurísticas vs MIP
-        - Modelos MIP
-        - Heurísticas de vizinhança
-        - Algoritmos heurísticos
     - Comparar Python com C++
     
 Férias
