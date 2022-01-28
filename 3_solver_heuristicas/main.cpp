@@ -18,13 +18,13 @@
 int main()
 {
     Testador test;
-    test.testarProjeto();
-    test.testarSonda();
-    test.testarCalculadorDeDesloc();
-    test.testarDadosDeEntrada();
-    test.testarLeitorDeDados();
-    test.testarIntervalo();
-    test.testarAlocacao();
+    // test.testarProjeto();
+    // test.testarSonda();
+    // test.testarCalculadorDeDesloc();
+    // test.testarDadosDeEntrada();
+    // test.testarLeitorDeDados();
+    // test.testarIntervalo();
+    // test.testarAlocacao();
     test.testarAlocacoes();
 
     return 0;

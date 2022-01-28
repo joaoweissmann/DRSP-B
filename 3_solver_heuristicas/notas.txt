@@ -377,14 +377,15 @@ Anotar lições aprendidas no mestrado
 
 Melhorar prints das funções e testes
 
-add construtor list que recebe vector e construtor vector que recebe list ------------------ FAZENDO
-
-add copyFrom ----------------------------------------------------------------------------- FAZENDO
-
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ FAZENDO
-    - testar interface sem métodos complexos para vector e list ----------------------------- FAZENDO
+        - sobrecarreegar operador == nas classes: Alocacao, Sonda, Projeto, Intervalo -------- ...
+        - rever definição de intercecção nas classes Itervalo e Alocacao ----------------------- 
+        - gerar projetos viaveis no test.testarAlocacoes() -------------------------------------- 
+        - add check alocacoes: inicioIntervalo + tempExecProjeto + desloc = finalIntervalo ---- 
+        - add check alocacoes: continuidade temporalmente (disjoint consecutivos) ----------- 
+        - continuar testes ----------------------------------------------------------------------- 
     - incluir métodos complexos
         - começar sem realocações
         - modo sem e com realocações
@@ -422,6 +423,8 @@ Para poder chamar métodos herdados da classe abstrata e métodos só de cada cl
     Interface * ptrClasseA = & objetoA;
 
 Porque algumas pessoas usam itr++ e outras pessoas usam ++itr, para incrementar iterators?
+
+Qual a diferença entre declarar variáveis/objetos dentro de um loop ou fora de um loop? Só o escopo?
 
 ---------------------------------
 HOW TO
@@ -480,4 +483,22 @@ Férias
 ----------------------------------
 LIÇÕES APRENDIDAS
 
-- 
+- marcar coisas a fazer com TODO
+
+- desenhar ideias e algoritmos 
+
+- escrever pseudo-códigos antes de implementar
+
+- codificar esqueleto das lógicas e algoritmos antes de implementar tudo
+
+- pensar nas representações e  estruturas  de dados
+
+- sempre ficar ligado com o escopo de cada variável
+
+- modularizar em funções
+
+- de preferência usar orientação a objetos
+
+- fazer testes para cada função
+
+- testar cada função assim que termina de implementar ela

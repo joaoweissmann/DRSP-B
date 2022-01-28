@@ -298,6 +298,9 @@ void Testador::testarIntervalo()
     x1.setIntervalo(2, 5);
     x1.print();
 
+    x1.copyFrom(x2);
+    x1.print();
+
 }
 
 void Testador::testarAlocacao()
@@ -317,13 +320,7 @@ void Testador::testarAlocacao()
     Alocacao alocacao3{projeto2, sonda2, intervalo2};
     alocacao3.print();
 
-    alocacao1.setProjeto(projeto2);
-    alocacao1.print();
-
-    alocacao1.setSonda(sonda2);
-    alocacao1.print();
-
-    alocacao1.setIntervalo(intervalo2);
+    alocacao1.setAlocacao(projeto2, sonda2, intervalo2);
     alocacao1.print();
 
     projeto2.setInicioJanela(7);
@@ -345,18 +342,219 @@ void Testador::testarAlocacoes()
     sondas1.insert(sonda2);
 
     std::cout << std::endl;
-    std::cout << "-------------------------------------------------------------------------";
+    std::cout << "-------------------------------------------------------------------------" << std::endl;
     AlocacoesVector alocacoesVector1{sondas1};
-    Alocacoes * ptrAlocacoesVector1 = & alocacoesVector1;
     std::cout << "As alocações (vector) são:" << std::endl;
     alocacoesVector1.print();
     std::cout << std::endl;
     AlocacoesList alocacoesList1{sondas1};
-    Alocacoes * ptrAlocacoesList1 = & alocacoesList1;
     std::cout << "As alocações (list) são:" << std::endl;
     alocacoesList1.print();
+    std::cout << "-------------------------------------------------------------------------" << std::endl;
+    std::cout << std::endl;
+
+    std::map<Sonda, std::vector<Alocacao>> alocacoesVector0;
+    std::map<Sonda, std::list<Alocacao>> alocacoesList0;
+    int nSondasVector = 2;
+    int nSondasList = 2;
+    int nProjetosVector = 3;
+    int nProjetosList = 3;
+    Projeto projPrev{};
+    Projeto projeto{};
+    Sonda sonda{};
+    int nomeSonda;
+    std::vector<Alocacao> vetorAloc;
+    std::list<Alocacao> listaAloc;
+    double coordXSonda, coordYSonda;
+    double coordXProj, coordYProj;
+    int baciaProj, nomeProj;
+    int maturidadeProj, qualidadeProj, playProj, tempExecProj, releaseDateProj, dueDateProj;
+    double soterramentoProj, pcgnaProj, geracaoProj, migracaoProj, reservatorioProj, geometriaProj;
+    double retencaoProj, pshcProj, mcVolProj, miVolProj, mcVplProj, miVplProj, custoProj;
+    int inicioIntervalo, finalIntervalo, desloc, maximo, minimo;
+    int countProj = 0;
+    Intervalo intervalo{};
+    Alocacao alocacao{};
+    std::vector<Alocacao> vetorTestViabilidade;
+    bool feasible;
+    Alocacao x;
+    std::vector<Alocacao>::iterator itrRefVector;
+    std::list<Alocacao>::iterator itrRefList;
+    int diferenca, diferencaBest;
+    for (int s=0; s<nSondasVector; s++)
+    {
+        nomeSonda = s;
+        coordXSonda = rand()%100+1;
+        coordYSonda = rand()%100+1;
+        sonda.setNome(nomeSonda);
+        sonda.setCoordX(coordXSonda);
+        sonda.setCoordY(coordYSonda);
+        alocacoesVector0.insert(std::pair<Sonda, std::vector<Alocacao>>(sonda, vetorAloc));
+        alocacoesList0.insert(std::pair<Sonda,std::list<Alocacao>>(sonda, listaAloc));
+
+        vetorTestViabilidade.clear();
+        for (int p=0; p<nProjetosVector; p++)
+        {
+            coordXProj=rand()%100+1; 
+            coordYProj=rand()%100+1;
+            baciaProj=rand()%10+1;
+            nomeProj=countProj;
+            maturidadeProj=rand()%10+1;
+            qualidadeProj=rand()%10+1;
+            playProj=rand()%10+1;
+            soterramentoProj=rand()%3000+1500;
+            pcgnaProj=rand()/RAND_MAX;
+            geracaoProj=rand()/RAND_MAX;
+            migracaoProj=rand()/RAND_MAX;
+            reservatorioProj=rand()/RAND_MAX;
+            geometriaProj=rand()/RAND_MAX;
+            retencaoProj=rand()/RAND_MAX;
+            pshcProj=rand()/RAND_MAX;
+            mcVolProj=rand()%1000+1;
+            miVolProj=rand()%1000+1;
+            mcVplProj=rand()%1000+1;
+            miVplProj=rand()%1000+1;
+            custoProj=rand()%100+1;
+            projeto.setCoordX(coordXProj);
+            projeto.setCoordY(coordYProj);
+            projeto.setBacia(baciaProj);
+            projeto.setNome(nomeProj);
+            projeto.setMaturidade(maturidadeProj);
+            projeto.setQualidade(qualidadeProj);
+            projeto.setPlay(playProj);
+            projeto.setSoterramento(soterramentoProj);
+            projeto.setPcgna(pcgnaProj);
+            projeto.setGeracao(geracaoProj);
+            projeto.setMigracao(migracaoProj);
+            projeto.setReservatorio(reservatorioProj);
+            projeto.setGeometria(geometriaProj);
+            projeto.setRetencao(retencaoProj);
+            projeto.setPshc(pshcProj);
+            projeto.setMcVol(mcVolProj);
+            projeto.setMiVol(miVolProj);
+            projeto.setMcVpl(mcVplProj);
+            projeto.setMiVpl(miVplProj);
+            projeto.setCusto(custoProj);
+            projeto.setTempExec(tempExecProj);
+            projeto.setInicioJanela(releaseDateProj);
+            projeto.setFinalJanela(dueDateProj);
+
+            if (p==0)
+            {
+                desloc = sqrt(pow(coordXSonda-coordXProj, 2) + pow(coordYSonda-coordYProj, 2));
+            }
+            else
+            {
+                desloc = sqrt(pow(projPrev.getCoordX()-coordXProj, 2) + pow(projPrev.getCoordY()-coordYProj, 2));
+            }
+            
+            for (int tests=0; tests<100; tests++)
+            {
+                feasible = true;
+                tempExecProj=rand()%70+1;
+                releaseDateProj=rand()%300+1;
+                dueDateProj = releaseDateProj + rand()%(1000- (releaseDateProj+tempExecProj+desloc) ) + tempExecProj + desloc; 
+
+                minimo = releaseDateProj;
+                maximo = dueDateProj - tempExecProj - desloc;
+                inicioIntervalo = rand()%(maximo-minimo) + minimo;
+                finalIntervalo = inicioIntervalo + tempExecProj + desloc;
+
+                intervalo.setIntervalo(inicioIntervalo, finalIntervalo);
+                alocacao.setAlocacao(projeto, sonda, intervalo);
+                
+                std::cout << "Início da janela do projeto: " << releaseDateProj << std::endl;
+                std::cout << "Final da janela do projeto: " << dueDateProj << std::endl;
+                std::cout << "Deslocamento em relação à alocação anterior: " << desloc << std::endl;
+                std::cout << "Tempo de execução do projeto: " << tempExecProj << std::endl;
+                std::cout << "Início do intervalo alocado: " << inicioIntervalo << std::endl;
+                std::cout << "Final do intervalo alocado: " << finalIntervalo << std::endl;
+                std::cout << std::endl;
+
+                // testar viabilidade
+                if (!vetorTestViabilidade.empty())
+                {
+                    for (std::vector<Alocacao>::iterator itr=vetorTestViabilidade.begin(); itr!=vetorTestViabilidade.end(); ++itr)
+                    {
+                        x = *itr;
+                        // testar interceção
+                        if ( ! (((inicioIntervalo<x.getIntervalo().getInicio())&&(finalIntervalo<x.getIntervalo().getInicio())) 
+                               || 
+                               ((inicioIntervalo>x.getIntervalo().getFinal())&&(finalIntervalo>x.getIntervalo().getFinal())))
+                           )
+                        {
+                            feasible = false;
+                            break;
+                        }
+                    } 
+                }
+                // testar tamanho da alocação
+                if (feasible)
+                {
+                    if (!(finalIntervalo == inicioIntervalo + desloc + tempExecProj))
+                    {
+                        feasible = false;
+                    }
+                }
+
+                if (feasible)
+                {
+                    break;
+                }
+            }
+            if (!feasible)
+            {
+                std::cout << "Nenhuma alocação gerada é viável" << std::endl;
+                assert (feasible);
+            }
+
+            // colocar na fucking ordem
+            diferencaBest = RAND_MAX;
+            for (std::vector<Alocacao>::iterator itr=vetorTestViabilidade.begin(); itr!=vetorTestViabilidade.end(); ++itr)
+            {
+                if ( finalIntervalo < (*itr).getIntervalo().getInicio() )
+                {
+                    diferenca = (*itr).getIntervalo().getInicio() - finalIntervalo;
+                    if (diferenca < diferencaBest)
+                    {
+                        x = *itr;
+                        itrRefVector = itr;
+                        diferencaBest = diferenca;
+                    }
+                }
+            }
+            alocacoesVector0[sonda].insert(itrRefVector, x);
+
+            itrRefList = std::find(alocacoesList0[sonda].begin(), alocacoesList0[sonda].end(), x);
+            
+            alocacoesList0[sonda].insert(itrRefList, x);
+
+            vetorTestViabilidade.push_back(alocacao);
+
+            projPrev.copyFrom(projeto);
+            countProj ++;
+        }
+        vetorAloc.clear();
+        listaAloc.clear();
+    } 
+    
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------" << std::endl;
+    AlocacoesVector alocsVector0{alocacoesVector0};
+    std::cout << "As alocações (vector) são:" << std::endl; 
+    alocsVector0.print();
+    std::cout << std::endl;
+    AlocacoesList alocsList0{alocacoesList0};
+    std::cout << "As alocações (list) são:" << std::endl;
+    alocsList0.print();
     std::cout << "-------------------------------------------------------------------------";
     std::cout << std::endl;
+
+    // TODO: testar novo construtor
+
+    /*
+    Alocacoes * ptrAlocacoesVector1 = & alocacoesVector1;
+    Alocacoes * ptrAlocacoesList1 = & alocacoesList1;
 
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------";
@@ -385,8 +583,6 @@ void Testador::testarAlocacoes()
     }
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------";
-
-    // ...
     
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------";
@@ -401,6 +597,9 @@ void Testador::testarAlocacoes()
     alocsList.print();
     std::cout << "-------------------------------------------------------------------------";
     std::cout << std::endl;
+    */
+
+    // TODO: testar getAlocacoes(Sonda)
 
     /*
     std::cout << std::endl;

@@ -17,7 +17,7 @@
 
 #include <bits/stdc++.h>
 #include "Alocacoes.h"
-#include "AlocacoesVector.h"
+// #include "AlocacoesVector.h" // TODO: não pode?
 
 class AlocacoesList: public Alocacoes
 {
@@ -28,8 +28,8 @@ class AlocacoesList: public Alocacoes
         AlocacoesList(std::set<Sonda>);
         AlocacoesList(std::map<Sonda, std::list<Alocacao>>);
         AlocacoesList(std::map<Sonda, std::vector<Alocacao>>);
-        AlocacoesList copyFrom(AlocacoesList);
-        AlocacoesList copyFrom(AlocacoesVector);
+        // AlocacoesList copyFrom(AlocacoesList);
+        // AlocacoesList copyFrom(AlocacoesVector);
         void print();
 
         int getNSondas();

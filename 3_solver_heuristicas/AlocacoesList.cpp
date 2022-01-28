@@ -31,27 +31,42 @@ AlocacoesList::AlocacoesList(std::map<Sonda, std::list<Alocacao>> alocacoes)
     }
 }
 
-AlocacoesList::AlocacoesList(std::map<Sonda, std::vector<Alocacao>>)
+AlocacoesList::AlocacoesList(std::map<Sonda, std::vector<Alocacao>> alocacoes)
 {
-    // TODO
+    for (std::map<Sonda, std::vector<Alocacao>>::iterator itr=alocacoes.begin(); itr!=alocacoes.end(); ++itr)
+    {
+        Sonda sonda = itr->first;
+        std::vector<Alocacao> vetorAloc = itr->second;
+        std::list<Alocacao> listAloc;
+        for (std::vector<Alocacao>::iterator it=vetorAloc.begin(); it!=vetorAloc.end(); ++it)
+        {
+            Alocacao x = *it;
+            listAloc.push_back(x);
+        }
+        _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(sonda, listAloc));
+    }
 }
 
-AlocacoesList AlocacoesList::copyFrom(AlocacoesVector)
+/*
+AlocacoesList AlocacoesList::copyFrom(AlocacoesVector alocacoes)
 {
-    // TODO
+    AlocacoesList x{alocacoes.getAlocacoes()};
+    return x;
 }
 
-AlocacoesList AlocacoesList::copyFrom(AlocacoesList)
+AlocacoesList AlocacoesList::copyFrom(AlocacoesList alocacoes)
 {
-    // TODO
+    AlocacoesList x{alocacoes.getAlocacoes()};
+    return x;
 }
+*/
 
 void AlocacoesList::print()
 {
     std::cout << std::endl;
     std::cout << "------------------ mostrando alocações ------------------" << std::endl;
     Sonda s{};
-    int count;
+    int count = 0;
     for (std::map<Sonda, std::list<Alocacao>>::iterator itr=_alocacoes.begin(); itr!=_alocacoes.end(); ++itr)
     {
         s.copyFrom(itr->first);
@@ -62,7 +77,9 @@ void AlocacoesList::print()
         {
             std::cout << "A alocação de índice " << count << " é: " << std::endl;
             (*itrl).print();
+            count++;
         }
+        count = 0;
     }
     std::cout << "------------------ alocações mostradas ------------------" << std::endl;
     std::cout << std::endl;

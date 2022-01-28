@@ -35,9 +35,7 @@ class Alocacao
         Sonda getSonda();
         Intervalo getIntervalo();
 
-        void setProjeto(Projeto);
-        void setSonda(Sonda);
-        void setIntervalo(Intervalo);
+        void setAlocacao(Projeto, Sonda, Intervalo);
 
         void print();
 };
