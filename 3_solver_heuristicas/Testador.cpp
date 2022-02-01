@@ -365,22 +365,21 @@ void Testador::testarAlocacoes()
     int nomeSonda;
     std::vector<Alocacao> vetorAloc;
     std::list<Alocacao> listaAloc;
-    double coordXSonda, coordYSonda;
-    double coordXProj, coordYProj;
-    int baciaProj, nomeProj;
-    int maturidadeProj, qualidadeProj, playProj, tempExecProj, releaseDateProj, dueDateProj;
-    double soterramentoProj, pcgnaProj, geracaoProj, migracaoProj, reservatorioProj, geometriaProj;
-    double retencaoProj, pshcProj, mcVolProj, miVolProj, mcVplProj, miVplProj, custoProj;
-    int inicioIntervalo, finalIntervalo, desloc, maximo, minimo;
+    double coordXSonda=0.0, coordYSonda=0.0;
+    double coordXProj=0.0, coordYProj=0.0;
+    int baciaProj=0, nomeProj=0;
+    int maturidadeProj=0, qualidadeProj=0, playProj=0, tempExecProj=0, releaseDateProj=0, dueDateProj=0;
+    double soterramentoProj=0.0, pcgnaProj=0.0, geracaoProj=0.0, migracaoProj=0.0, reservatorioProj=0.0, geometriaProj=0.0;
+    double retencaoProj=0.0, pshcProj=0.0, mcVolProj=0.0, miVolProj=0.0, mcVplProj=0.0, miVplProj=0.0, custoProj=0.0;
+    int inicioIntervalo=0, finalIntervalo=0, desloc=0, maximo=0, minimo=0;
     int countProj = 0;
     Intervalo intervalo{};
     Alocacao alocacao{};
-    std::vector<Alocacao> vetorTestViabilidade;
     bool feasible;
     Alocacao x;
     std::vector<Alocacao>::iterator itrRefVector;
     std::list<Alocacao>::iterator itrRefList;
-    int diferenca, diferencaBest;
+    int diferenca=0, diferencaBest=0;
     for (int s=0; s<nSondasVector; s++)
     {
         nomeSonda = s;
@@ -392,9 +391,11 @@ void Testador::testarAlocacoes()
         alocacoesVector0.insert(std::pair<Sonda, std::vector<Alocacao>>(sonda, vetorAloc));
         alocacoesList0.insert(std::pair<Sonda,std::list<Alocacao>>(sonda, listaAloc));
 
-        vetorTestViabilidade.clear();
         for (int p=0; p<nProjetosVector; p++)
         {
+            std::cout << std::endl;
+            std::cout << "Sonda " << s << " Projeto " << p << std::endl;
+
             coordXProj=rand()%100+1; 
             coordYProj=rand()%100+1;
             baciaProj=rand()%10+1;
@@ -403,13 +404,13 @@ void Testador::testarAlocacoes()
             qualidadeProj=rand()%10+1;
             playProj=rand()%10+1;
             soterramentoProj=rand()%3000+1500;
-            pcgnaProj=rand()/RAND_MAX;
-            geracaoProj=rand()/RAND_MAX;
-            migracaoProj=rand()/RAND_MAX;
-            reservatorioProj=rand()/RAND_MAX;
-            geometriaProj=rand()/RAND_MAX;
-            retencaoProj=rand()/RAND_MAX;
-            pshcProj=rand()/RAND_MAX;
+            pcgnaProj=(double)rand()/(double)RAND_MAX;
+            geracaoProj=(double)rand()/(double)RAND_MAX;
+            migracaoProj=(double)rand()/(double)RAND_MAX;
+            reservatorioProj=(double)rand()/(double)RAND_MAX;
+            geometriaProj=(double)rand()/(double)RAND_MAX;
+            retencaoProj=(double)rand()/(double)RAND_MAX;
+            pshcProj=(double)rand()/(double)RAND_MAX;
             mcVolProj=rand()%1000+1;
             miVolProj=rand()%1000+1;
             mcVplProj=rand()%1000+1;
@@ -435,11 +436,8 @@ void Testador::testarAlocacoes()
             projeto.setMcVpl(mcVplProj);
             projeto.setMiVpl(miVplProj);
             projeto.setCusto(custoProj);
-            projeto.setTempExec(tempExecProj);
-            projeto.setInicioJanela(releaseDateProj);
-            projeto.setFinalJanela(dueDateProj);
 
-            if (p==0)
+            if (p % nProjetosVector == 0)
             {
                 desloc = sqrt(pow(coordXSonda-coordXProj, 2) + pow(coordYSonda-coordYProj, 2));
             }
@@ -455,14 +453,16 @@ void Testador::testarAlocacoes()
                 releaseDateProj=rand()%300+1;
                 dueDateProj = releaseDateProj + rand()%(1000- (releaseDateProj+tempExecProj+desloc) ) + tempExecProj + desloc; 
 
+                projeto.setTempExec(tempExecProj);
+                projeto.setInicioJanela(releaseDateProj);
+                projeto.setFinalJanela(dueDateProj);
+
                 minimo = releaseDateProj;
                 maximo = dueDateProj - tempExecProj - desloc;
                 inicioIntervalo = rand()%(maximo-minimo) + minimo;
                 finalIntervalo = inicioIntervalo + tempExecProj + desloc;
-
-                intervalo.setIntervalo(inicioIntervalo, finalIntervalo);
-                alocacao.setAlocacao(projeto, sonda, intervalo);
                 
+                std::cout << std::endl;
                 std::cout << "Início da janela do projeto: " << releaseDateProj << std::endl;
                 std::cout << "Final da janela do projeto: " << dueDateProj << std::endl;
                 std::cout << "Deslocamento em relação à alocação anterior: " << desloc << std::endl;
@@ -471,10 +471,13 @@ void Testador::testarAlocacoes()
                 std::cout << "Final do intervalo alocado: " << finalIntervalo << std::endl;
                 std::cout << std::endl;
 
+                intervalo.setIntervalo(inicioIntervalo, finalIntervalo);
+                alocacao.setAlocacao(projeto, sonda, intervalo);
+
                 // testar viabilidade
-                if (!vetorTestViabilidade.empty())
+                if (! alocacoesVector0[sonda].empty() )
                 {
-                    for (std::vector<Alocacao>::iterator itr=vetorTestViabilidade.begin(); itr!=vetorTestViabilidade.end(); ++itr)
+                    for (std::vector<Alocacao>::iterator itr=alocacoesVector0[sonda].begin(); itr!=alocacoesVector0[sonda].end(); ++itr)
                     {
                         x = *itr;
                         // testar interceção
@@ -499,37 +502,80 @@ void Testador::testarAlocacoes()
 
                 if (feasible)
                 {
+                    std::cout << std::endl;
+                    std::cout << "Alocação viável." << std::endl;
                     break;
+                }
+                else
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocação não viável.";
+                    std::cout << std::endl;
                 }
             }
             if (!feasible)
             {
+                std::cout << std::endl;
                 std::cout << "Nenhuma alocação gerada é viável" << std::endl;
                 assert (feasible);
             }
 
             // colocar na fucking ordem
-            diferencaBest = RAND_MAX;
-            for (std::vector<Alocacao>::iterator itr=vetorTestViabilidade.begin(); itr!=vetorTestViabilidade.end(); ++itr)
+            std::cout << std::endl;
+            std::cout << "Encontrando posição correta para inserir.";
+            std::cout << std::endl;
+
+            if (alocacoesVector0[sonda].empty())
             {
-                if ( finalIntervalo < (*itr).getIntervalo().getInicio() )
+                std::cout << std::endl;
+                std::cout << "Inserindo em container vazio";
+                std::cout << std::endl;
+
+                itrRefVector = alocacoesVector0[sonda].begin();
+                alocacoesVector0[sonda].insert(itrRefVector, alocacao);
+
+                itrRefList = alocacoesList0[sonda].begin();
+                alocacoesList0[sonda].insert(itrRefList, alocacao);
+            }
+            else
+            {
+                diferencaBest = RAND_MAX;
+                for (std::vector<Alocacao>::iterator itr=alocacoesVector0[sonda].begin(); itr!=alocacoesVector0[sonda].end(); ++itr)
                 {
-                    diferenca = (*itr).getIntervalo().getInicio() - finalIntervalo;
-                    if (diferenca < diferencaBest)
+                    if ( finalIntervalo < (*itr).getIntervalo().getInicio() )
                     {
-                        x = *itr;
-                        itrRefVector = itr;
-                        diferencaBest = diferenca;
+                        diferenca = (*itr).getIntervalo().getInicio() - finalIntervalo;
+                        if (diferenca < diferencaBest)
+                        {
+                            x = *itr;
+                            itrRefVector = itr;
+                            diferencaBest = diferenca;
+                        }
+                    }
+                    else
+                    {
+                        if (diferencaBest == RAND_MAX)
+                        {
+                            itrRefVector = alocacoesVector0[sonda].end();
+                        }
                     }
                 }
+                std::cout << std::endl;
+                std::cout << "Inserindo em container não vazio";
+                std::cout << std::endl;
+
+                alocacoesVector0[sonda].insert(itrRefVector, alocacao);
+
+                if (diferencaBest == RAND_MAX)
+                {
+                    itrRefList = alocacoesList0[sonda].end();
+                }
+                else
+                {
+                    itrRefList = std::find(alocacoesList0[sonda].begin(), alocacoesList0[sonda].end(), x);
+                }
+                alocacoesList0[sonda].insert(itrRefList, alocacao);
             }
-            alocacoesVector0[sonda].insert(itrRefVector, x);
-
-            itrRefList = std::find(alocacoesList0[sonda].begin(), alocacoesList0[sonda].end(), x);
-            
-            alocacoesList0[sonda].insert(itrRefList, x);
-
-            vetorTestViabilidade.push_back(alocacao);
 
             projPrev.copyFrom(projeto);
             countProj ++;

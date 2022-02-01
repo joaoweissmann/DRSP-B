@@ -375,15 +375,14 @@ TODO:
 
 Anotar lições aprendidas no mestrado
 
+Tirar notebooks jupyter do repositório e deixar apenas códigos *.py
+
 Melhorar prints das funções e testes
 
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ FAZENDO
-        - sobrecarreegar operador == nas classes: Alocacao, Sonda, Projeto, Intervalo -------- ...
-        - rever definição de intercecção nas classes Itervalo e Alocacao ----------------------- 
-        - gerar projetos viaveis no test.testarAlocacoes() -------------------------------------- 
-        - add check alocacoes: inicioIntervalo + tempExecProjeto + desloc = finalIntervalo ---- 
+        - add check alocacoes: inicioIntervalo + tempExecProjeto + desloc = finalIntervalo ---- ...
         - add check alocacoes: continuidade temporalmente (disjoint consecutivos) ----------- 
         - continuar testes ----------------------------------------------------------------------- 
     - incluir métodos complexos
@@ -485,7 +484,7 @@ LIÇÕES APRENDIDAS
 
 - marcar coisas a fazer com TODO
 
-- desenhar ideias e algoritmos 
+- desenhar ideias e algoritmos no papel antes
 
 - escrever pseudo-códigos antes de implementar
 
@@ -493,12 +492,14 @@ LIÇÕES APRENDIDAS
 
 - pensar nas representações e  estruturas  de dados
 
-- sempre ficar ligado com o escopo de cada variável
+- pensar bem nas operações que se deseja fazer
 
 - modularizar em funções
 
 - de preferência usar orientação a objetos
 
-- fazer testes para cada função
+- fazer testes e checks de realidade para cada função
 
 - testar cada função assim que termina de implementar ela
+
+- sempre ficar ligado com o escopo de cada variável
