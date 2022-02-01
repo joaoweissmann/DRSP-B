@@ -261,6 +261,39 @@ Projeto::Projeto(double coordX, double coordY, int bacia, int nome, int maturida
     _finalJanela = finalJanela;
 }
 
+bool Projeto::operator==(const Projeto & p) const
+{
+    bool x1 = this->_bacia == p._bacia;
+    bool x2 = this->_coordX == p._coordX;
+    bool x3 = this->_coordY == p._coordY;
+    bool x4 = this->_custo == p._custo;
+    bool x5 = this->_finalJanela == p._finalJanela;
+    bool x6 = this->_geometria == p._geometria;
+    bool x7 = this->_geracao == p._geracao;
+    bool x8 = this->_inicioJanela == p._inicioJanela;
+    bool x9 = this->_maturidade == p._maturidade;
+    bool x10 = this->_mcVol == p._mcVol;
+    bool x11 = this->_mcVpl == p._mcVpl;
+    bool x12 = this->_migracao == p._migracao;
+    bool x13 = this->_miVol == p._miVol;
+    bool x14 = this->_miVpl == p._miVpl;
+    bool x15 = this->_nome == p._nome;
+    bool x16 = this->_pcgna == p._pcgna;
+    bool x17 = this->_play == p._play;
+    bool x18 = this->_pshc == p._pshc;
+    bool x19 = this->_qualidade == p._qualidade;
+    bool x20 = this->_reservatorio == p._reservatorio;
+    bool x21 = this->_retencao == p._retencao;
+    bool x22 = this->_soterramento == p._soterramento;
+    bool x23 = this->_tempExec == p._tempExec;
+
+    bool r = x1 && x2 && x3 && x4 && x5 && x6 && x7 && x8 && x9 &&
+             x10 && x11 && x12 && x13 && x14 && x15 && x16 && x17 && x18 && x19 &&
+             x20 && x21 && x22 && x23;
+
+    return r;
+}
+
 void Projeto::copyFrom(Projeto p)
 {
     _coordX = p.getCoordX();

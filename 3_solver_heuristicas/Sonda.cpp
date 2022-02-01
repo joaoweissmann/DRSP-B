@@ -61,6 +61,14 @@ bool Sonda::operator<(const Sonda & s) const
     return this->_nome < s._nome;
 }
 
+bool Sonda::operator==(const Sonda & s) const
+{
+    bool x1 = this->_nome == s._nome;
+    bool x2 = this->_coordX == s._coordX;
+    bool x3 = this->_coordY == s._coordY;
+    return x1 && x2 && x3;
+}
+
 void Sonda::copyFrom(Sonda s)
 {
     _nome = s.getNome();

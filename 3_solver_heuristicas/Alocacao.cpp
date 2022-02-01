@@ -54,6 +54,12 @@ Alocacao::Alocacao(Projeto projeto, Sonda sonda, Intervalo intervalo)
     _intervalo.copyFrom(intervalo);
 }
 
+bool Alocacao::operator==(const Alocacao & a) const
+{
+    bool x = (this->_projeto == a._projeto) && (this->_sonda == a._sonda) && (this->_intervalo == a._intervalo);
+    return x;
+}
+
 Projeto Alocacao::getProjeto()
 {
     return _projeto;

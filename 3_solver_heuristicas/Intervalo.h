@@ -27,6 +27,8 @@ class Intervalo
         Intervalo();
         Intervalo(int, int);
 
+        bool operator==(const Intervalo & i) const;
+
         int getInicio();
         int getFinal();
 

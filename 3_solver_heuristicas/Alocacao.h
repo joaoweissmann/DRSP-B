@@ -31,6 +31,8 @@ class Alocacao
         Alocacao();
         Alocacao(Projeto, Sonda, Intervalo);
 
+        bool operator==(const Alocacao & a) const;
+
         Projeto getProjeto();
         Sonda getSonda();
         Intervalo getIntervalo();

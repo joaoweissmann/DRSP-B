@@ -50,6 +50,8 @@ class Projeto
                 double, double, double, double, double, double,
                 double, double, double, double, double, double,
                 int, int, int);
+
+        bool operator==(const Projeto & p) const;
         
         void copyFrom(Projeto);
 

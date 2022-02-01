@@ -57,6 +57,13 @@ Intervalo::Intervalo(int inicio, int final)
     _final = final;
 }
 
+bool Intervalo::operator==(const Intervalo & i) const
+{
+    bool x1 = this->_inicio == i._inicio;
+    bool x2 = this->_final == i._final;
+    return x1 && x2;
+}
+
 int Intervalo::getInicio()
 {
     return _inicio;
