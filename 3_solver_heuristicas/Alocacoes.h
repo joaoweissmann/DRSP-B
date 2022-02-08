@@ -27,16 +27,15 @@ class Alocacoes
         
         virtual std::map<Sonda, std::vector<Alocacao>> getAlocacoes() = 0;
         virtual std::vector<Alocacao> getAlocacoes(Sonda) = 0;
-
-        /*
+        
         virtual int getNAlocacoes(Sonda) = 0;
         virtual Alocacao getAlocacao(Sonda, int) = 0;
         virtual Alocacao getAlocacao(Sonda, Projeto) = 0;
         virtual int getAlocacaoIndex(Sonda, Projeto) = 0;
-
+        
         virtual void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>) = 0;
         virtual void setAlocacoes(Sonda, std::vector<Alocacao>) = 0;
-
+        /*
         virtual void setAlocacao(Sonda, int, Alocacao) = 0;
         virtual void setAlocacao(Sonda, Projeto, Alocacao) = 0;
 

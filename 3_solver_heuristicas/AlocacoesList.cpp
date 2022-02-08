@@ -587,37 +587,581 @@ std::vector<Alocacao> AlocacoesList::getAlocacoes(Sonda sonda)
         return vetor;
     }
 }
+
+int AlocacoesList::getNAlocacoes(Sonda sonda)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator it = _alocacoes.find(sonda);
+    if (it == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não foi encontrada." << std::endl;
+        return 0;
+    }
+    else
+    {
+        return it->second.size();
+    }
+}
+
+Alocacao AlocacoesList::getAlocacao(Sonda sonda, int idx)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator it = _alocacoes.find(sonda);
+    if (it == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não foi encontrada." << std::endl;
+        Alocacao x{};
+        return x;
+    }
+
+    int count = 0;
+    std::list<Alocacao>::iterator itr = _alocacoes[sonda].begin();
+    for (std::list<Alocacao>::iterator it = _alocacoes[sonda].begin(); it!=_alocacoes[sonda].end(); ++it)
+    {
+        if (count == idx)
+        {
+            Alocacao x = *it;
+            return x;
+        }
+        else
+        {
+            itr = it;
+        }
+        count++;
+    }
+    if (itr == _alocacoes[sonda].end())
+    {
+        std::cout << "Alocação não encontrada." << std::endl;
+        Alocacao x{};
+        return x;
+    }
+}
+
+Alocacao AlocacoesList::getAlocacao(Sonda sonda, Projeto projeto)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator it = _alocacoes.find(sonda);
+    if (it == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não foi encontrada." << std::endl;
+        Alocacao x{};
+        return x;
+    }
+
+    std::list<Alocacao>::iterator itr = _alocacoes[sonda].begin();
+    for (std::list<Alocacao>::iterator it = _alocacoes[sonda].begin(); it!=_alocacoes[sonda].end(); ++it)
+    {
+        Alocacao x = *it;
+        if (projeto == x.getProjeto())
+        {
+            return x;
+        }
+        else
+        {
+            itr = it;
+        }
+    }
+    if (itr == _alocacoes[sonda].end())
+    {
+        std::cout << "Alocação não encontrada." << std::endl;
+        Alocacao x{};
+        return x;
+    }
+}
+
+int AlocacoesList::getAlocacaoIndex(Sonda sonda, Projeto projeto)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator it = _alocacoes.find(sonda);
+    if (it == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não foi encontrada." << std::endl;
+        return 0;
+    }
+
+    int count = 0;
+    std::list<Alocacao>::iterator itr = _alocacoes[sonda].begin();
+    for (std::list<Alocacao>::iterator it = _alocacoes[sonda].begin(); it!=_alocacoes[sonda].end(); ++it)
+    {
+        Alocacao x = *it;
+        if (projeto == x.getProjeto())
+        {
+            return count;
+        }
+        else
+        {
+            itr = it;
+        }
+        count++;
+    }
+    if (itr == _alocacoes[sonda].end())
+    {
+        std::cout << "Alocação não encontrada." << std::endl;
+        return 0;
+    }
+}
+
+void AlocacoesList::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocacoes)
+{
+    _alocacoes.clear();
+
+    // checar interceção
+    bool feasible = true; 
+    for (std::map<Sonda, std::vector<Alocacao>>::iterator its=alocacoes.begin(); its!=alocacoes.end(); ++its)
+    {
+        Sonda sonda{};
+        sonda = its->first;
+        for (std::vector<Alocacao>::iterator itv1=alocacoes[sonda].begin(); itv1 != alocacoes[sonda].end(); ++itv1)
+        {
+            Alocacao aloc{};
+            aloc = *itv1;
+            for (std::vector<Alocacao>::iterator itv2=alocacoes[sonda].begin(); itv2 != alocacoes[sonda].end(); ++itv2)
+            {
+                Alocacao alocX{};
+                alocX = *itv2;
+                if (aloc == alocX)
+                {
+                    continue;
+                }
+                if (!((aloc.getIntervalo().getFinal() < alocX.getIntervalo().getInicio()) 
+                    ||
+                    (aloc.getIntervalo().getInicio() > alocX.getIntervalo().getFinal())))
+                    {
+                        std::cout << std::endl;
+                        std::cout << "Alocações não viáveis, pois existe interceção.";
+                        std::cout << "Interceção entre as alocações dos projetos" << aloc.getProjeto().getNome() << " e "
+                                                                                  << alocX.getProjeto().getNome() << " na sonda "
+                                                                                  << sonda.getNome();
+                        std::cout << std::endl;
+                        feasible = false;
+                        break;
+                    }
+            }
+            if (!feasible)
+            {
+                break;
+            }
+        }
+        if (!feasible)
+        {
+            break;
+        }
+    }
+    assert (feasible);
+
+    // checar continuidade e tamanho das alocações
+    for (std::map<Sonda, std::vector<Alocacao>>::iterator its = alocacoes.begin(); its != alocacoes.end(); ++its)
+    {
+        Sonda sonda = its->first;
+        for (std::vector<Alocacao>::iterator itv = alocacoes[sonda].begin(); itv != alocacoes[sonda].end(); ++itv)
+        {
+            Alocacao aloc = *itv;
+            Projeto projeto = aloc.getProjeto();
+            Intervalo intervalo = aloc.getIntervalo();
+            CalculadorDeDesloc calc{};
+            double desloc;
+            if ( (itv == alocacoes[sonda].begin()) && (itv+1 == alocacoes[sonda].end()) )
+            {
+                // alocacao única
+                desloc = calc.getDesloc(sonda, projeto);
+                if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << "origem" << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+            }
+            if ( (itv == alocacoes[sonda].begin()) && !(itv+1 == alocacoes[sonda].end()) )
+            {
+                // alocação begin, mas existe uma próxima alocação
+                desloc = calc.getDesloc(sonda, projeto);
+                if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << "origem" << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+                Alocacao alocNext = *(itv+1);
+                Intervalo intervaloNext = alocNext.getIntervalo();
+                if ( !(intervalo.getFinal() < intervaloNext.getInicio()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << "origem" << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+            }
+            if ( !(itv == alocacoes[sonda].begin()) && (itv+1 == alocacoes[sonda].end()) )
+            {
+                // última alocação, mas existe alocação prévia
+                Alocacao alocPrev = *(itv-1);
+                Projeto projPrev = alocPrev.getProjeto();
+                desloc = calc.getDesloc(projPrev, projeto);
+                if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+                Intervalo intervaloPrev = alocPrev.getIntervalo();
+                if ( !(intervaloPrev.getFinal() < intervalo.getInicio()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+            }
+            if ( !(itv == alocacoes[sonda].begin()) && !(itv+1 == alocacoes[sonda].end()) )
+            {
+                // existe alocação prévia e próxima
+                Alocacao alocPrev = *(itv-1);
+                Alocacao alocNext = *(itv+1);
+                Projeto projPrev = alocPrev.getProjeto();
+                Projeto projNext = alocNext.getProjeto();
+                Intervalo intervaloPrev = alocPrev.getIntervalo();
+                Intervalo intervaloNext = alocNext.getIntervalo();
+                desloc = calc.getDesloc(projPrev, projeto);
+                if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+                if ( !(intervaloPrev.getFinal() < intervalo.getInicio()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+                if ( !(intervalo.getFinal() < intervaloNext.getInicio()) )
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                    std::cout << "Alocação incorreta: " << std::endl;
+                    std::cout << "Sonda " << sonda.getNome() << std::endl;
+                    std::cout << "Projeto " << projeto.getNome() << std::endl;
+                    std::cout << "Início " << intervalo.getInicio() << std::endl;
+                    std::cout << "Final " << intervalo.getFinal() << std::endl;
+                    std::cout << "desloc " << desloc << std::endl;
+                    std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                    std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+            }
+        }
+        if (!feasible)
+        {
+            break;
+        }
+    }
+    assert (feasible);
+
+    for (std::map<Sonda, std::vector<Alocacao>>::iterator itr=alocacoes.begin(); itr!=alocacoes.end(); ++itr)
+    {
+        Sonda sonda = itr->first;
+        std::vector<Alocacao> vetorAloc = itr->second;
+        std::list<Alocacao> listAloc;
+        for (std::vector<Alocacao>::iterator it=vetorAloc.begin(); it!=vetorAloc.end(); ++it)
+        {
+            Alocacao x = *it;
+            listAloc.push_back(x);
+        }
+        _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(sonda, listAloc));
+    }
+}
+
+void AlocacoesList::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
+{
+    std::map<Sonda, std::list<Alocacao>>::iterator it = _alocacoes.find(sonda);
+    if (it == _alocacoes.end())
+    {
+        std::cout << "A sonda especificada não foi encontrada." << std::endl;
+    }
+
+    _alocacoes[sonda].clear();
+
+    // checar interceção
+    bool feasible = true; 
+    for (std::vector<Alocacao>::iterator itv1=alocacoes.begin(); itv1 != alocacoes.end(); ++itv1)
+    {
+        Alocacao aloc{};
+        aloc = *itv1;
+        for (std::vector<Alocacao>::iterator itv2=alocacoes.begin(); itv2 != alocacoes.end(); ++itv2)
+        {
+            Alocacao alocX{};
+            alocX = *itv2;
+            if (aloc == alocX)
+            {
+                continue;
+            }
+            if (!((aloc.getIntervalo().getFinal() < alocX.getIntervalo().getInicio()) 
+                ||
+                (aloc.getIntervalo().getInicio() > alocX.getIntervalo().getFinal())))
+                {
+                    std::cout << std::endl;
+                    std::cout << "Alocações não viáveis, pois existe interceção.";
+                    std::cout << "Interceção entre as alocações dos projetos" << aloc.getProjeto().getNome() << " e "
+                                                                                << alocX.getProjeto().getNome() << " na sonda "
+                                                                                << sonda.getNome();
+                    std::cout << std::endl;
+                    feasible = false;
+                    break;
+                }
+        }
+        if (!feasible)
+        {
+            break;
+        }
+    }
+    assert (feasible);
+
+    // checar continuidade e tamanho das alocações
+    for (std::vector<Alocacao>::iterator itv = alocacoes.begin(); itv != alocacoes.end(); ++itv)
+    {
+        Alocacao aloc = *itv;
+        Projeto projeto = aloc.getProjeto();
+        Intervalo intervalo = aloc.getIntervalo();
+        CalculadorDeDesloc calc{};
+        double desloc;
+        if ( (itv == alocacoes.begin()) && (itv+1 == alocacoes.end()) )
+        {
+            // alocacao única
+            desloc = calc.getDesloc(sonda, projeto);
+            if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << "origem" << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+        }
+        if ( (itv == alocacoes.begin()) && !(itv+1 == alocacoes.end()) )
+        {
+            // alocação begin, mas existe uma próxima alocação
+            desloc = calc.getDesloc(sonda, projeto);
+            if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << "origem" << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+            Alocacao alocNext = *(itv+1);
+            Intervalo intervaloNext = alocNext.getIntervalo();
+            if ( !(intervalo.getFinal() < intervaloNext.getInicio()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << "origem" << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+        }
+        if ( !(itv == alocacoes.begin()) && (itv+1 == alocacoes.end()) )
+        {
+            // última alocação, mas existe alocação prévia
+            Alocacao alocPrev = *(itv-1);
+            Projeto projPrev = alocPrev.getProjeto();
+            desloc = calc.getDesloc(projPrev, projeto);
+            if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+            Intervalo intervaloPrev = alocPrev.getIntervalo();
+            if ( !(intervaloPrev.getFinal() < intervalo.getInicio()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+        }
+        if ( !(itv == alocacoes.begin()) && !(itv+1 == alocacoes.end()) )
+        {
+            // existe alocação prévia e próxima
+            Alocacao alocPrev = *(itv-1);
+            Alocacao alocNext = *(itv+1);
+            Projeto projPrev = alocPrev.getProjeto();
+            Projeto projNext = alocNext.getProjeto();
+            Intervalo intervaloPrev = alocPrev.getIntervalo();
+            Intervalo intervaloNext = alocNext.getIntervalo();
+            desloc = calc.getDesloc(projPrev, projeto);
+            if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois tamanho da alocação não está correto.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+            if ( !(intervaloPrev.getFinal() < intervalo.getInicio()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+            if ( !(intervalo.getFinal() < intervaloNext.getInicio()) )
+            {
+                std::cout << std::endl;
+                std::cout << "Alocações não viáveis, pois continuidade temporal não está correta.";
+                std::cout << "Alocação incorreta: " << std::endl;
+                std::cout << "Sonda " << sonda.getNome() << std::endl;
+                std::cout << "Projeto " << projeto.getNome() << std::endl;
+                std::cout << "Início " << intervalo.getInicio() << std::endl;
+                std::cout << "Final " << intervalo.getFinal() << std::endl;
+                std::cout << "desloc " << desloc << std::endl;
+                std::cout << "tempExec " << projeto.getTempExec() << std::endl;
+                std::cout << "alocação prev " << projPrev.getNome() << std::endl;
+                std::cout << std::endl;
+                feasible = false;
+                break;
+            }
+        }
+    }
+    assert (feasible);
+
+    std::list<Alocacao> alocsList;
+    for (std::vector<Alocacao>::iterator it=alocacoes.begin(); it!=alocacoes.end(); ++it)
+    {
+        Alocacao x = *it;
+        alocsList.push_back(x);
+    }
+    _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(sonda, alocsList));
+}
+
 /*
-void Alocacoes::setAlocacoes(std::map<Sonda, std::vector<Alocacao>>)
-{
-    // TODO
-}
-
-void Alocacoes::setAlocacoes(Sonda, std::vector<Alocacao>)
-{
-    // TODO
-}
-
-int Alocacoes::getNAlocacoes(Sonda)
-{
-    // TODO
-}
-
-Alocacao Alocacoes::getAlocacao(Sonda, int)
-{
-    // TODO
-}
-
-Alocacao Alocacoes::getAlocacao(Sonda, Projeto)
-{
-    // TODO
-}
-
-int Alocacoes::getAlocacaoIndex(Sonda, Projeto)
-{
-    // TODO
-}
-
 void Alocacoes::setAlocacao(Sonda, int, Alocacao)
 {
     // TODO

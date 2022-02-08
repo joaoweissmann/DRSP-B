@@ -38,15 +38,15 @@ class AlocacoesVector: public Alocacoes
         
         std::map<Sonda, std::vector<Alocacao>> getAlocacoes();
         std::vector<Alocacao> getAlocacoes(Sonda);
-        /*
+        
         int getNAlocacoes(Sonda);
         Alocacao getAlocacao(Sonda, int);
         Alocacao getAlocacao(Sonda, Projeto);
         int getAlocacaoIndex(Sonda, Projeto);
-
+        
         void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>);
         void setAlocacoes(Sonda, std::vector<Alocacao>);
-
+        /*
         void setAlocacao(Sonda, int, Alocacao);
         void setAlocacao(Sonda, Projeto, Alocacao);
 
