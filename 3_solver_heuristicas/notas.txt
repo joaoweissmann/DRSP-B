@@ -375,16 +375,17 @@ TODO:
 
 Anotar lições aprendidas no mestrado
 
-Tirar notebooks jupyter do repositório e deixar apenas códigos *.py
+Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 
 Melhorar prints das funções e testes
+
+Calculadora de desloc retorna double. Mudar para int?
 
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ FAZENDO
-        - add check alocacoes: inicioIntervalo + tempExecProjeto + desloc = finalIntervalo ---- ...
-        - add check alocacoes: continuidade temporalmente (disjoint consecutivos) ----------- 
-        - continuar testes ----------------------------------------------------------------------- 
+        - continuar métodos -------------------------------------------------------------------- ...
+        - continuar testes ----------------------------------------------------------------------- ...
     - incluir métodos complexos
         - começar sem realocações
         - modo sem e com realocações
@@ -460,13 +461,7 @@ Fevereiro
     - Escrever classe pré-processamento
     - Escrever classe movimentador em vizinhanças
     - Escrever classe busca local
-        - VND
-        - RVND
     - Escrever classe executador de metaheurísticas
-        - mult-start heuristic
-        - iterated greedy
-        - GRASP
-        - ILS
 
 Março
     - Escrever novas perturbações
@@ -481,6 +476,8 @@ Férias
 
 ----------------------------------
 LIÇÕES APRENDIDAS
+
+- fazer uma documentação completa
 
 - marcar coisas a fazer com TODO
 
@@ -503,3 +500,6 @@ LIÇÕES APRENDIDAS
 - testar cada função assim que termina de implementar ela
 
 - sempre ficar ligado com o escopo de cada variável
+
+- antes de copiar e colar, tenha certeza que o código funciona
+

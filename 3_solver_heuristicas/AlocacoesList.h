@@ -17,6 +17,7 @@
 
 #include <bits/stdc++.h>
 #include "Alocacoes.h"
+#include "CalculadorDeDesloc.h"
 // #include "AlocacoesVector.h" // TODO: não pode?
 
 class AlocacoesList: public Alocacoes
