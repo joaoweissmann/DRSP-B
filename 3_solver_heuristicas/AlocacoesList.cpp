@@ -612,22 +612,19 @@ Alocacao AlocacoesList::getAlocacao(Sonda sonda, int idx)
         return x;
     }
 
+    bool idxFound = false;
     int count = 0;
-    std::list<Alocacao>::iterator itr = _alocacoes[sonda].begin();
     for (std::list<Alocacao>::iterator it = _alocacoes[sonda].begin(); it!=_alocacoes[sonda].end(); ++it)
     {
         if (count == idx)
         {
+            idxFound = true;
             Alocacao x = *it;
             return x;
         }
-        else
-        {
-            itr = it;
-        }
         count++;
     }
-    if (itr == _alocacoes[sonda].end())
+    if (!idxFound)
     {
         std::cout << "Alocação não encontrada." << std::endl;
         Alocacao x{};
@@ -645,20 +642,17 @@ Alocacao AlocacoesList::getAlocacao(Sonda sonda, Projeto projeto)
         return x;
     }
 
-    std::list<Alocacao>::iterator itr = _alocacoes[sonda].begin();
+    bool projFound = false;
     for (std::list<Alocacao>::iterator it = _alocacoes[sonda].begin(); it!=_alocacoes[sonda].end(); ++it)
     {
         Alocacao x = *it;
         if (projeto == x.getProjeto())
         {
+            projFound = true;
             return x;
         }
-        else
-        {
-            itr = it;
-        }
     }
-    if (itr == _alocacoes[sonda].end())
+    if (!projFound)
     {
         std::cout << "Alocação não encontrada." << std::endl;
         Alocacao x{};
@@ -1158,64 +1152,10 @@ void AlocacoesList::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
         Alocacao x = *it;
         alocsList.push_back(x);
     }
-    _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(sonda, alocsList));
+    _alocacoes[sonda] = alocsList;
 }
 
 /*
-void Alocacoes::setAlocacao(Sonda, int, Alocacao)
-{
-    // TODO
-}
-
-void Alocacoes::setAlocacao(Sonda, Projeto, Alocacao)
-{
-    // TODO
-}
-
-int Alocacoes::getDesloc(Sonda, int)
-{
-    // TODO
-}
-
-int Alocacoes::getGapLeft(Sonda, int)
-{
-    // TODO
-}
-
-int Alocacoes::getGapRight(Sonda, int)
-{
-    // TODO
-}
-
-int Alocacoes::getFolgaLeft(Sonda, int)
-{
-    // TODO
-}
-
-int Alocacoes::getFolgaRight(Sonda, int)
-{
-    // TODO
-}
-
-bool Alocacoes::isPrimeiraAlocacao(Sonda, Projeto)
-{
-    // TODO
-}
-
-bool Alocacoes::isUltimaAlocacao(Sonda, Projeto)
-{
-    // TODO
-}
-
-bool Alocacoes::isEmpty(Sonda)
-{
-    // TODO
-}
-
-bool Alocacoes::isFeasible(Alocacao)
-{
-    // TODO
-}
 
 std::tuple<bool, int, Intervalo, int, int, int, int> Alocacoes::buscarJanelaViavel(Sonda, Projeto)
 {
@@ -1228,11 +1168,6 @@ std::tuple<> Alocacoes::inserirProjeto(Sonda, Projeto, Intervalo, int, int, int,
 }
 
 std::tuple<> Alocacoes::removerProjeto(Sonda, int)
-{
-    // TODO
-}
-
-std::tuple<> Alocacoes::trocarProjetos(Sonda, int, Sonda, int)
 {
     // TODO
 }

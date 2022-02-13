@@ -46,22 +46,8 @@ class AlocacoesVector: public Alocacoes
         
         void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>);
         void setAlocacoes(Sonda, std::vector<Alocacao>);
-        /*
-        void setAlocacao(Sonda, int, Alocacao);
-        void setAlocacao(Sonda, Projeto, Alocacao);
-
-        int getDesloc(Sonda, int);
         
-        int getGapLeft(Sonda, int);
-        int getGapRight(Sonda, int);
-
-        int getFolgaLeft(Sonda, int);
-        int getFolgaRight(Sonda, int);
-
-        bool isPrimeiraAlocacao(Sonda, Projeto);
-        bool isUltimaAlocacao(Sonda, Projeto);
-        bool isEmpty(Sonda);
-        bool isFeasible(Alocacao);
+        /*
 
         std::tuple<bool, int, Intervalo, int, int, int, int> buscarJanelaViavel(Sonda, Projeto);
 
@@ -69,7 +55,6 @@ class AlocacoesVector: public Alocacoes
 
         std::tuple<> removerProjeto(Sonda, int);
 
-        std::tuple<> trocarProjetos(Sonda, int, Sonda, int);
         */
 };
 

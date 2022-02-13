@@ -35,22 +35,8 @@ class Alocacoes
         
         virtual void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>) = 0;
         virtual void setAlocacoes(Sonda, std::vector<Alocacao>) = 0;
-        /*
-        virtual void setAlocacao(Sonda, int, Alocacao) = 0;
-        virtual void setAlocacao(Sonda, Projeto, Alocacao) = 0;
-
-        virtual int getDesloc(Sonda, int) = 0;
         
-        virtual int getGapLeft(Sonda, int) = 0;
-        virtual int getGapRight(Sonda, int) = 0;
-
-        virtual int getFolgaLeft(Sonda, int) = 0;
-        virtual int getFolgaRight(Sonda, int) = 0;
-
-        virtual bool isPrimeiraAlocacao(Sonda, Projeto) = 0;
-        virtual bool isUltimaAlocacao(Sonda, Projeto) = 0;
-        virtual bool isEmpty(Sonda) = 0;
-        virtual bool isFeasible(Alocacao) = 0;
+        /*
 
         virtual std::tuple<bool, int, Intervalo, int, int, int, int> buscarJanelaViavel(Sonda, Projeto) = 0;
 
@@ -58,7 +44,6 @@ class Alocacoes
 
         virtual std::tuple<> removerProjeto(Sonda, int) = 0;
 
-        virtual std::tuple<> trocarProjetos(Sonda, int, Sonda, int) = 0;
         */
 };
 

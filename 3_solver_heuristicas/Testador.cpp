@@ -773,13 +773,167 @@ void Testador::testarAlocacoes()
     std::cout << std::endl;
     */
 
-   // ...
+   /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::cout << "Mostrando alocações (vector)" << std::endl;
+    for (std::map<Sonda, std::vector<Alocacao>>::iterator it=alocacoesVector0.begin(); it!=alocacoesVector0.end(); ++it)
+    {
+        Sonda sonda = it->first;
+        std::cout << "A sonda " << sonda.getNome() << " tem " << ptrAlocacoesVector1->getNAlocacoes(sonda) << " alocações";
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::cout << "Mostrando alocações (list)" << std::endl;
+    for (std::map<Sonda, std::list<Alocacao>>::iterator it=alocacoesList0.begin(); it!=alocacoesList0.end(); ++it)
+    {
+        Sonda sonda = it->first;
+        std::cout << "A sonda " << sonda.getNome() << " tem " << ptrAlocacoesList1->getNAlocacoes(sonda) << " alocações";
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
 
     /*
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------";
     std::cout << std::endl;
-    
+    std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    Sonda sondaX = *sondas.begin();
+    Alocacao alocX = ptrAlocacoesVector1->getAlocacao(sondaX, 0);
+    std::cout << "Mostrando alocação (vector)" << std::endl;
+    alocX.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    //std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    //Sonda sondaX = *sondas.begin();
+    Alocacao alocY = ptrAlocacoesList1->getAlocacao(sondaX, 0);
+    std::cout << "Mostrando alocação (list)" << std::endl;
+    alocY.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    Sonda sondaX = *sondas.begin();
+    Projeto projX = alocacoesVector0[sondaX].begin()->getProjeto();
+    Alocacao alocX = ptrAlocacoesVector1->getAlocacao(sondaX, projX);
+    std::cout << "Mostrando alocação (vector)" << std::endl;
+    alocX.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    //std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    //Sonda sondaX = *sondas.begin();
+    //Projeto projX = alocacoesVector0[sondaX].begin()->getProjeto();
+    Alocacao alocY = ptrAlocacoesList1->getAlocacao(sondaX, projX);
+    std::cout << "Mostrando alocação (list)" << std::endl;
+    alocY.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    Sonda sondaX = *sondas.begin();
+    Projeto projX = alocacoesVector0[sondaX].begin()->getProjeto();
+    int idxX = ptrAlocacoesVector1->getAlocacaoIndex(sondaX, projX);
+    std::cout << "O índice da alocação (vector) do projeto " << projX.getNome() << " na sonda " << sondaX.getNome() << 
+                " é " << idxX << std::endl;
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    //std::set<Sonda> sondas = ptrAlocacoesVector1->getSondas();
+    //Sonda sondaX = *sondas.begin();
+    //Projeto projX = alocacoesVector0[sondaX].begin()->getProjeto();
+    int idxY = ptrAlocacoesList1->getAlocacaoIndex(sondaX, projX);
+    std::cout << "O índice da alocação (list) do projeto " << projX.getNome() << " na sonda " << sondaX.getNome() << 
+                " é " << idxY << std::endl;
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::set<Sonda> sondas = ptrAlocacoesList1->getSondas();
+    AlocacoesVector alocsVector1{sondas};
+    std::cout << "Alocações (vector) antes de modificar: " << std::endl;
+    alocsVector1.print();
+    std::cout << "Alocações (vector) depois de modificar uma sonda: " << std::endl;
+    Sonda sondaX = *sondas.begin();
+    std::vector<Alocacao> vetorAlocX = ptrAlocacoesVector1->getAlocacoes(sondaX);
+    alocsVector1.setAlocacoes(sondaX, vetorAlocX);
+    alocsVector1.print();
+    std::cout << "Alocações (vector) depois de modificar tudo: " << std::endl;
+    alocsVector1.setAlocacoes(alocacoesVector0);
+    alocsVector1.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    std::set<Sonda> sondas = ptrAlocacoesList1->getSondas();
+    AlocacoesList alocsList1{sondas};
+    std::cout << "Alocações (list) antes de modificar: " << std::endl;
+    alocsList1.print();
+    std::cout << "Alocações (list) depois de modificar uma sonda: " << std::endl;
+    Sonda sondaX = *sondas.begin();
+    std::vector<Alocacao> vetorAlocX = ptrAlocacoesVector1->getAlocacoes(sondaX);
+    alocsList1.setAlocacoes(sondaX, vetorAlocX);
+    alocsList1.print();
+    std::cout << "Alocações (list) depois de modificar tudo: " << std::endl;
+    alocsList1.setAlocacoes(alocacoesVector0);
+    alocsList1.print();
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+    */
+
+    // ...
+
+    /*
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------------------";
+    std::cout << std::endl;
+
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------";
     std::cout << std::endl;

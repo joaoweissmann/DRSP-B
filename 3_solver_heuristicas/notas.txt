@@ -381,15 +381,12 @@ Melhorar prints das funções e testes
 
 Calculadora de desloc retorna double. Mudar para int?
 
+Rever operações das classes implementadas e verificar se posso deixar mais eficiente
+
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
-    - implementações individuais para vector e list ------------------------------------------ FAZENDO
-        - continuar métodos -------------------------------------------------------------------- ...
-        - continuar testes ----------------------------------------------------------------------- ...
-    - incluir métodos complexos
-        - começar sem realocações
-        - modo sem e com realocações
-        - incluir realocações
+    - implementações individuais para vector e list ------------------------------------------ OK
+    - incluir métodos complexos ------------------------------------------------------------- FAZENDO
 
 Classe Solucao:
     - Membros
@@ -494,6 +491,8 @@ LIÇÕES APRENDIDAS
 - modularizar em funções
 
 - de preferência usar orientação a objetos
+
+- dentro das classes, codificar apenas métodos realmente necessários / úteis
 
 - fazer testes e checks de realidade para cada função
 
