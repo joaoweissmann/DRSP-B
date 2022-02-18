@@ -19,7 +19,8 @@ AlocacoesList::AlocacoesList(std::set<Sonda> sondas)
 {
     for(std::set<Sonda>::iterator itr = sondas.begin(); itr != sondas.end(); ++itr)
     {
-        _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(*itr, std::list<Alocacao>()));
+        std::list<Alocacao> lista;
+        _alocacoes.insert(std::pair<Sonda, std::list<Alocacao>>(*itr, lista));
     }
 }
 
@@ -1155,17 +1156,17 @@ void AlocacoesList::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
     _alocacoes[sonda] = alocsList;
 }
 
+std::tuple<bool, int, Intervalo, int, int> AlocacoesList::buscarJanelaViavel(Sonda sonda, Projeto projeto)
+{
+    // TODO
+}
+
+void AlocacoesList::inserirProjeto(Sonda, Projeto, int, Intervalo, int, int)
+{
+    // TODO
+}
+
 /*
-
-std::tuple<bool, int, Intervalo, int, int, int, int> Alocacoes::buscarJanelaViavel(Sonda, Projeto)
-{
-    // TODO
-}
-
-std::tuple<> Alocacoes::inserirProjeto(Sonda, Projeto, Intervalo, int, int, int, int, int)
-{
-    // TODO
-}
 
 std::tuple<> Alocacoes::removerProjeto(Sonda, int)
 {

@@ -383,10 +383,17 @@ Calculadora de desloc retorna double. Mudar para int?
 
 Rever operações das classes implementadas e verificar se posso deixar mais eficiente
 
+Rever gerador de instânciass
+
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ OK
     - incluir métodos complexos ------------------------------------------------------------- FAZENDO
+        - incluir todos parâmetros inputs e returns outputs ------------------------------------ 
+        - tenta na janela após última alocação -------------------------------------------------- 
+        - caso deltaDesloc > 0 ------------------------------------------------------------------ 
+        - tenta realocar projetos ---------------------------------------------------------------- 
+        - método para remover projetos -------------------------------------------------------- 
 
 Classe Solucao:
     - Membros
@@ -474,6 +481,8 @@ Férias
 ----------------------------------
 LIÇÕES APRENDIDAS
 
+- fazer primeiro uma implementação simples e organizada e, com o tempo, ir rebuscando ela, adicionando novas funcionalidades
+
 - fazer uma documentação completa
 
 - marcar coisas a fazer com TODO
@@ -497,6 +506,8 @@ LIÇÕES APRENDIDAS
 - fazer testes e checks de realidade para cada função
 
 - testar cada função assim que termina de implementar ela
+
+- funções grandes / complexas, testar por partes
 
 - sempre ficar ligado com o escopo de cada variável
 

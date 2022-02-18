@@ -341,7 +341,9 @@ void Testador::testarAlocacoes()
     Sonda sonda2{2, 10, 10};
     sondas1.insert(sonda1);
     sondas1.insert(sonda2);
+    */
 
+    /*
     std::cout << std::endl;
     std::cout << "-------------------------------------------------------------------------" << std::endl;
     AlocacoesVector alocacoesVector1{sondas1};
@@ -355,12 +357,13 @@ void Testador::testarAlocacoes()
     std::cout << std::endl;
     */
 
+    ///*
     std::map<Sonda, std::vector<Alocacao>> alocacoesVector0;
     std::map<Sonda, std::list<Alocacao>> alocacoesList0;
     int nSondasVector = 2;
     int nSondasList = 2;
-    int nProjetosVector = 3;
-    int nProjetosList = 3;
+    int nProjetosVector = 0;
+    int nProjetosList = 0;
     Projeto projeto{};
     Sonda sonda{};
     int nomeSonda;
@@ -661,6 +664,7 @@ void Testador::testarAlocacoes()
         vetorAloc.clear();
         listaAloc.clear();
     }
+    //*/
     
     /*
     std::cout << std::endl;
@@ -678,18 +682,18 @@ void Testador::testarAlocacoes()
 
     // std::cout << std::endl;
     // std::cout << "-------------------------------------------------------------------------" << std::endl;
-    AlocacoesVector alocsVector0{alocacoesList0};
+    // AlocacoesVector alocsVector0{alocacoesList0};
     // std::cout << "As alocações (vector) são:" << std::endl; 
     // alocsVector0.print();
     // std::cout << std::endl;
-    AlocacoesList alocsList0{alocacoesVector0};
+    // AlocacoesList alocsList0{alocacoesVector0};
     // std::cout << "As alocações (list) são:" << std::endl;
     // alocsList0.print();
     // std::cout << "-------------------------------------------------------------------------";
     // std::cout << std::endl;
 
-    Alocacoes * ptrAlocacoesVector1 = & alocsVector0;
-    Alocacoes * ptrAlocacoesList1 = & alocsList0;
+    // Alocacoes * ptrAlocacoesVector1 = & alocsVector0;
+    // Alocacoes * ptrAlocacoesList1 = & alocsList0;
 
     /*
     std::cout << std::endl;
@@ -927,7 +931,119 @@ void Testador::testarAlocacoes()
     std::cout << std::endl;
     */
 
-    // ...
+    /*
+    AlocacoesVector alocsVector1{sondas1};
+    Alocacoes * ptrAlocsVector1 = & alocsVector1;
+
+    std::cout << "Mostrando alocações iniciais: " << std::endl;
+    alocsVector1.print();
+
+    Sonda sondaX = *sondas1.begin();
+
+    Projeto projetoX{};
+    projetoX.setCoordX(10);
+    projetoX.setCoordY(20);
+    projetoX.setNome(0);
+    projetoX.setMiVpl(10);
+    projetoX.setCusto(5);
+    projetoX.setTempExec(11);
+    projetoX.setInicioJanela(20);
+    projetoX.setFinalJanela(420);
+
+    bool alocExiste = false;
+    int posicaoAloc = -1;
+    Intervalo intervaloAloc{};
+    int deltaNext = 0;
+    int numNexts = 0;
+    std::cout << "Buscando janela viável..." << std::endl;
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, deltaNext, numNexts) = ptrAlocsVector1->buscarJanelaViavel(sondaX, projetoX);
+
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "deltaNext: " << deltaNext << std::endl;
+    std::cout << "numNexts: " << numNexts << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    if (alocExiste)
+    {
+        ptrAlocsVector1->inserirProjeto(sondaX, projetoX, posicaoAloc, intervaloAloc, deltaNext, numNexts);
+        std::cout << "Mostrando alocações após inserção do projeto " << projetoX.getNome() << std::endl;
+        alocsVector1.print();
+    }
+    */
+
+    ///*
+    // testes com inserções aleatórias ---------------------------------------
+    
+    ///*
+    // instanciar alocações por set
+    AlocacoesVector alocsVector2{alocacoesVector0};
+    Alocacoes * ptrAlocsVector2 = & alocsVector2;
+
+    // mostra alocações iniciais
+    std::cout << std::endl;
+    std::cout << "Mostrando alocações iniciais =================================================" << std::endl;
+    alocsVector2.print();
+
+    // get sondas
+    std::set<Sonda> sondas2 = ptrAlocsVector2->getSondas();
+    Sonda sonda1 = *(sondas2.begin());
+    Sonda sonda2 = *(std::next(sondas2.begin(), 1));
+
+    // loop para buscas e inserções
+    int nTests = 3;
+    Sonda sondaX{};
+    Projeto projetoX{};
+    for (int tests=0; tests<nTests; tests++)
+    {
+        std::cout << "Sonda 1 empty: " << ptrAlocsVector2->getAlocacoes()[sonda1].empty() << std::endl;
+        std::cout << "Sonda 1 size: " << ptrAlocsVector2->getAlocacoes()[sonda1].size() << std::endl;
+        std::cout << "Sonda 2 empty: " << ptrAlocsVector2->getAlocacoes()[sonda2].empty() << std::endl;
+        std::cout << "Sonda 2 size: " << ptrAlocsVector2->getAlocacoes()[sonda2].size() << std::endl;
+
+        // escolhe sonda
+        sondaX = *(sondas2.begin());
+
+        // escolhe projeto
+        projetoX.setCoordX(rand()%20);
+        projetoX.setCoordY(rand()%20);
+        projetoX.setNome(tests);
+        projetoX.setMiVpl(rand()%20);
+        projetoX.setCusto(rand()%20);
+        projetoX.setTempExec(rand()%20);
+        projetoX.setInicioJanela(rand()%100);
+        projetoX.setFinalJanela(rand()%200 + projetoX.getInicioJanela());
+
+        // faz busca
+        bool alocExiste = false;
+        int posicaoAloc = -1;
+        Intervalo intervaloAloc{};
+        int deltaNext = 0;
+        int numNexts = 0;
+        std::tie(alocExiste, posicaoAloc, intervaloAloc, deltaNext, numNexts) = ptrAlocsVector2->buscarJanelaViavel(sondaX, projetoX);
+        
+        // mostra resultados da busca
+        std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+        std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+        std::cout << "deltaNext: " << deltaNext << std::endl;
+        std::cout << "numNexts: " << numNexts << std::endl;
+        std::cout << "Intervalo para alocação: " << std::endl;
+        intervaloAloc.print();
+
+        // se viável, insere
+        ///*        
+        if (alocExiste)
+        {
+            ptrAlocsVector2->inserirProjeto(sondaX, projetoX, posicaoAloc, intervaloAloc, deltaNext, numNexts);
+            std::cout << "Mostrando alocações após inserção do projeto " << projetoX.getNome() << std::endl;
+            alocsVector2.print();
+        }
+        //*/
+    }
+    //*/
+    
+    //*/
 
     /*
     std::cout << std::endl;

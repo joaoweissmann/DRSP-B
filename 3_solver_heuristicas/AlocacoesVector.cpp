@@ -19,7 +19,8 @@ AlocacoesVector::AlocacoesVector(std::set<Sonda> sondas)
 {
     for (std::set<Sonda>::iterator itr=sondas.begin(); itr!=sondas.end(); ++itr)
     {
-        _alocacoes.insert(std::pair<Sonda, std::vector<Alocacao>>(*itr, std::vector<Alocacao>()));
+        std::vector<Alocacao> vetor;
+        _alocacoes.insert(std::pair<Sonda, std::vector<Alocacao>>(*itr, vetor));
     }
 }
 
@@ -1119,17 +1120,323 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
     _alocacoes[sonda] = alocacoes;
 }
 
+std::tuple<bool, int, Intervalo, int, int> AlocacoesVector::buscarJanelaViavel(Sonda sonda, Projeto projeto)
+{
+    std::cout << std::endl;
+    std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+    std::cout << std::endl;
+
+    std::cout << "Alocações atuais são:" << std::endl;
+    this->print();
+
+    // verifica se sonda existe
+    std::map<Sonda, std::vector<Alocacao>>::iterator it = this->_alocacoes.find(sonda);
+    if (it == this->_alocacoes.end())
+    {
+        std::cout << "Sonda não encontrada nas alocações." << std::endl;
+        assert (it !=this->_alocacoes.end());
+    }
+
+    // inicializa valores que serão retornados
+    CalculadorDeDesloc calc{};
+    bool alocExiste = false;
+    Intervalo intervaloAloc{};
+    int posicaoAloc = -1;
+    int deltaNext = 0;
+    int numNexts = 0;
+
+    std::cout << "Sonda empty: " << this->_alocacoes[sonda].empty() << std::endl;
+    std::cout << "Sonda size: " << this->_alocacoes[sonda].size() << std::endl;
+
+    // se o vetor de alocações está vazio
+    if (this->_alocacoes[sonda].empty())
+    {
+        std::cout << std::endl;
+        std::cout << "A sonda " << sonda.getNome() << " ainda NÃO TEM alocações.";
+        std::cout << std::endl;
+
+        // se é viável inserir projeto entre release e due
+        double desloc = calc.getDesloc(sonda, projeto);
+        if (projeto.getInicioJanela() + (int)desloc + projeto.getTempExec() - 1 <= projeto.getFinalJanela())
+        {
+            // escolhe intervalo
+            int inicioIntervalo = projeto.getInicioJanela();
+            int finalIntervalo = projeto.getInicioJanela() + (int)desloc + projeto.getTempExec() - 1;
+            intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
+
+            std::cout << std::endl;
+            std::cout << "Inserção viável na sonda " << sonda.getNome() << " ainda sem alocações." << std::endl;
+            std::cout << "Release do projeto: " << projeto.getInicioJanela() << std::endl;
+            std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
+            std::cout << "setup: " << desloc << std::endl;
+            std::cout << "proc: " << projeto.getTempExec() << std::endl;
+            std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
+            std::cout << "Due do projeto: " << projeto.getFinalJanela() << std::endl;
+            std::cout << std::endl;
+
+            // alocar
+            alocExiste = true;
+            posicaoAloc = 0;
+            deltaNext = 0;
+            numNexts = 0;
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << "Inserção NÃO viável na sonda " << sonda.getNome() << " ainda sem alocações.";
+            std::cout << std::endl;
+
+            alocExiste = false;
+            posicaoAloc = -1;
+            intervaloAloc.setIntervalo(0, 0);
+            deltaNext = 0;
+            numNexts = 0;
+        }
+        return std::make_tuple(alocExiste, posicaoAloc, intervaloAloc, deltaNext, numNexts);
+    }
+    // se já existem alocações no vetor
+    else
+    {
+        std::cout << std::endl;
+        std::cout << "A sonda " << sonda.getNome() << " JÁ TEM alocações.";
+        std::cout << std::endl;
+
+        // itera sob as alocações da sonda
+        int count = -1;
+        for (std::vector<Alocacao>::iterator itr=this->_alocacoes[sonda].begin(); itr!=this->_alocacoes[sonda].end(); ++itr)
+        {
+            count++;
+
+            double desloc = 0;
+            int gapInit = -1, gapFinal = -1;
+            double oldDesloc = 0, newDesloc = 0;
+            int deltaDesloc = 0;
+            int dataMin = -1, dataMax = -1;
+            int deltaDeslocEfetivo;
+            bool janelaExiste = false;
+
+            std::cout << std::endl;
+            std::cout << "Verificando alocação de índice " << count << " da sonda " << sonda.getNome();
+            std::cout << std::endl;
+
+            // pega informações da janela que antecede a alocação corrente
+            if (itr == this->_alocacoes[sonda].begin())
+            {
+                desloc = calc.getDesloc(sonda, projeto);
+
+                // se existe janela
+                if (itr->getIntervalo().getInicio() == 0)
+                {
+                    janelaExiste = false;
+                }
+                else
+                {
+                    janelaExiste = true;
+                    gapInit = 0;
+                    gapFinal = itr->getIntervalo().getInicio() - 1;
+                }
+            }
+            else
+            {
+                desloc = calc.getDesloc((itr-1)->getProjeto(), projeto);
+
+                // se existe janela
+                if (itr->getIntervalo().getInicio() == (itr-1)->getIntervalo().getFinal() + 1)
+                {
+                    janelaExiste = false;
+                }
+                else
+                {
+                    janelaExiste = true;
+                    gapInit = (itr-1)->getIntervalo().getFinal() + 1;
+                    gapFinal = itr->getIntervalo().getInicio() - 1;
+                }
+            }
+            if (janelaExiste)
+            {
+                std::cout << std::endl;
+                std::cout << "Janela disponível: " << std::endl;
+                std::cout << "Início: " << gapInit << ", e final: " << gapFinal << std::endl;
+                std::cout << std::endl;
+            }
+            else
+            {
+                std::cout << std::endl;
+                std::cout << "Janela NÃO disponível: " << std::endl;
+                std::cout << std::endl;
+                continue;
+            }
+            
+            // verifica se a inserção do projeto altera o setup do projeto seguinte
+            if (itr == this->_alocacoes[sonda].begin())
+            {
+                oldDesloc = calc.getDesloc(sonda, itr->getProjeto());
+            }
+            else
+            {
+                oldDesloc = calc.getDesloc((itr-1)->getProjeto(), itr->getProjeto());
+            }
+            newDesloc = calc.getDesloc(projeto, itr->getProjeto());
+            deltaDesloc = (int)newDesloc - (int)oldDesloc;
+            std::cout << std::endl << "Se o projeto " << projeto.getNome() << " for inserido na posição " << count
+                      << ", o setup do projeto seguinte será alterado em: " << deltaDesloc << std::endl;
+            
+            // se tamanho do projeto cabe na janela, entre release e due
+            dataMin = std::max(gapInit, projeto.getInicioJanela());
+            dataMax = std::min(gapFinal, projeto.getFinalJanela());
+            deltaDeslocEfetivo = std::min(deltaDesloc, 0);
+            if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax - deltaDeslocEfetivo)
+            {
+                std::cout << std::endl;
+                std::cout << "Tamanho do projeto cabe na sonda " << sonda.getNome() << " posição " << count << std::endl;
+                std::cout << "Release do projeto: " << projeto.getInicioJanela() << std::endl;
+                std::cout << "Data mínima: " << dataMin << std::endl;
+                std::cout << "setup: " << desloc << std::endl;
+                std::cout << "proc: " << projeto.getTempExec() << std::endl;
+                std::cout << "Data máxima: " << dataMax << std::endl;
+                std::cout << "Due do projeto: " << projeto.getFinalJanela() << std::endl;
+                std::cout << std::endl;
+
+                // escolher intervalo
+                int inicioIntervalo, finalIntervalo;
+                inicioIntervalo = dataMin;
+                finalIntervalo = inicioIntervalo + desloc + projeto.getTempExec() - 1;
+                intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
+                std::cout << std::endl;
+                std::cout << "Intervalo escolhido: " << std::endl;
+                std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
+                std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
+                std::cout << std::endl;
+
+                // se não altera setup do projeto seguinte
+                if (deltaDesloc == 0)
+                {
+                    std::cout << std::endl;
+                    std::cout << "Inserção viável sem modificar setup do projeto seguinte";
+                    std::cout << std::endl;
+
+                    // alocar
+                    alocExiste = true;
+                    posicaoAloc = count;
+                    deltaNext = 0;
+                    numNexts = 0;
+
+                    break;
+                }
+                // se altera setup do projeto seguinte para menos
+                else if (deltaDesloc < 0)
+                {
+                    std::cout << std::endl;
+                    std::cout << "Inserção viável modificando setup do projeto seguinte para menos. Valor: " << deltaDesloc;
+                    std::cout << std::endl;
+
+                    // alocar
+                    alocExiste = true;
+                    posicaoAloc = count;
+                    deltaNext = deltaDesloc;
+                    numNexts = 1;
+
+                    break;
+                }
+                // se altera setup do projeto seguinte para mais
+                else
+                {
+                    std::cout << std::endl;
+                    std::cout << "O setup do projeto seguinte sofre modificação para mais, em caso de inserção.";
+                    std::cout << "Tentando realocar diferença de desloc.";
+                    std::cout << std::endl;
+
+                    // tenta colocar diferença para trás
+                    // tenta colocar diferença para frente
+                }
+            }
+            else
+            {
+                std::cout << std::endl;
+                std::cout << "Tamanho do projeto NÃO cabe na sonda. Tentar realocações.";
+                std::cout << std::endl;
+
+                // tenta realocar projetos vizinhos
+            }
+        }
+        // se não conseguiu alocar, tenta na janela após a última alocação
+
+        return std::make_tuple(alocExiste, posicaoAloc, intervaloAloc, deltaNext, numNexts);
+    }
+}
+
+void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
+                                     int deltaNext, int numNexts)
+{
+    std::cout << std::endl;
+    std::cout << "Inserindo projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+    std::cout << std::endl;
+
+    // verificar se sonda existe nas alocações
+    std::map<Sonda, std::vector<Alocacao>>::iterator it = this->_alocacoes.find(sonda);
+    if (it == this->_alocacoes.end())
+    {
+        std::cout << std::endl;
+        std::cout << "Sonda não encontrada nas alocações.";
+        std::cout << std::endl;
+
+        assert (it != this->_alocacoes.end());
+    }
+
+    // verificar se posição é viável
+    if (posicaoAloc != 999) // 999 é a posição que indica inserção no final
+    {
+        if ( !(posicaoAloc <= this->_alocacoes[sonda].size() - 1) )
+        {
+            std::cout << std::endl;
+            std::cout << "Posição inválida para inserção" << std::endl;
+            std::cout << "Valor informado: " << posicaoAloc;
+            std::cout << std::endl;
+
+            assert(posicaoAloc <= this->_alocacoes[sonda].size() - 1);
+        }
+    }
+
+    // fazer alterações, se tiver que fazer
+    if (deltaNext < 0)
+    {
+        std::cout << std::endl;
+        std::cout << "Fazendo modificação de setup no valor de " << deltaNext;
+        std::cout << std::endl;
+
+        // alterar setup do projeto seguinte: posterga início
+        std::vector<Alocacao>::iterator itr = this->_alocacoes[sonda].begin() + posicaoAloc;
+        Projeto projetoTemp = itr->getProjeto();
+        Sonda sondaTemp = itr->getSonda();
+        Intervalo intervaloTemp = itr->getIntervalo();
+        intervaloTemp.setIntervalo(intervaloTemp.getInicio() - deltaNext, intervaloTemp.getFinal());
+        itr->setAlocacao(projetoTemp, sondaTemp, intervaloTemp);
+    }
+
+    // cria a alocação
+    Alocacao x{projeto, sonda, intervalo};
+
+    // insere
+    if (posicaoAloc == 999) // 999 é a posição que indica inserção no final
+    {
+        std::cout << std::endl;
+        std::cout << "Inserindo no final.";
+        std::cout << std::endl;
+
+        this->_alocacoes[sonda].push_back(x);
+    }
+    else
+    {
+        std::cout << std::endl;
+        std::cout << "Inserindo na posição " << posicaoAloc;
+        std::cout << std::endl;
+
+        std::vector<Alocacao>::iterator posicao = std::next(this->_alocacoes[sonda].begin(), posicaoAloc);
+        this->_alocacoes[sonda].insert(posicao, x);
+    }
+}
+
 /*
-
-std::tuple<bool, int, Intervalo, int, int, int, int> Alocacoes::buscarJanelaViavel(Sonda, Projeto)
-{
-    // TODO
-}
-
-std::tuple<> Alocacoes::inserirProjeto(Sonda, Projeto, Intervalo, int, int, int, int, int)
-{
-    // TODO
-}
 
 std::tuple<> Alocacoes::removerProjeto(Sonda, int)
 {
