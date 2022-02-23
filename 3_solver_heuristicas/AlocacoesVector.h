@@ -47,9 +47,9 @@ class AlocacoesVector: public Alocacoes
         void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>);
         void setAlocacoes(Sonda, std::vector<Alocacao>);
 
-        std::tuple<bool, int, Intervalo, int, int> buscarJanelaViavel(Sonda, Projeto);
+        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda, Projeto, int);
 
-        void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int);
+        void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int);
 
         /*
 

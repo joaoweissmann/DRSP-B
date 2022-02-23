@@ -377,23 +377,19 @@ Anotar lições aprendidas no mestrado
 
 Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 
-Melhorar prints das funções e testes
-
-Calculadora de desloc retorna double. Mudar para int?
-
 Rever operações das classes implementadas e verificar se posso deixar mais eficiente
 
-Rever gerador de instânciass
+Rever gerador de instâncias
+
+Listar produtos que já tenho
 
 Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ OK
     - incluir métodos complexos ------------------------------------------------------------- FAZENDO
-        - incluir todos parâmetros inputs e returns outputs ------------------------------------ 
-        - tenta na janela após última alocação -------------------------------------------------- 
-        - caso deltaDesloc > 0 ------------------------------------------------------------------ 
-        - tenta realocar projetos ---------------------------------------------------------------- 
-        - método para remover projetos -------------------------------------------------------- 
+        - método para remover projetos
+        - testes direcionados para todos os casos
+        - versão list
 
 Classe Solucao:
     - Membros
@@ -483,6 +479,8 @@ LIÇÕES APRENDIDAS
 
 - fazer primeiro uma implementação simples e organizada e, com o tempo, ir rebuscando ela, adicionando novas funcionalidades
 
+- testar a implementação a cada avanço razoável
+
 - fazer uma documentação completa
 
 - marcar coisas a fazer com TODO
@@ -509,7 +507,11 @@ LIÇÕES APRENDIDAS
 
 - funções grandes / complexas, testar por partes
 
+- fazer testes aleatórios e testes direcionados
+
 - sempre ficar ligado com o escopo de cada variável
 
 - antes de copiar e colar, tenha certeza que o código funciona
+
+- inicializar variáveis com valores padrão
 

@@ -36,9 +36,9 @@ class Alocacoes
         virtual void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>) = 0;
         virtual void setAlocacoes(Sonda, std::vector<Alocacao>) = 0;
 
-        virtual std::tuple<bool, int, Intervalo, int, int> buscarJanelaViavel(Sonda, Projeto) = 0;
+        virtual std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda, Projeto, int) = 0;
 
-        virtual void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int) = 0;
+        virtual void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int) = 0;
 
         /*
 

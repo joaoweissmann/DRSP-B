@@ -992,18 +992,18 @@ void Testador::testarAlocacoes()
     Sonda sonda2 = *(std::next(sondas2.begin(), 1));
 
     // loop para buscas e inserções
-    int nTests = 3;
+    int nTests = 6;
     Sonda sondaX{};
     Projeto projetoX{};
     for (int tests=0; tests<nTests; tests++)
     {
-        std::cout << "Sonda 1 empty: " << ptrAlocsVector2->getAlocacoes()[sonda1].empty() << std::endl;
-        std::cout << "Sonda 1 size: " << ptrAlocsVector2->getAlocacoes()[sonda1].size() << std::endl;
-        std::cout << "Sonda 2 empty: " << ptrAlocsVector2->getAlocacoes()[sonda2].empty() << std::endl;
-        std::cout << "Sonda 2 size: " << ptrAlocsVector2->getAlocacoes()[sonda2].size() << std::endl;
+        // std::cout << "Sonda 1 empty: " << ptrAlocsVector2->getAlocacoes()[sonda1].empty() << std::endl;
+        // std::cout << "Sonda 1 size: " << ptrAlocsVector2->getAlocacoes()[sonda1].size() << std::endl;
+        // std::cout << "Sonda 2 empty: " << ptrAlocsVector2->getAlocacoes()[sonda2].empty() << std::endl;
+        // std::cout << "Sonda 2 size: " << ptrAlocsVector2->getAlocacoes()[sonda2].size() << std::endl;
 
         // escolhe sonda
-        sondaX = *(sondas2.begin());
+        sondaX = *(std::next(sondas2.begin(), rand()%2));
 
         // escolhe projeto
         projetoX.setCoordX(rand()%20);
@@ -1016,18 +1016,25 @@ void Testador::testarAlocacoes()
         projetoX.setFinalJanela(rand()%200 + projetoX.getInicioJanela());
 
         // faz busca
+        int modo = 1; // sem realocações: 0; com realocações 1;
         bool alocExiste = false;
         int posicaoAloc = -1;
         Intervalo intervaloAloc{};
-        int deltaNext = 0;
-        int numNexts = 0;
-        std::tie(alocExiste, posicaoAloc, intervaloAloc, deltaNext, numNexts) = ptrAlocsVector2->buscarJanelaViavel(sondaX, projetoX);
+        int prevMinus = 0;
+        int currMinus = 0;
+        int currPlus = 0;
+        int nextPlus = 0;
+        int caso = 0;
+        std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                               ptrAlocsVector2->buscarJanelaViavel(sondaX, projetoX, modo);
         
         // mostra resultados da busca
         std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
         std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
-        std::cout << "deltaNext: " << deltaNext << std::endl;
-        std::cout << "numNexts: " << numNexts << std::endl;
+        std::cout << "prevMinus: " << prevMinus << std::endl;
+        std::cout << "currMinus: " << currMinus << std::endl;
+        std::cout << "currPlus: " << currPlus << std::endl;
+        std::cout << "nextPlus: " << nextPlus << std::endl;
         std::cout << "Intervalo para alocação: " << std::endl;
         intervaloAloc.print();
 
@@ -1035,7 +1042,8 @@ void Testador::testarAlocacoes()
         ///*        
         if (alocExiste)
         {
-            ptrAlocsVector2->inserirProjeto(sondaX, projetoX, posicaoAloc, intervaloAloc, deltaNext, numNexts);
+            ptrAlocsVector2->inserirProjeto(sondaX, projetoX, posicaoAloc, intervaloAloc, prevMinus, 
+                                            currMinus, currPlus, nextPlus, caso);
             std::cout << "Mostrando alocações após inserção do projeto " << projetoX.getNome() << std::endl;
             alocsVector2.print();
         }

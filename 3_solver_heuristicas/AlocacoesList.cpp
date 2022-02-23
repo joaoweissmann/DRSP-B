@@ -1156,12 +1156,12 @@ void AlocacoesList::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
     _alocacoes[sonda] = alocsList;
 }
 
-std::tuple<bool, int, Intervalo, int, int> AlocacoesList::buscarJanelaViavel(Sonda sonda, Projeto projeto)
+std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo)
 {
     // TODO
 }
 
-void AlocacoesList::inserirProjeto(Sonda, Projeto, int, Intervalo, int, int)
+void AlocacoesList::inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int)
 {
     // TODO
 }
