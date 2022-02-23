@@ -40,11 +40,7 @@ class Alocacoes
 
         virtual void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int) = 0;
 
-        /*
-
-        virtual std::tuple<> removerProjeto(Sonda, int) = 0;
-
-        */
+        virtual bool removerProjeto(Sonda, Projeto) = 0;
 };
 
 #endif

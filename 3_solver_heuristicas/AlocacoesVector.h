@@ -51,11 +51,7 @@ class AlocacoesVector: public Alocacoes
 
         void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int);
 
-        /*
-
-        std::tuple<> removerProjeto(Sonda, int);
-
-        */
+        bool removerProjeto(Sonda, Projeto);
 };
 
 #endif

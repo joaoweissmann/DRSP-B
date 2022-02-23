@@ -387,8 +387,7 @@ Classe Alocacoes:
     - interface para vector e list -------------------------------------------------------------- OK
     - implementações individuais para vector e list ------------------------------------------ OK
     - incluir métodos complexos ------------------------------------------------------------- FAZENDO
-        - método para remover projetos
-        - testes direcionados para todos os casos
+        - testes direcionados para todos os casos de inserção e remoção
         - versão list
 
 Classe Solucao:

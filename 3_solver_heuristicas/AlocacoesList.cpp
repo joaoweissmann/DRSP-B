@@ -1166,11 +1166,8 @@ void AlocacoesList::inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int
     // TODO
 }
 
-/*
-
-std::tuple<> Alocacoes::removerProjeto(Sonda, int)
+bool AlocacoesList::removerProjeto(Sonda, Projeto)
 {
     // TODO
 }
 
-*/

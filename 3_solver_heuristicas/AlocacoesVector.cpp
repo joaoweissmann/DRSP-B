@@ -1967,11 +1967,174 @@ void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAl
     }
 }
 
-/*
-
-std::tuple<> Alocacoes::removerProjeto(Sonda, int)
+bool AlocacoesVector::removerProjeto(Sonda sonda, Projeto projeto)
 {
-    // TODO
+    // verificar se sonda existe
+    std::map<Sonda, std::vector<Alocacao>>::iterator it = this->_alocacoes.find(sonda);
+    if (it == this->_alocacoes.end())
+    {
+        std::cout << std::endl;
+        std::cout << "Sonda não existe nas alocações.";
+        std::cout << std::endl;
+    }
+    assert (it != this->_alocacoes.end());
+
+    // verificar se projeto existe na sonda
+    bool projetoExiste = false;
+    std::vector<Alocacao>::iterator posicao;
+    for (std::vector<Alocacao>::iterator itr=this->_alocacoes[sonda].begin(); itr!=this->_alocacoes[sonda].end(); ++itr)
+    {
+        Projeto x = itr->getProjeto();
+        if (x == projeto)
+        {
+            projetoExiste = true;
+            posicao = itr;
+            break;
+        }
+    }
+    if (projetoExiste == false)
+    {
+        std::cout << std::endl;
+        std::cout << "Projeto não encontrado nas alocações da sonda.";
+        std::cout << std::endl;
+    }
+    assert (projetoExiste);
+
+    // se projeto é a última alocação
+    if (std::next(posicao, 1) == this->_alocacoes[sonda].end())
+    {
+        std::cout << std::endl;
+        std::cout << "Removendo última alocação.";
+        std::cout << std::endl;
+
+        // remove
+        this->_alocacoes[sonda].erase(posicao);
+
+        return true;
+    }
+    // se tiver alguma alocação posterior
+    else
+    {
+        // verifica mudança de setup
+        CalculadorDeDesloc calc{};
+        int oldDesloc=0, newDesloc=0, deltaDesloc=0;
+        oldDesloc = calc.getDesloc(projeto, std::next(posicao, 1)->getProjeto());
+        if (posicao == this->_alocacoes[sonda].begin())
+        {
+            newDesloc = calc.getDesloc(sonda, std::next(posicao, 1)->getProjeto());
+        }
+        else
+        {
+            newDesloc = calc.getDesloc(std::prev(posicao, 1)->getProjeto(), std::next(posicao, 1)->getProjeto());
+        }
+        deltaDesloc = newDesloc - oldDesloc;
+
+        if (deltaDesloc == 0)
+        {
+            std::cout << std::endl;
+            std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
+            std::cout << std::endl;
+
+            // remove
+            this->_alocacoes[sonda].erase(posicao);
+
+            return true;
+        }
+        else if (deltaDesloc < 0)
+        {
+            std::cout << std::endl;
+            std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
+            std::cout << std::endl;
+
+            // altera projeto seguinte
+            std::vector<Alocacao>::iterator itrNext = std::next(posicao, 1);
+            Projeto projetoTemp = itrNext->getProjeto();
+            Sonda sondaTemp = itrNext->getSonda();
+            Intervalo intervaloTemp = itrNext->getIntervalo();
+            intervaloTemp.setIntervalo(intervaloTemp.getInicio() - deltaDesloc, intervaloTemp.getFinal());
+            itrNext->setAlocacao(projetoTemp, sondaTemp, intervaloTemp);
+
+            // remove
+            this->_alocacoes[sonda].erase(posicao);
+
+            return true;
+        }
+        else
+        {
+            std::vector<Alocacao>::iterator itrNext = std::next(posicao, 1);
+            int deltaLeftDisp=0, deltaRightDisp=0;
+
+            // verifica quanto de espaço tenho para trás do next
+            if (posicao == this->_alocacoes[sonda].begin())
+            {
+                deltaLeftDisp = itrNext->getIntervalo().getInicio() - itrNext->getProjeto().getInicioJanela();
+            }
+            else
+            {
+                int temp1 = itrNext->getProjeto().getInicioJanela();
+                int temp2 = std::prev(posicao, 1)->getIntervalo().getFinal();
+                deltaLeftDisp = itrNext->getIntervalo().getInicio() - std::max(temp1, temp2);
+            }
+
+            // verifica quanto de espaço tenho para frente do next
+            if (std::next(itrNext, 1) == this->_alocacoes[sonda].end())
+            {
+                deltaRightDisp = itrNext->getProjeto().getFinalJanela() - itrNext->getIntervalo().getFinal();
+            }
+            else
+            {
+                int temp1 = itrNext->getProjeto().getFinalJanela();
+                int temp2 = std::next(itrNext, 1)->getIntervalo().getInicio();
+                deltaRightDisp = std::min(temp1, temp2) - itrNext->getIntervalo().getFinal();
+            }
+
+            // se espaço para trás basta
+            if (deltaLeftDisp >= deltaDesloc)
+            {
+                std::cout << std::endl;
+                std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
+                std::cout << "Espaço disponível para trás é suficiente: " << deltaLeftDisp << std::endl;
+                std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
+
+                Projeto projetoTemp = itrNext->getProjeto();
+                Sonda sondaTemp = itrNext->getSonda();
+                Intervalo intervaloTemp = itrNext->getIntervalo();
+                intervaloTemp.setIntervalo(intervaloTemp.getInicio() - deltaDesloc, intervaloTemp.getFinal());
+                itrNext->setAlocacao(projetoTemp, sondaTemp, intervaloTemp);
+
+                this->_alocacoes[sonda].erase(posicao);
+
+                return true;
+            }
+            else if ( (deltaLeftDisp + deltaRightDisp) >= deltaDesloc)
+            {
+                std::cout << std::endl;
+                std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
+                std::cout << "Espaço disponível para trás e para frente são suficientes."<< std::endl;
+                std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
+                std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
+                std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
+
+                Projeto projetoTemp = itrNext->getProjeto();
+                Sonda sondaTemp = itrNext->getSonda();
+                Intervalo intervaloTemp = itrNext->getIntervalo();
+                intervaloTemp.setIntervalo(intervaloTemp.getInicio() - deltaLeftDisp, 
+                                           intervaloTemp.getFinal() + (deltaDesloc - deltaLeftDisp));
+                itrNext->setAlocacao(projetoTemp, sondaTemp, intervaloTemp);
+
+                this->_alocacoes[sonda].erase(posicao);
+
+                return true;
+            }
+            else
+            {
+                std::cout << std::endl;
+                std::cout << "Remoção não é viável, pois deltaSetup: " << deltaDesloc;
+                std::cout << std::endl;
+
+                return false;
+            }
+        }
+    }
 }
 
-*/
