@@ -973,10 +973,8 @@ void Testador::testarAlocacoes()
     }
     */
 
-    ///*
+    /*
     // testes com inserções aleatórias ---------------------------------------
-    
-    ///*
     // instanciar alocações por set
     AlocacoesVector alocsVector2{alocacoesVector0};
     Alocacoes * ptrAlocsVector2 = & alocsVector2;
@@ -1038,8 +1036,7 @@ void Testador::testarAlocacoes()
         std::cout << "Intervalo para alocação: " << std::endl;
         intervaloAloc.print();
 
-        // se viável, insere
-        ///*        
+        // se viável, insere       
         if (alocExiste)
         {
             ptrAlocsVector2->inserirProjeto(sondaX, projetoX, posicaoAloc, intervaloAloc, prevMinus, 
@@ -1047,10 +1044,183 @@ void Testador::testarAlocacoes()
             std::cout << "Mostrando alocações após inserção do projeto " << projetoX.getNome() << std::endl;
             alocsVector2.print();
         }
-        //*/
     }
-    //*/
+    */
+
+    ///*
+    // Testes direcionados ===============================================
     
+    // instanciar alocações
+    AlocacoesVector alocsVector2{alocacoesVector0};
+    Alocacoes * ptrAlocsVector2 = & alocsVector2;
+
+    // mostra alocações iniciais
+    std::cout << std::endl;
+    std::cout << "Mostrando alocações iniciais =================================================" << std::endl;
+    alocsVector2.print();
+
+    // get sondas
+    std::set<Sonda> sondas2 = ptrAlocsVector2->getSondas();
+    Sonda sonda1 = *(sondas2.begin());
+    Sonda sonda2 = *(std::next(sondas2.begin(), 1));
+
+    // cria projeto
+    Projeto p1{};
+    p1.setCoordX(30);
+    p1.setCoordY(20);
+    p1.setNome(1);
+    p1.setMiVpl(10);
+    p1.setCusto(10);
+    p1.setTempExec(4);
+    p1.setInicioJanela(130);
+    p1.setFinalJanela(150);
+    
+    // faz busca
+    int modo = 1; // sem realocações: 0; com realocações 1;
+    bool alocExiste = false;
+    int posicaoAloc = -1;
+    Intervalo intervaloAloc{};
+    int prevMinus = 0;
+    int currMinus = 0;
+    int currPlus = 0;
+    int nextPlus = 0;
+    int caso = 0;
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p1, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        ptrAlocsVector2->inserirProjeto(sonda1, p1, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << p1.getNome() << std::endl;
+        alocsVector2.print();
+    }
+
+    // removendo projeto
+    //bool removido;
+    //removido = ptrAlocsVector2->removerProjeto(sonda1, p1);
+    //std::cout << "Mostrando alocações após remoção do projeto " << p1.getNome() << std::endl;
+    //alocsVector2.print();
+    
+    // cria projeto
+    Projeto p2{};
+    p2.setCoordX(25);
+    p2.setCoordY(25);
+    p2.setNome(2);
+    p2.setMiVpl(10);
+    p2.setCusto(10);
+    p2.setTempExec(4);
+    p2.setInicioJanela(130);
+    p2.setFinalJanela(195);
+
+    // faz busca
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p2, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        ptrAlocsVector2->inserirProjeto(sonda1, p2, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << p2.getNome() << std::endl;
+        alocsVector2.print();
+    }
+
+    // removendo projeto
+    bool removido;
+    removido = ptrAlocsVector2->removerProjeto(sonda1, p1);
+    std::cout << "Mostrando alocações após remoção do projeto " << p1.getNome() << std::endl;
+    alocsVector2.print();
+
+    // cria projeto
+    Projeto p3{};
+    p3.setCoordX(25);
+    p3.setCoordY(25);
+    p3.setNome(3);
+    p3.setMiVpl(10);
+    p3.setCusto(10);
+    p3.setTempExec(19);
+    p3.setInicioJanela(150);
+    p3.setFinalJanela(198);
+
+    // faz busca
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p3, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        ptrAlocsVector2->inserirProjeto(sonda1, p3, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << p3.getNome() << std::endl;
+        alocsVector2.print();
+    }
+
+    // cria projeto
+    Projeto p4{};
+    p4.setCoordX(45);
+    p4.setCoordY(32);
+    p4.setNome(4);
+    p4.setMiVpl(10);
+    p4.setCusto(10);
+    p4.setTempExec(1);
+    p4.setInicioJanela(120);
+    p4.setFinalJanela(190);
+
+    // faz busca
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p4, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        ptrAlocsVector2->inserirProjeto(sonda1, p4, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << p4.getNome() << std::endl;
+        alocsVector2.print();
+    }
+
     //*/
 
     /*

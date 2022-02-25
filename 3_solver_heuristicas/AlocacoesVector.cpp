@@ -1363,7 +1363,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     std::cout << std::endl;
 
                     // verifica quanto espaço livre tenho para frente, sem realocações
-                    int deltaLeftDisp, deltaRightDisp, temp1, temp2;
+                    int deltaLeftDisp=0, deltaRightDisp=0, temp1=0, temp2=0;
                     if (std::next(itr, 1) == this->_alocacoes[sonda].end())
                     {
                         deltaRightDisp = itr->getProjeto().getFinalJanela() - itr->getIntervalo().getFinal();
@@ -1371,14 +1371,16 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     else
                     {
                         temp1 = itr->getProjeto().getFinalJanela();
-                        temp2 = std::next(itr, 1)->getIntervalo().getInicio();
+                        temp2 = std::next(itr, 1)->getIntervalo().getInicio() - 1;
                         deltaRightDisp = std::min(temp1, temp2) - itr->getIntervalo().getFinal();
                     }
+                    std::cout << "Espaço disponível para frente, sem realocações: " << deltaRightDisp << std::endl;
 
                     // verifica quanto espaço livre tenho para trás, sem realocações
                     temp1 = itr->getProjeto().getInicioJanela();
-                    temp2 = intervaloAloc.getFinal();
+                    temp2 = intervaloAloc.getFinal() + 1;
                     deltaLeftDisp = itr->getIntervalo().getInicio() - std::max(temp1, temp2);
+                    std::cout << "Espaço disponível para trás, sem realocações: " << deltaLeftDisp << std::endl;
 
                     // se chegar só para trás basta
                     if (deltaLeftDisp >= deltaDesloc)
@@ -1420,6 +1422,10 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     // senão, se está no modo realocar
                     else if (modo == 1)
                     {
+                        std::cout << std::endl;
+                        std::cout << "Espaços disponíveis sem realocações são insuficientes.";
+                        std::cout << std::endl;
+
                         // verifica quanto posso chegar o next para frente
                         int deltaNextDisp = 0;
                         if (std::next(itr, 1) == this->_alocacoes[sonda].end())
@@ -1436,10 +1442,13 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                             else
                             {
                                 temp1 = itrNext->getProjeto().getFinalJanela();
-                                temp2 = std::next(itrNext, 1)->getIntervalo().getInicio();
+                                temp2 = std::next(itrNext, 1)->getIntervalo().getInicio() - 1;
                                 deltaNextDisp = std::min(temp1, temp2) - itrNext->getIntervalo().getFinal();
                             }
                         }
+                        std::cout << std::endl;
+                        std::cout << "Espaço disponível para frente realocando o próximo projeto: " << deltaNextDisp;
+                        std::cout << std::endl;
 
                         // verifica se chegar para trás e para frente basta, considerando delta next
                         if ( (deltaLeftDisp + deltaRightDisp + deltaNextDisp) >= deltaDesloc)
@@ -1458,8 +1467,15 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                             currMinus = deltaLeftDisp;
                             currPlus = deltaRightDisp;
                             nextPlus = deltaDesloc - (deltaLeftDisp + deltaRightDisp);
+                            currPlus += nextPlus;
 
                             break;
+                        }
+                        else
+                        {
+                            std::cout << std::endl;
+                            std::cout << "Inserção inviável, mesmo com realocações.";
+                            std::cout << std::endl;
                         }
                     }
                     // senão, não dá mesmo
@@ -1501,10 +1517,13 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     {
                         int temp1 = 0, temp2 = 0;
                         temp1 = itrPrev->getProjeto().getInicioJanela();
-                        temp2 = std::prev(itrPrev, 1)->getIntervalo().getFinal();
+                        temp2 = std::prev(itrPrev, 1)->getIntervalo().getFinal() + 1;
                         deltaPrevDisp = itrPrev->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
                 }
+                std::cout << std::endl;
+                std::cout << "Espaço disponível realocando projeto anterior: " << deltaPrevDisp;
+                std::cout << std::endl;
 
                 int deltaCurrDisp = 0;
                 // quanto posso chegar o curr para frente?
@@ -1516,9 +1535,12 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                 {
                     int temp1 = 0, temp2 = 0;
                     temp1 = itr->getProjeto().getFinalJanela();
-                    temp2 = std::next(itr, 1)->getIntervalo().getInicio();
+                    temp2 = std::next(itr, 1)->getIntervalo().getInicio() - 1;
                     deltaCurrDisp = std::min(temp1, temp2) - itr->getIntervalo().getFinal();
                 }
+                std::cout << std::endl;
+                std::cout << "Espaço disponível realocando projeto posterior: " << deltaCurrDisp;
+                std::cout << std::endl;
 
                 // se deltaDesloc é positivo, verificar viabilidade de aumentar o curr para frente e descontar valor
                 bool deltaViavel = true;
@@ -1553,11 +1575,11 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                         int inicioIntervalo = -1, finalIntervalo = -1;
                         if (deltaPrevDisp >= deltaNecessario)
                         {
-                            inicioIntervalo = gapInit - deltaNecessario;
+                            inicioIntervalo = std::max((gapInit-deltaNecessario), projeto.getInicioJanela());
                         }
                         else if ( (deltaPrevDisp + deltaCurrDisp) >= deltaNecessario)
                         {
-                            inicioIntervalo = gapInit - deltaPrevDisp;
+                            inicioIntervalo = std::max((gapInit-deltaPrevDisp), projeto.getInicioJanela());
                         }
                         finalIntervalo = inicioIntervalo + desloc + projeto.getTempExec() - 1;
                         intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
@@ -1676,6 +1698,8 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                 }
                 else if (modo == 1)
                 {
+                    int deltaNecessario = ((int)desloc + projeto.getTempExec()) - (dataMax - dataMin + 1);
+
                     std::cout << std::endl;
                     std::cout << "Tamanho do projeto NÃO cabe na janela após última alocação. Tentando realocações.";
                     std::cout << std::endl;
@@ -1690,7 +1714,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     {
                         int temp1, temp2;
                         temp1 = itr->getProjeto().getInicioJanela();
-                        temp2 = std::prev(itr, 1)->getIntervalo().getFinal();
+                        temp2 = std::prev(itr, 1)->getIntervalo().getFinal() + 1;
                         deltaDisponivel = itr->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
                     std::cout << std::endl;
@@ -1698,8 +1722,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     std::cout << std::endl;
 
                     // atualiza valores da janela considerando o delta de realocação
-                    gapInit -= deltaDisponivel;
-                    dataMin = std::max(gapInit, projeto.getInicioJanela());
+                    dataMin = std::max(gapInit - deltaDisponivel, projeto.getInicioJanela());
 
                     // verifica se projeto cabe na janela alterada
                     if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax)
@@ -1711,11 +1734,11 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                         alocExiste = true;
                         caso = 6;
                         posicaoAloc = 999;
-                        int inicioIntervalo = dataMin;
+                        int inicioIntervalo = gapInit - deltaNecessario;
                         int finalIntervalo = inicioIntervalo + (int)desloc + projeto.getTempExec() - 1; 
                         intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
                         prevMinus = 0;
-                        currMinus = deltaDisponivel;
+                        currMinus = deltaNecessario;
                         currPlus = 0;
                         nextPlus = 0;
                     }
@@ -1868,10 +1891,12 @@ void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAl
 
         if (nextPlus > 0)
         {
-            projetoTemp = std::next(itr, 1)->getProjeto();
-            sondaTemp = std::next(itr, 1)->getSonda();
-            intervaloTemp = std::next(itr, 1)->getIntervalo();
+            std::vector<Alocacao>::iterator itrNext = std::next(itr, 1);
+            projetoTemp = itrNext->getProjeto();
+            sondaTemp = itrNext->getSonda();
+            intervaloTemp = itrNext->getIntervalo();
             intervaloTemp.setIntervalo(intervaloTemp.getInicio() + nextPlus, intervaloTemp.getFinal() + nextPlus);
+            itrNext->setAlocacao(projetoTemp, sondaTemp, intervaloTemp);
         }
     }
     else if (caso == 5)
