@@ -1121,7 +1121,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
 }
 
 std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::buscarJanelaViavel(Sonda sonda, Projeto projeto, 
-                                                                                         int modo)
+                                                                                              int modo)
 {
     std::cout << std::endl;
     std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();

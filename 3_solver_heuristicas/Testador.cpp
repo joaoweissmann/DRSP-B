@@ -1051,7 +1051,8 @@ void Testador::testarAlocacoes()
     // Testes direcionados ===============================================
     
     // instanciar alocações
-    AlocacoesVector alocsVector2{alocacoesVector0};
+    // AlocacoesVector alocsVector2{alocacoesVector0};
+    AlocacoesList alocsVector2{alocacoesList0};
     Alocacoes * ptrAlocsVector2 = & alocsVector2;
 
     // mostra alocações iniciais

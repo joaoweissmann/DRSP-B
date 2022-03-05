@@ -383,22 +383,15 @@ Rever gerador de instâncias
 
 Listar produtos que já tenho
 
-Classe Alocacoes:
-    - interface para vector e list -------------------------------------------------------------- OK
-    - implementações individuais para vector e list ------------------------------------------ OK
-    - incluir métodos complexos ------------------------------------------------------------- FAZENDO
-        - versão list
+Classe Solucao
+    - testar classe Solucao
 
-Classe Solucao:
-    - Membros
-        - manter o mapa de projeto alocado para sonda: unordered map de Projeto para Sonda
-        - mapa de sonda para objeto Alocacoes: map de Sonda para Alocacoes
-        - projetos alocados: set de Projeto
-        - projetos não alocados: set de Projeto
-        - sondas disponíveis: set de Sonda
-        - ...
-    - Métodos
-        - ...
+Classe construtor de solução
+
+Classe verificador de solução
+
+Classe para rodar metaheurísticas
+    - mult start heuristic
 
 ---------------------------------
 Observações e dúvidas:
@@ -450,8 +443,8 @@ Janeiro
     - Alterar classe Sonda: ------------------------------------------------------------------- OK
     - Escrever classe Intervalo --------------------------------------------------------------- OK
     - Escrever classe Alocacao --------------------------------------------------------------- OK
-    - Escrever classe Alocacoes -------------------------------------------------------------- FAZENDO
-    - Escrever classe Solucao
+    - Escrever classe Alocacoes -------------------------------------------------------------- OK
+    - Escrever classe Solucao ---------------------------------------------------------------- FAZENDO
 
 Fevereiro
     - Escrever classe verificador de solução
@@ -512,4 +505,6 @@ LIÇÕES APRENDIDAS
 - antes de copiar e colar, tenha certeza que o código funciona
 
 - inicializar variáveis com valores padrão
+
+- fazer previsões realistas de cronograma
 
