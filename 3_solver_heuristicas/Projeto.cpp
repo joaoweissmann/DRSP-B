@@ -294,6 +294,11 @@ bool Projeto::operator==(const Projeto & p) const
     return r;
 }
 
+bool Projeto::operator<(const Projeto & p) const
+{
+    return this->_nome < p._nome;
+}
+
 void Projeto::copyFrom(Projeto p)
 {
     _coordX = p.getCoordX();

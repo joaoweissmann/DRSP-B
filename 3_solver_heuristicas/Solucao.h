@@ -16,16 +16,39 @@
 #define SOLUCAO
 
 #include <bits/stdc++.h>
-#include "Sonda.h"
-#include "Projeto.h"
+#include "Alocacoes.h"
+#include "AlocacoesVector.h"
+#include "AlocacoesList.h"
 #include "DadosDeEntrada.h"
 
 class Solucao
 {
     private:
-        // 
+        Alocacoes * _ptrAlocacoes;
+        std::set<Projeto> _projetosAlocados;
+        std::set<Projeto> _projetosNaoAlocados;
+        std::map<Projeto, Alocacao> _mapProjeto2Alocacao;
+        double _gastos;
+        double _fitness;
+        int _totalFree;
+
     public:
-        Solucao(DadosDeEntrada);
+        Solucao(std::set<Sonda> sondas, int dataStructure, DadosDeEntrada dataset);
+        Solucao(std::map<Sonda, std::vector<Alocacao>> alocacoesIn, int dataStructure, DadosDeEntrada dataset);
+
+        std::set<Projeto> getProjetosAlocados();
+        std::set<Projeto> getProjetosNaoAlocados();
+        std::map<Projeto, Alocacao> getMapProjeto2Alocacao();
+        double getGastos();
+        double getFitness();
+        int getTotalFree();
+
+        void inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
+                                     int prevMinus, int currMinus, int currPlus, int nextPlus, int caso);
+        
+        void removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo);
+
+        void print();
 };
 
 #endif

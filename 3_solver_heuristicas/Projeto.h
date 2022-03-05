@@ -52,6 +52,8 @@ class Projeto
                 int, int, int);
 
         bool operator==(const Projeto & p) const;
+
+        bool operator<(const Projeto & p) const;
         
         void copyFrom(Projeto);
 
