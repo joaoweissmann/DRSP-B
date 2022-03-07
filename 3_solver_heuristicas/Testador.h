@@ -26,6 +26,7 @@
 #include "Alocacoes.h"
 #include "AlocacoesVector.h"
 #include "AlocacoesList.h"
+#include "Solucao.h"
 
 class Testador
 {
@@ -38,6 +39,7 @@ class Testador
         void testarIntervalo();
         void testarAlocacao();
         void testarAlocacoes();
+        void testarSolucao();
 };
 
 #endif

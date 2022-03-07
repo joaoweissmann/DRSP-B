@@ -88,20 +88,21 @@ void Testador::testarCalculadorDeDesloc()
     Projeto projeto2{x4, y4, 3, 7, 1, 2, 3, 4500, 0.5, 0.9, 0.8, 0.7, 0.8, 0.7, 0.3, 500, 150, 1000, 200, 50, 5, 0, 100};
     
     CalculadorDeDesloc calc;
+    int deltaT = 28;
 
     std::cout << std::endl;
-    std::cout << "A distância entre a sonda1 e a sonda2 é: " << calc.getDesloc(sonda1, sonda2) << std::endl;
-    std::cout << "A distância entre a sonda1 e a projeto1 é: " << calc.getDesloc(sonda1, projeto1) << std::endl;
-    std::cout << "A distância entre a sonda1 e a projeto2 é: " << calc.getDesloc(sonda1, projeto2) << std::endl;
-    std::cout << "A distância entre a sonda2 e a sonda1 é: " << calc.getDesloc(sonda2, sonda1) << std::endl;
-    std::cout << "A distância entre a sonda2 e a projeto1 é: " << calc.getDesloc(sonda2, projeto1) << std::endl;
-    std::cout << "A distância entre a sonda2 e a projeto2 é: " << calc.getDesloc(sonda2, projeto2) << std::endl;
-    std::cout << "A distância entre a projeto1 e a sonda1 é: " << calc.getDesloc(projeto1, sonda1) << std::endl;
-    std::cout << "A distância entre a projeto1 e a sonda2 é: " << calc.getDesloc(projeto1, sonda2) << std::endl;
-    std::cout << "A distância entre a projeto1 e a projeto2 é: " << calc.getDesloc(projeto1, projeto2) << std::endl;
-    std::cout << "A distância entre a projeto2 e a sonda1 é: " << calc.getDesloc(projeto2, sonda1) << std::endl;
-    std::cout << "A distância entre a projeto2 e a sonda2 é: " << calc.getDesloc(projeto2, sonda2) << std::endl;
-    std::cout << "A distância entre a projeto2 e a projeto1 é: " << calc.getDesloc(projeto2, projeto1) << std::endl;
+    std::cout << "A distância entre a sonda1 e a sonda2 é: " << calc.getDesloc(sonda1, sonda2, deltaT) << std::endl;
+    std::cout << "A distância entre a sonda1 e a projeto1 é: " << calc.getDesloc(sonda1, projeto1, deltaT) << std::endl;
+    std::cout << "A distância entre a sonda1 e a projeto2 é: " << calc.getDesloc(sonda1, projeto2, deltaT) << std::endl;
+    std::cout << "A distância entre a sonda2 e a sonda1 é: " << calc.getDesloc(sonda2, sonda1, deltaT) << std::endl;
+    std::cout << "A distância entre a sonda2 e a projeto1 é: " << calc.getDesloc(sonda2, projeto1, deltaT) << std::endl;
+    std::cout << "A distância entre a sonda2 e a projeto2 é: " << calc.getDesloc(sonda2, projeto2, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto1 e a sonda1 é: " << calc.getDesloc(projeto1, sonda1, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto1 e a sonda2 é: " << calc.getDesloc(projeto1, sonda2, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto1 e a projeto2 é: " << calc.getDesloc(projeto1, projeto2, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto2 e a sonda1 é: " << calc.getDesloc(projeto2, sonda1, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto2 e a sonda2 é: " << calc.getDesloc(projeto2, sonda2, deltaT) << std::endl;
+    std::cout << "A distância entre a projeto2 e a projeto1 é: " << calc.getDesloc(projeto2, projeto1, deltaT) << std::endl;
     std::cout << std::endl;
 }
 
@@ -259,19 +260,19 @@ void Testador::testarDadosDeEntrada()
     CalculadorDeDesloc calc{};
     double dist;
 
-    dist = calc.getDesloc(sondas[0], projetos[0]);
+    dist = calc.getDesloc(sondas[0], projetos[0], delta);
     dataset1.setDesloc(sondas[0], projetos[0], dist);
 
-    dist = calc.getDesloc(projetos[0], projetos[1]);
+    dist = calc.getDesloc(projetos[0], projetos[1], delta);
     dataset1.setDesloc(projetos[0], projetos[1], dist);
 
-    dist = calc.getDesloc(sondas[1], projetos[1]);
+    dist = calc.getDesloc(sondas[1], projetos[1], delta);
     dataset1.setDeslocIdx2Idx(1, 3, dist);
     
-    dist = calc.getDesloc(sondas[0], projetos[0]);
+    dist = calc.getDesloc(sondas[0], projetos[0], delta);
     dataset1.setDeslocSonda2Proj(0, 0, dist);
 
-    dist = calc.getDesloc(projetos[1], projetos[1]);
+    dist = calc.getDesloc(projetos[1], projetos[1], delta);
     dataset1.setDeslocProj2Proj(1, 1, dist);
 
     dataset1.print();
@@ -385,6 +386,7 @@ void Testador::testarAlocacoes()
     std::list<Alocacao>::iterator itrRefList;
     int diferenca=0, diferencaBest=0;
     CalculadorDeDesloc calc{};
+    int deltaT = 1;
     for (int s=0; s<nSondasVector; s++)
     {
         nomeSonda = s;
@@ -481,7 +483,7 @@ void Testador::testarAlocacoes()
                     itrRefList = alocacoesList0[sonda].begin();
 
                     // calcula desloc
-                    desloc = calc.getDesloc(sonda, projeto);
+                    desloc = calc.getDesloc(sonda, projeto, deltaT);
 
                     // define final do intervalo
                     finalIntervalo = inicioIntervalo + tempExecProj + desloc - 1;
@@ -545,13 +547,13 @@ void Testador::testarAlocacoes()
                     // calcula desloc
                     if (itrRefVector == alocacoesVector0[sonda].begin())
                     {
-                        desloc = calc.getDesloc(sonda, projeto);
+                        desloc = calc.getDesloc(sonda, projeto, deltaT);
                     }
                     else
                     {
                         Alocacao alocPrev = *(itrRefVector-1);
                         Projeto projPrev = alocPrev.getProjeto();
-                        desloc = calc.getDesloc(projPrev, projeto);
+                        desloc = calc.getDesloc(projPrev, projeto, deltaT);
                     }
 
                     // define final intervalo
@@ -587,15 +589,15 @@ void Testador::testarAlocacoes()
 
                     if ((itrRefVector) == alocacoesVector0[sonda].begin())
                     {
-                        oldSetup = calc.getDesloc(sonda, alocNext.getProjeto());
+                        oldSetup = calc.getDesloc(sonda, alocNext.getProjeto(), deltaT);
                     }
                     else
                     {
                         Alocacao alocPrev = *(itrRefVector-1);
-                        oldSetup = calc.getDesloc(alocPrev.getProjeto(), alocNext.getProjeto());
+                        oldSetup = calc.getDesloc(alocPrev.getProjeto(), alocNext.getProjeto(), deltaT);
                     }
 
-                    int newSetup = calc.getDesloc(projeto, alocNext.getProjeto());
+                    int newSetup = calc.getDesloc(projeto, alocNext.getProjeto(), deltaT);
                     
                     int deltaSetup = newSetup - oldSetup;
                     int releaseNext = alocNext.getProjeto().getInicioJanela();
@@ -1052,7 +1054,7 @@ void Testador::testarAlocacoes()
     
     // instanciar alocações
     // AlocacoesVector alocsVector2{alocacoesVector0};
-    AlocacoesList alocsVector2{alocacoesList0};
+    AlocacoesList alocsVector2{alocacoesList0, deltaT};
     Alocacoes * ptrAlocsVector2 = & alocsVector2;
 
     // mostra alocações iniciais
@@ -1087,7 +1089,7 @@ void Testador::testarAlocacoes()
     int nextPlus = 0;
     int caso = 0;
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p1, modo);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p1, modo, deltaT);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1127,7 +1129,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p2, modo);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p2, modo, deltaT);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1150,7 +1152,7 @@ void Testador::testarAlocacoes()
 
     // removendo projeto
     bool removido;
-    removido = ptrAlocsVector2->removerProjeto(sonda1, p1);
+    removido = ptrAlocsVector2->removerProjeto(sonda1, p1, deltaT);
     std::cout << "Mostrando alocações após remoção do projeto " << p1.getNome() << std::endl;
     alocsVector2.print();
 
@@ -1167,7 +1169,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p3, modo);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p3, modo, deltaT);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1201,7 +1203,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p4, modo);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p4, modo, deltaT);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1234,6 +1236,98 @@ void Testador::testarAlocacoes()
     std::cout << std::endl;
     */
 
+    std::cout << std::endl;
+    std::cout << "################### Teste concluído ###################" << std::endl;
+}
+
+void Testador::testarSolucao()
+{
+    std::cout << "################### Testando classe solução ###################" << std::endl;
+
+    // ler dataset
+    std::string filename;
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancia_10projetos_2sondas_delta_t28.dat";
+    LeitorDeDados leitor;
+    DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
+
+    // inicializar solução vazia
+    std::vector<Sonda> sondasVector = dataset.getSondas();
+    std::set<Sonda> sondas;
+    for (std::vector<Sonda>::iterator itr = sondasVector.begin(); itr!=sondasVector.end(); ++itr)
+    {
+        Sonda x = *itr;
+        sondas.insert(x);
+    }
+    int dataStruct = 1; // 1 -> vector
+    Solucao solucao1{dataStruct, dataset};
+
+    // mostra alocações iniciais
+    std::cout << std::endl;
+    std::cout << "Mostrando alocações iniciais =================================================" << std::endl;
+    solucao1.print();
+
+    // inserir projetos na solução
+    std::vector<Projeto> projetos = dataset.getProjetos();
+    Projeto projeto1 = projetos[0];
+    Sonda sonda1 = *sondas.begin();
+
+    // faz busca
+    int modo = 1; // sem realocações: 0; com realocações 1;
+    bool alocExiste = false;
+    int posicaoAloc = -1;
+    Intervalo intervaloAloc{};
+    int prevMinus = 0;
+    int currMinus = 0;
+    int currPlus = 0;
+    int nextPlus = 0;
+    int caso = 0;
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            solucao1.buscarJanelaViavel(sonda1, projeto1, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        solucao1.inserirProjeto(sonda1, projeto1, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << projeto1.getNome() << std::endl;
+        solucao1.print();
+    }
+
+    // mais um projeto
+    Projeto projeto2 = projetos[1];
+
+    std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                            solucao1.buscarJanelaViavel(sonda1, projeto2, modo);
+
+    // mostra resultados da busca
+    std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+    std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
+    std::cout << "Intervalo para alocação: " << std::endl;
+    intervaloAloc.print();
+
+    // se viável, insere       
+    if (alocExiste)
+    {
+        solucao1.inserirProjeto(sonda1, projeto2, posicaoAloc, intervaloAloc, prevMinus, 
+                                        currMinus, currPlus, nextPlus, caso);
+        std::cout << "Mostrando alocações após inserção do projeto " << projeto2.getNome() << std::endl;
+        solucao1.print();
+    }
+    
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;
 }

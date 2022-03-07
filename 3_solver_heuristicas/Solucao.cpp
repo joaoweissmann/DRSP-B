@@ -15,17 +15,29 @@
 #include <bits/stdc++.h>
 #include "Solucao.h"
 
-Solucao::Solucao(std::set<Sonda> sondas, int dataStructure, DadosDeEntrada dataset)
+Solucao::Solucao(int dataStructure, DadosDeEntrada dataset)
 {
+    std::vector<Sonda> sondasVector = dataset.getSondas();
+    std::set<Sonda> sondas;
+    for (std::vector<Sonda>::iterator it=sondasVector.begin(); it!=sondasVector.end(); ++it)
+    {
+        Sonda x = *it;
+        sondas.insert(x);
+    }
+
+    this->_deltaT = dataset.getDelta();
+
     if (dataStructure == 1) // 1 -> vector
     {
-        AlocacoesVector alocacoes{sondas};
-        this->_ptrAlocacoes = & alocacoes;
+        AlocacoesVector alocsVectorTemp{sondas};
+        this->_alocsVector = alocsVectorTemp;
+        this->_ptrAlocacoes = & this->_alocsVector;
     }
     else if (dataStructure == 2) // 2 -> list
     {
-        AlocacoesList alocacoes{sondas};
-        this->_ptrAlocacoes = & alocacoes;
+        AlocacoesList alocsListTemp{sondas};
+        this->_alocsList = alocsListTemp;
+        this->_ptrAlocacoes = & this->_alocsList;
     }
     else
     {
@@ -49,15 +61,19 @@ Solucao::Solucao(std::set<Sonda> sondas, int dataStructure, DadosDeEntrada datas
 
 Solucao::Solucao(std::map<Sonda, std::vector<Alocacao>> alocacoesIn, int dataStructure, DadosDeEntrada dataset)
 {
+    this->_deltaT = dataset.getDelta();
+
     if (dataStructure == 1) // 1 -> vector
     {
-        AlocacoesVector alocacoes{alocacoesIn};
-        this->_ptrAlocacoes = & alocacoes;
+        AlocacoesVector alocsVectorTemp{alocacoesIn, this->_deltaT};
+        this->_alocsVector = alocsVectorTemp;
+        this->_ptrAlocacoes = & this->_alocsVector;
     }
     else if (dataStructure == 2) // 2 -> list
     {
-        AlocacoesList alocacoes{alocacoesIn};
-        this->_ptrAlocacoes = & alocacoes;
+        AlocacoesList alocsListTemp{alocacoesIn, this->_deltaT};
+        this->_alocsList = alocsListTemp;
+        this->_ptrAlocacoes = & this->_alocsList;
     }
     else
     {
@@ -146,6 +162,16 @@ int Solucao::getTotalFree()
     return this->_totalFree;
 }
 
+std::map<Sonda, std::vector<Alocacao>> Solucao::getAlocacoes()
+{
+    return this->_ptrAlocacoes->getAlocacoes();
+}
+
+std::tuple<bool, int, Intervalo, int, int, int, int, int> Solucao::buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo)
+{
+    return this->_ptrAlocacoes->buscarJanelaViavel(sonda, projeto, modo, this->_deltaT);
+}
+
 void Solucao::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
                                      int prevMinus, int currMinus, int currPlus, int nextPlus, int caso)
 {
@@ -171,7 +197,6 @@ void Solucao::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Inte
         this->_projetosNaoAlocados.erase(projeto);
     }
 
-    // TODO: checar se projeto já está no mapa
     if (this->_mapProjeto2Alocacao.find(projeto) == this->_mapProjeto2Alocacao.end())
     {
         Alocacao alocacao{projeto, sonda, intervalo};
@@ -192,47 +217,55 @@ void Solucao::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Inte
                                         prevMinus, currMinus, currPlus, nextPlus, caso);
 }
 
-void Solucao::removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo)
+bool Solucao::removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo)
 {
-    if (this->_projetosAlocados.find(projeto) == this->_projetosAlocados.end())
+    bool result = this->_ptrAlocacoes->removerProjeto(sonda, projeto, this->_deltaT);
+
+    if (result)
     {
-        std::cout << std::endl;
-        std::cout << "Projeto a ser removido não está no conjunto de alocados! ========================= ERRO!";
-        std::cout << std::endl;
+        if (this->_projetosAlocados.find(projeto) == this->_projetosAlocados.end())
+        {
+            std::cout << std::endl;
+            std::cout << "Projeto a ser removido não está no conjunto de alocados! ========================= ERRO!";
+            std::cout << std::endl;
+        }
+        else
+        {
+            this->_projetosAlocados.erase(projeto);
+        }
+
+        if (this->_projetosNaoAlocados.find(projeto) == this->_projetosNaoAlocados.end())
+        {
+            this->_projetosNaoAlocados.insert(projeto);
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << "Projeto a ser removido já está no conjunto de NÃO alocados! ======================= ERRO!";
+            std::cout << std::endl;
+        }
+
+        if (this->_mapProjeto2Alocacao.find(projeto) == this->_mapProjeto2Alocacao.end())
+        {
+            std::cout << std::endl;
+            std::cout << "Projeto a ser removido não está no mapa de alocados! ============================ ERRO!";
+            std::cout << std::endl;
+        }
+        else
+        {
+            this->_mapProjeto2Alocacao.erase(projeto);
+        }
+
+        this->_gastos -= projeto.getCusto();
+        this->_fitness -= projeto.getMiVpl();
+        this->_totalFree += intervalo.getFinal() - intervalo.getInicio() + 1;
     }
     else
     {
-        this->_projetosAlocados.erase(projeto);
-    }
-
-    if (this->_projetosNaoAlocados.find(projeto) == this->_projetosNaoAlocados.end())
-    {
-        this->_projetosNaoAlocados.insert(projeto);
-    }
-    else
-    {
         std::cout << std::endl;
-        std::cout << "Projeto a ser removido já está no conjunto de NÃO alocados! ======================= ERRO!";
+        std::cout << "Não é possível fazer a remoção do projeto.";
         std::cout << std::endl;
     }
-
-    // TODO: checar se projeto está no mapa
-    if (this->_mapProjeto2Alocacao.find(projeto) == this->_mapProjeto2Alocacao.end())
-    {
-        std::cout << std::endl;
-        std::cout << "Projeto a ser removido não está no mapa de alocados! ============================ ERRO!";
-        std::cout << std::endl;
-    }
-    else
-    {
-        this->_mapProjeto2Alocacao.erase(projeto);
-    }
-
-    this->_gastos -= projeto.getCusto();
-    this->_fitness -= projeto.getMiVpl();
-    this->_totalFree += intervalo.getFinal() - intervalo.getInicio() + 1;
-
-    this->_ptrAlocacoes->removerProjeto(sonda, projeto);
 }
 
 void Solucao::print()
@@ -259,7 +292,7 @@ void Solucao::print()
     } std::cout << std::endl;
 
     std::cout << "Alocações:" << std::endl;
-    AlocacoesVector alocs{this->_ptrAlocacoes->getAlocacoes()};
+    AlocacoesVector alocs{this->_ptrAlocacoes->getAlocacoes(), this->_deltaT};
     alocs.print();
 
     std::cout << std::endl;

@@ -375,18 +375,15 @@ TODO:
 
 Anotar lições aprendidas no mestrado
 
-Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
-
 Rever operações das classes implementadas e verificar se posso deixar mais eficiente
+
+Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 
 Rever gerador de instâncias
 
 Listar produtos que já tenho
 
-Classe Solucao
-    - testar classe Solucao
-
-Classe construtor de solução
+Classe construtor de solução ------------------------------------- ...
 
 Classe verificador de solução
 

@@ -15,7 +15,7 @@
 #include <bits/stdc++.h>
 #include "CalculadorDeDesloc.h"
 
-double CalculadorDeDesloc::getDesloc(Sonda s1, Sonda s2)
+double CalculadorDeDesloc::getDesloc(Sonda s1, Sonda s2, int deltaT)
 {
     double x1, x2, y1, y2, desloc;
     x1 = s1.getCoordX();
@@ -23,10 +23,11 @@ double CalculadorDeDesloc::getDesloc(Sonda s1, Sonda s2)
     x2 = s2.getCoordX();
     y2 = s2.getCoordY();
     desloc = sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
+    desloc = (int)desloc / deltaT;
     return desloc;
 }
 
-double CalculadorDeDesloc::getDesloc(Sonda s, Projeto p)
+double CalculadorDeDesloc::getDesloc(Sonda s, Projeto p, int deltaT)
 {
     double x1, x2, y1, y2, desloc;
     x1 = p.getCoordX();
@@ -34,10 +35,11 @@ double CalculadorDeDesloc::getDesloc(Sonda s, Projeto p)
     x2 = s.getCoordX();
     y2 = s.getCoordY();
     desloc = sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
+    desloc = (int)desloc / deltaT;
     return desloc;
 }
 
-double CalculadorDeDesloc::getDesloc(Projeto p, Sonda s)
+double CalculadorDeDesloc::getDesloc(Projeto p, Sonda s, int deltaT)
 {
     double x1, x2, y1, y2, desloc;
     x1 = p.getCoordX();
@@ -45,10 +47,11 @@ double CalculadorDeDesloc::getDesloc(Projeto p, Sonda s)
     x2 = s.getCoordX();
     y2 = s.getCoordY();
     desloc = sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
+    desloc = (int)desloc / deltaT;
     return desloc;
 }
 
-double CalculadorDeDesloc::getDesloc(Projeto p1, Projeto p2)
+double CalculadorDeDesloc::getDesloc(Projeto p1, Projeto p2, int deltaT)
 {
     double x1, x2, y1, y2, desloc;
     x1 = p1.getCoordX();
@@ -56,6 +59,7 @@ double CalculadorDeDesloc::getDesloc(Projeto p1, Projeto p2)
     x2 = p2.getCoordX();
     y2 = p2.getCoordY();
     desloc = sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
+    desloc = (int)desloc / deltaT;
     return desloc;
 }
 

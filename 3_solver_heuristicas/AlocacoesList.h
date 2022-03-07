@@ -26,9 +26,10 @@ class AlocacoesList: public Alocacoes
         std::map<Sonda, std::list<Alocacao>> _alocacoes;
     
     public:
+        AlocacoesList();
         AlocacoesList(std::set<Sonda>);
-        AlocacoesList(std::map<Sonda, std::list<Alocacao>>);
-        AlocacoesList(std::map<Sonda, std::vector<Alocacao>>);
+        AlocacoesList(std::map<Sonda, std::list<Alocacao>>, int);
+        AlocacoesList(std::map<Sonda, std::vector<Alocacao>>, int);
         // AlocacoesList copyFrom(AlocacoesList);
         // AlocacoesList copyFrom(AlocacoesVector);
         void print();
@@ -44,14 +45,14 @@ class AlocacoesList: public Alocacoes
         Alocacao getAlocacao(Sonda, Projeto);
         int getAlocacaoIndex(Sonda, Projeto);
         
-        void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>);
-        void setAlocacoes(Sonda, std::vector<Alocacao>);
+        void setAlocacoes(std::map<Sonda, std::vector<Alocacao>>, int);
+        void setAlocacoes(Sonda, std::vector<Alocacao>, int);
 
-        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda, Projeto, int);
+        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda, Projeto, int, int);
 
         void inserirProjeto(Sonda, Projeto, int, Intervalo, int, int, int, int, int);
 
-        bool removerProjeto(Sonda, Projeto);
+        bool removerProjeto(Sonda, Projeto, int);
 };
 
 #endif

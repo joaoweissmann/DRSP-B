@@ -24,6 +24,8 @@
 class Solucao
 {
     private:
+        AlocacoesVector _alocsVector;
+        AlocacoesList _alocsList;
         Alocacoes * _ptrAlocacoes;
         std::set<Projeto> _projetosAlocados;
         std::set<Projeto> _projetosNaoAlocados;
@@ -31,9 +33,10 @@ class Solucao
         double _gastos;
         double _fitness;
         int _totalFree;
+        int _deltaT;
 
     public:
-        Solucao(std::set<Sonda> sondas, int dataStructure, DadosDeEntrada dataset);
+        Solucao(int dataStructure, DadosDeEntrada dataset);
         Solucao(std::map<Sonda, std::vector<Alocacao>> alocacoesIn, int dataStructure, DadosDeEntrada dataset);
 
         std::set<Projeto> getProjetosAlocados();
@@ -42,11 +45,14 @@ class Solucao
         double getGastos();
         double getFitness();
         int getTotalFree();
+        std::map<Sonda, std::vector<Alocacao>> getAlocacoes();
+
+        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo);
 
         void inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
                                      int prevMinus, int currMinus, int currPlus, int nextPlus, int caso);
         
-        void removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo);
+        bool removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo);
 
         void print();
 };

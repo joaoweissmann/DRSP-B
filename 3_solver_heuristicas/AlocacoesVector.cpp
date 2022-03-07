@@ -15,6 +15,13 @@
 #include <bits/stdc++.h>
 #include "AlocacoesVector.h"
 
+AlocacoesVector::AlocacoesVector()
+{
+    std::vector<Alocacao> vetor;
+    Sonda s{};
+    this->_alocacoes.insert(std::pair<Sonda, std::vector<Alocacao>>(s, vetor));
+}
+
 AlocacoesVector::AlocacoesVector(std::set<Sonda> sondas)
 {
     for (std::set<Sonda>::iterator itr=sondas.begin(); itr!=sondas.end(); ++itr)
@@ -24,7 +31,7 @@ AlocacoesVector::AlocacoesVector(std::set<Sonda> sondas)
     }
 }
 
-AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoes)
+AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoes, int deltaT)
 {
     // checar interceção
     bool feasible = true; 
@@ -84,7 +91,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoe
             if ( (itv == alocacoes[sonda].begin()) && (itv+1 == alocacoes[sonda].end()) )
             {
                 // alocacao única
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -105,7 +112,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoe
             if ( (itv == alocacoes[sonda].begin()) && !(itv+1 == alocacoes[sonda].end()) )
             {
                 // alocação begin, mas existe uma próxima alocação
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -146,7 +153,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoe
                 // última alocação, mas existe alocação prévia
                 Alocacao alocPrev = *(itv-1);
                 Projeto projPrev = alocPrev.getProjeto();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -190,7 +197,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoe
                 Projeto projNext = alocNext.getProjeto();
                 Intervalo intervaloPrev = alocPrev.getIntervalo();
                 Intervalo intervaloNext = alocNext.getIntervalo();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -254,7 +261,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::vector<Alocacao>> alocacoe
     }
 }
 
-AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
+AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes, int deltaT)
 {
     // checar interceção
     bool feasible = true; 
@@ -314,7 +321,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
             if ( (itv == alocacoes[sonda].begin()) && (std::next(itv,1) == alocacoes[sonda].end()) )
             {
                 // alocacao única
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -335,7 +342,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
             if ( (itv == alocacoes[sonda].begin()) && !(std::next(itv,1) == alocacoes[sonda].end()) )
             {
                 // alocação begin, mas existe uma próxima alocação
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -376,7 +383,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
                 // última alocação, mas existe alocação prévia
                 Alocacao alocPrev = *(std::prev(itv));
                 Projeto projPrev = alocPrev.getProjeto();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -420,7 +427,7 @@ AlocacoesVector::AlocacoesVector(std::map<Sonda, std::list<Alocacao>> alocacoes)
                 Projeto projNext = alocNext.getProjeto();
                 Intervalo intervaloPrev = alocPrev.getIntervalo();
                 Intervalo intervaloNext = alocNext.getIntervalo();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -670,7 +677,7 @@ int AlocacoesVector::getAlocacaoIndex(Sonda sonda, Projeto projeto)
     }
 }
 
-void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocacoes)
+void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocacoes, int deltaT)
 {
     _alocacoes.clear();
 
@@ -732,7 +739,7 @@ void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocac
             if ( (itv == alocacoes[sonda].begin()) && (itv+1 == alocacoes[sonda].end()) )
             {
                 // alocacao única
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -753,7 +760,7 @@ void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocac
             if ( (itv == alocacoes[sonda].begin()) && !(itv+1 == alocacoes[sonda].end()) )
             {
                 // alocação begin, mas existe uma próxima alocação
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -794,7 +801,7 @@ void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocac
                 // última alocação, mas existe alocação prévia
                 Alocacao alocPrev = *(itv-1);
                 Projeto projPrev = alocPrev.getProjeto();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -838,7 +845,7 @@ void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocac
                 Projeto projNext = alocNext.getProjeto();
                 Intervalo intervaloPrev = alocPrev.getIntervalo();
                 Intervalo intervaloNext = alocNext.getIntervalo();
-                desloc = calc.getDesloc(projPrev, projeto);
+                desloc = calc.getDesloc(projPrev, projeto, deltaT);
                 if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
                 {
                     std::cout << std::endl;
@@ -902,7 +909,7 @@ void AlocacoesVector::setAlocacoes(std::map<Sonda, std::vector<Alocacao>> alocac
     }
 }
 
-void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
+void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes, int deltaT)
 {
     std::map<Sonda, std::vector<Alocacao>>::iterator it = _alocacoes.find(sonda);
     if (it == _alocacoes.end())
@@ -958,7 +965,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
         if ( (itv == alocacoes.begin()) && (itv+1 == alocacoes.end()) )
         {
             // alocacao única
-            desloc = calc.getDesloc(sonda, projeto);
+            desloc = calc.getDesloc(sonda, projeto, deltaT);
             if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
             {
                 std::cout << std::endl;
@@ -979,7 +986,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
         if ( (itv == alocacoes.begin()) && !(itv+1 == alocacoes.end()) )
         {
             // alocação begin, mas existe uma próxima alocação
-            desloc = calc.getDesloc(sonda, projeto);
+            desloc = calc.getDesloc(sonda, projeto, deltaT);
             if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
             {
                 std::cout << std::endl;
@@ -1020,7 +1027,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
             // última alocação, mas existe alocação prévia
             Alocacao alocPrev = *(itv-1);
             Projeto projPrev = alocPrev.getProjeto();
-            desloc = calc.getDesloc(projPrev, projeto);
+            desloc = calc.getDesloc(projPrev, projeto, deltaT);
             if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
             {
                 std::cout << std::endl;
@@ -1064,7 +1071,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
             Projeto projNext = alocNext.getProjeto();
             Intervalo intervaloPrev = alocPrev.getIntervalo();
             Intervalo intervaloNext = alocNext.getIntervalo();
-            desloc = calc.getDesloc(projPrev, projeto);
+            desloc = calc.getDesloc(projPrev, projeto, deltaT);
             if ( !(intervalo.getInicio() + (int)desloc + projeto.getTempExec() - 1 == intervalo.getFinal()) )
             {
                 std::cout << std::endl;
@@ -1121,7 +1128,7 @@ void AlocacoesVector::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes)
 }
 
 std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::buscarJanelaViavel(Sonda sonda, Projeto projeto, 
-                                                                                              int modo)
+                                                                                              int modo, int deltaT)
 {
     std::cout << std::endl;
     std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
@@ -1165,7 +1172,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
         std::cout << std::endl;
 
         // se é viável inserir projeto entre release e due
-        double desloc = calc.getDesloc(sonda, projeto);
+        double desloc = calc.getDesloc(sonda, projeto, deltaT);
         if (projeto.getInicioJanela() + (int)desloc + projeto.getTempExec() - 1 <= projeto.getFinalJanela())
         {
             // escolhe intervalo
@@ -1237,7 +1244,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
             // pega informações da janela que antecede a alocação corrente
             if (itr == this->_alocacoes[sonda].begin())
             {
-                desloc = calc.getDesloc(sonda, projeto);
+                desloc = calc.getDesloc(sonda, projeto, deltaT);
 
                 // se existe janela
                 if (itr->getIntervalo().getInicio() == 0)
@@ -1253,7 +1260,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
             }
             else
             {
-                desloc = calc.getDesloc((itr-1)->getProjeto(), projeto);
+                desloc = calc.getDesloc((itr-1)->getProjeto(), projeto, deltaT);
 
                 // se existe janela
                 if (itr->getIntervalo().getInicio() == (itr-1)->getIntervalo().getFinal() + 1)
@@ -1285,13 +1292,13 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
             // verifica se a inserção do projeto altera o setup do projeto seguinte
             if (itr == this->_alocacoes[sonda].begin())
             {
-                oldDesloc = calc.getDesloc(sonda, itr->getProjeto());
+                oldDesloc = calc.getDesloc(sonda, itr->getProjeto(), deltaT);
             }
             else
             {
-                oldDesloc = calc.getDesloc((itr-1)->getProjeto(), itr->getProjeto());
+                oldDesloc = calc.getDesloc((itr-1)->getProjeto(), itr->getProjeto(), deltaT);
             }
-            newDesloc = calc.getDesloc(projeto, itr->getProjeto());
+            newDesloc = calc.getDesloc(projeto, itr->getProjeto(), deltaT);
             deltaDesloc = (int)newDesloc - (int)oldDesloc;
             std::cout << std::endl << "Se o projeto " << projeto.getNome() << " for inserido na posição " << count
                       << ", o setup do projeto seguinte será alterado em: " << deltaDesloc << std::endl;
@@ -1674,7 +1681,7 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                 std::cout << std::endl;
 
                 // calcula setup, caso projeto seja inserido
-                desloc = calc.getDesloc(itr->getProjeto(), projeto);
+                desloc = calc.getDesloc(itr->getProjeto(), projeto, deltaT);
 
                 // verifica se projeto cabe na janela
                 dataMin = std::max(gapInit, projeto.getInicioJanela());
@@ -1992,7 +1999,7 @@ void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAl
     }
 }
 
-bool AlocacoesVector::removerProjeto(Sonda sonda, Projeto projeto)
+bool AlocacoesVector::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
 {
     // verificar se sonda existe
     std::map<Sonda, std::vector<Alocacao>>::iterator it = this->_alocacoes.find(sonda);
@@ -2043,14 +2050,14 @@ bool AlocacoesVector::removerProjeto(Sonda sonda, Projeto projeto)
         // verifica mudança de setup
         CalculadorDeDesloc calc{};
         int oldDesloc=0, newDesloc=0, deltaDesloc=0;
-        oldDesloc = calc.getDesloc(projeto, std::next(posicao, 1)->getProjeto());
+        oldDesloc = calc.getDesloc(projeto, std::next(posicao, 1)->getProjeto(), deltaT);
         if (posicao == this->_alocacoes[sonda].begin())
         {
-            newDesloc = calc.getDesloc(sonda, std::next(posicao, 1)->getProjeto());
+            newDesloc = calc.getDesloc(sonda, std::next(posicao, 1)->getProjeto(), deltaT);
         }
         else
         {
-            newDesloc = calc.getDesloc(std::prev(posicao, 1)->getProjeto(), std::next(posicao, 1)->getProjeto());
+            newDesloc = calc.getDesloc(std::prev(posicao, 1)->getProjeto(), std::next(posicao, 1)->getProjeto(), deltaT);
         }
         deltaDesloc = newDesloc - oldDesloc;
 

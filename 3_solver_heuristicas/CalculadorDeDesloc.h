@@ -22,10 +22,10 @@
 class CalculadorDeDesloc
 {
     public:
-        double getDesloc(Sonda, Sonda);
-        double getDesloc(Sonda, Projeto);
-        double getDesloc(Projeto, Sonda);
-        double getDesloc(Projeto, Projeto);
+        double getDesloc(Sonda, Sonda, int);
+        double getDesloc(Sonda, Projeto, int);
+        double getDesloc(Projeto, Sonda, int);
+        double getDesloc(Projeto, Projeto, int);
 };
 
 #endif
