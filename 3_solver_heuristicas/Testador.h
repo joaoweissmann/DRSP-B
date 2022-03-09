@@ -27,6 +27,7 @@
 #include "AlocacoesVector.h"
 #include "AlocacoesList.h"
 #include "Solucao.h"
+#include "ConstrutorHeuristico.h"
 
 class Testador
 {
@@ -40,6 +41,7 @@ class Testador
         void testarAlocacao();
         void testarAlocacoes();
         void testarSolucao();
+        void testarConstrutorHeuristico();
 };
 
 #endif

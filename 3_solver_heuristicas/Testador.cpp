@@ -1327,7 +1327,24 @@ void Testador::testarSolucao()
         std::cout << "Mostrando alocações após inserção do projeto " << projeto2.getNome() << std::endl;
         solucao1.print();
     }
-    
+
+    std::map<Sonda, std::vector<Alocacao>> mapAlocs = solucao1.getAlocacoes();
+    Solucao solucao2{mapAlocs, dataStruct, dataset};
+    std::cout << std::endl;
+    std::cout << "Mostrando solução criada a partir da solução anterior: " << std::endl;
+    solucao2.print();
+
+    std::cout << std::endl;
+    std::cout << "################### Teste concluído ###################" << std::endl;
+}
+
+void Testador::testarConstrutorHeuristico()
+{
+    std::cout << std::endl;
+    std::cout << "################### Testando classe construtor heuristico ###################" << std::endl;
+
+    // TODO
+
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;
 }

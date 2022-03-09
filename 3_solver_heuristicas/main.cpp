@@ -26,7 +26,8 @@ int main()
     // test.testarIntervalo();
     // test.testarAlocacao();
     // test.testarAlocacoes();
-    test.testarSolucao();
+    // test.testarSolucao();
+    test.testarConstrutorHeuristico();
 
     return 0;
 };
