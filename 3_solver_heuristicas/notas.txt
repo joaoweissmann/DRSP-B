@@ -384,13 +384,18 @@ Rever gerador de instâncias
 Listar produtos que já tenho
 
 Classe construtor de solução
-    - overload com solução parcial
+    - commit
+    - falar com David
 
 Classe verificador de solução
 
 Classe para rodar metaheurísticas
     - mult start heuristic
     - iterated greedy
+
+Classe pré-processamento
+
+Classe movimentador em vizinhanças
 
 ---------------------------------
 Observações e dúvidas:
@@ -446,10 +451,10 @@ Janeiro
     - Escrever classe Solucao ---------------------------------------------------------------- OK
 
 Fevereiro
-    - Escrever classe construtor heurístico -------------------------------------------------- FAZENDO
-    - Escrever classe verificador de solução
-    - Escrever classe pré-processamento
-    - Escrever classe movimentador em vizinhanças
+    - Escrever classe construtor heurístico -------------------------------------------------- OK
+    - Escrever classe verificador de solução ------------------------------------------------- FAZENDO
+    - Escrever classe pré-processamento 
+    - Escrever classe movimentador em vizinhanças 
     - Escrever classe busca local
     - Escrever classe executador de metaheurísticas
 

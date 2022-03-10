@@ -1166,13 +1166,13 @@ void AlocacoesList::setAlocacoes(Sonda sonda, std::vector<Alocacao> alocacoes, i
 std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJanelaViavel(Sonda sonda, Projeto projeto, 
                                                                                             int modo, int deltaT)
 {
-    std::cout << std::endl;
-    std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
-    std::cout << std::endl;
+    //std::cout << std::endl;
+    //std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+    //std::cout << std::endl;
 
-    std::cout << "Informações do projeto: " << std::endl;
-    std::cout << "Release date: " << projeto.getInicioJanela() << std::endl;
-    std::cout << "Due date: " << projeto.getFinalJanela() << std::endl;
+    //std::cout << "Informações do projeto: " << std::endl;
+    //std::cout << "Release date: " << projeto.getInicioJanela() << std::endl;
+    //std::cout << "Due date: " << projeto.getFinalJanela() << std::endl;
 
     // std::cout << "Alocações atuais são:" << std::endl;
     // this->print();
@@ -1203,9 +1203,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
     // se o vetor de alocações está vazio
     if (this->_alocacoes[sonda].empty())
     {
-        std::cout << std::endl;
-        std::cout << "A sonda " << sonda.getNome() << " ainda NÃO TEM alocações.";
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "A sonda " << sonda.getNome() << " ainda NÃO TEM alocações.";
+        //std::cout << std::endl;
 
         // se é viável inserir projeto entre release e due
         double desloc = calc.getDesloc(sonda, projeto, deltaT);
@@ -1216,15 +1216,15 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             int finalIntervalo = projeto.getInicioJanela() + (int)desloc + projeto.getTempExec() - 1;
             intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
 
-            std::cout << std::endl;
-            std::cout << "Inserção viável na sonda " << sonda.getNome() << " ainda sem alocações." << std::endl;
-            std::cout << "Release do projeto: " << projeto.getInicioJanela() << std::endl;
-            std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
-            std::cout << "setup: " << desloc << std::endl;
-            std::cout << "proc: " << projeto.getTempExec() << std::endl;
-            std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
-            std::cout << "Due do projeto: " << projeto.getFinalJanela() << std::endl;
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Inserção viável na sonda " << sonda.getNome() << " ainda sem alocações." << std::endl;
+            //std::cout << "Release do projeto: " << projeto.getInicioJanela() << std::endl;
+            //std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
+            //std::cout << "setup: " << desloc << std::endl;
+            //std::cout << "proc: " << projeto.getTempExec() << std::endl;
+            //std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
+            //std::cout << "Due do projeto: " << projeto.getFinalJanela() << std::endl;
+            //std::cout << std::endl;
 
             // alocar
             alocExiste = true;
@@ -1237,9 +1237,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
         }
         else
         {
-            std::cout << std::endl;
-            std::cout << "Inserção NÃO viável na sonda " << sonda.getNome() << " ainda sem alocações.";
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Inserção NÃO viável na sonda " << sonda.getNome() << " ainda sem alocações.";
+            //std::cout << std::endl;
 
             alocExiste = false;
             caso = 0;
@@ -1255,9 +1255,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
     // se já existem alocações no vetor
     else
     {
-        std::cout << std::endl;
-        std::cout << "A sonda " << sonda.getNome() << " JÁ TEM alocações.";
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "A sonda " << sonda.getNome() << " JÁ TEM alocações.";
+        //std::cout << std::endl;
 
         // itera sob as alocações da sonda
         int count = -1;
@@ -1273,9 +1273,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             int deltaDeslocEfetivo;
             bool janelaExiste = false;
 
-            std::cout << std::endl;
-            std::cout << "Verificando alocação de índice " << count << " da sonda " << sonda.getNome();
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Verificando alocação de índice " << count << " da sonda " << sonda.getNome();
+            //std::cout << std::endl;
 
             // pega informações da janela que antecede a alocação corrente
             if (itr == this->_alocacoes[sonda].begin())
@@ -1312,16 +1312,16 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             }
             if (janelaExiste)
             {
-                std::cout << std::endl;
-                std::cout << "Janela disponível: " << std::endl;
-                std::cout << "Início: " << gapInit << ", e final: " << gapFinal << std::endl;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Janela disponível: " << std::endl;
+                //std::cout << "Início: " << gapInit << ", e final: " << gapFinal << std::endl;
+                //std::cout << std::endl;
             }
             else
             {
-                std::cout << std::endl;
-                std::cout << "Janela NÃO disponível: " << std::endl;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Janela NÃO disponível: " << std::endl;
+                //std::cout << std::endl;
                 continue;
             }
             
@@ -1336,8 +1336,8 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             }
             newDesloc = calc.getDesloc(projeto, itr->getProjeto(), deltaT);
             deltaDesloc = (int)newDesloc - (int)oldDesloc;
-            std::cout << std::endl << "Se o projeto " << projeto.getNome() << " for inserido na posição " << count
-                      << ", o setup do projeto seguinte será alterado em: " << deltaDesloc << std::endl;
+            //std::cout << std::endl << "Se o projeto " << projeto.getNome() << " for inserido na posição " << count
+            //          << ", o setup do projeto seguinte será alterado em: " << deltaDesloc << std::endl;
             
             // se tamanho do projeto cabe na janela, entre release e due
             dataMin = std::max(gapInit, projeto.getInicioJanela());
@@ -1345,27 +1345,27 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             deltaDeslocEfetivo = std::min(deltaDesloc, 0);
             if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax - deltaDeslocEfetivo)
             {
-                std::cout << std::endl;
-                std::cout << "Tamanho do projeto cabe na sonda.";
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Tamanho do projeto cabe na sonda.";
+                //std::cout << std::endl;
 
                 // escolher intervalo
                 int inicioIntervalo, finalIntervalo;
                 inicioIntervalo = dataMin;
                 finalIntervalo = inicioIntervalo + desloc + projeto.getTempExec() - 1;
                 intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
-                std::cout << std::endl;
-                std::cout << "Intervalo escolhido: " << std::endl;
-                std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
-                std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Intervalo escolhido: " << std::endl;
+                //std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
+                //std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
+                //std::cout << std::endl;
 
                 // se não altera setup do projeto seguinte
                 if (deltaDesloc == 0)
                 {
-                    std::cout << std::endl;
-                    std::cout << "Inserção viável sem modificar setup do projeto seguinte";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Inserção viável sem modificar setup do projeto seguinte";
+                    //std::cout << std::endl;
 
                     // alocar
                     alocExiste = true;
@@ -1381,9 +1381,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                 // se altera setup do projeto seguinte para menos
                 else if (deltaDesloc < 0)
                 {
-                    std::cout << std::endl;
-                    std::cout << "Inserção viável modificando setup do projeto seguinte para menos. Valor: " << deltaDesloc;
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Inserção viável modificando setup do projeto seguinte para menos. Valor: " << deltaDesloc;
+                    //std::cout << std::endl;
 
                     // alocar
                     alocExiste = true;
@@ -1400,10 +1400,10 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                 else
                 {
                     // tenta colocar diferença para trás e/ou colocar diferença para frente
-                    std::cout << std::endl;
-                    std::cout << "O setup do projeto seguinte sofre modificação para mais, em caso de inserção.";
-                    std::cout << "Tentando realocar diferença de desloc.";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "O setup do projeto seguinte sofre modificação para mais, em caso de inserção.";
+                    //std::cout << "Tentando realocar diferença de desloc.";
+                    //std::cout << std::endl;
 
                     // verifica quanto espaço livre tenho para frente, sem realocações
                     int deltaLeftDisp=0, deltaRightDisp=0, temp1=0, temp2=0;
@@ -1417,20 +1417,20 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                         temp2 = std::next(itr, 1)->getIntervalo().getInicio() - 1;
                         deltaRightDisp = std::min(temp1, temp2) - itr->getIntervalo().getFinal();
                     }
-                    std::cout << "Espaço disponível para frente, sem realocações: " << deltaRightDisp << std::endl;
+                    //std::cout << "Espaço disponível para frente, sem realocações: " << deltaRightDisp << std::endl;
 
                     // verifica quanto espaço livre tenho para trás, sem realocações
                     temp1 = itr->getProjeto().getInicioJanela();
                     temp2 = intervaloAloc.getFinal() + 1;
                     deltaLeftDisp = itr->getIntervalo().getInicio() - std::max(temp1, temp2);
-                    std::cout << "Espaço disponível para trás, sem realocações: " << deltaLeftDisp << std::endl;
+                    //std::cout << "Espaço disponível para trás, sem realocações: " << deltaLeftDisp << std::endl;
 
                     // se chegar só para trás basta
                     if (deltaLeftDisp >= deltaDesloc)
                     {
-                        std::cout << std::endl;
-                        std::cout << "Apenas chegar para trás, basta. Espaço disponível: " << deltaLeftDisp;
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Apenas chegar para trás, basta. Espaço disponível: " << deltaLeftDisp;
+                        //std::cout << std::endl;
 
                         // alocar
                         alocExiste = true;
@@ -1446,10 +1446,10 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     // se chegar para trás e para frente basta
                     else if (deltaLeftDisp + deltaRightDisp >= deltaDesloc)
                     {
-                        std::cout << std::endl;
-                        std::cout << "Chegar para trás e para frente, basta." << std::endl;
-                        std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
-                        std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Chegar para trás e para frente, basta." << std::endl;
+                        //std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
+                        //std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
 
                         // alocar
                         alocExiste = true;
@@ -1465,9 +1465,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     // senão, se está no modo realocar
                     else if (modo == 1)
                     {
-                        std::cout << std::endl;
-                        std::cout << "Espaços disponíveis sem realocações são insuficientes.";
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Espaços disponíveis sem realocações são insuficientes.";
+                        //std::cout << std::endl;
 
                         // verifica quanto posso chegar o next para frente
                         int deltaNextDisp = 0;
@@ -1489,18 +1489,18 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                                 deltaNextDisp = std::min(temp1, temp2) - itrNext->getIntervalo().getFinal();
                             }
                         }
-                        std::cout << std::endl;
-                        std::cout << "Espaço disponível para frente realocando o próximo projeto: " << deltaNextDisp;
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Espaço disponível para frente realocando o próximo projeto: " << deltaNextDisp;
+                        //std::cout << std::endl;
 
                         // verifica se chegar para trás e para frente basta, considerando delta next
                         if ( (deltaLeftDisp + deltaRightDisp + deltaNextDisp) >= deltaDesloc)
                         {
-                            std::cout << std::endl;
-                            std::cout << "Chegar para trás, para frente, e postergar o next basta." << std::endl;
-                            std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
-                            std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
-                            std::cout << "Espaço disponível para realocar next: " << deltaNextDisp << std::endl;
+                            //std::cout << std::endl;
+                            //std::cout << "Chegar para trás, para frente, e postergar o next basta." << std::endl;
+                            //std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
+                            //std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
+                            //std::cout << "Espaço disponível para realocar next: " << deltaNextDisp << std::endl;
 
                             // alocar
                             alocExiste = true;
@@ -1516,32 +1516,32 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                         }
                         else
                         {
-                            std::cout << std::endl;
-                            std::cout << "Inserção inviável, mesmo com realocações.";
-                            std::cout << std::endl;
+                            //std::cout << std::endl;
+                            //std::cout << "Inserção inviável, mesmo com realocações.";
+                            //std::cout << std::endl;
                         }
                     }
                     // senão, não dá mesmo
                     else
                     {
-                        std::cout << std::endl;
-                        std::cout << "Inserção não viável, por conta do aumento de setup." << deltaLeftDisp;
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Inserção não viável, por conta do aumento de setup." << deltaLeftDisp;
+                        //std::cout << std::endl;
                     }
                 }
             }
             else if (modo == 1)
             {
                 // tenta realocar projetos vizinhos
-                std::cout << std::endl;
-                std::cout << "Tamanho do projeto NÃO cabe na sonda. Tentar realocações.";
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Tamanho do projeto NÃO cabe na sonda. Tentar realocações.";
+                //std::cout << std::endl;
 
                 // quanto de espaço é necessário? considerar deltaDesloc negativo
                 int deltaNecessario = ((int)desloc + projeto.getTempExec()) - (dataMax - dataMin + 1 - deltaDeslocEfetivo);
-                std::cout << std::endl;
-                std::cout << "É preciso abrir um espaço de tamanho: " << deltaNecessario;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "É preciso abrir um espaço de tamanho: " << deltaNecessario;
+                //std::cout << std::endl;
 
                 int deltaPrevDisp = 0;
                 // quanto posso chegar o prev para trás?
@@ -1564,9 +1564,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                         deltaPrevDisp = itrPrev->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
                 }
-                std::cout << std::endl;
-                std::cout << "Espaço disponível realocando projeto anterior: " << deltaPrevDisp;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Espaço disponível realocando projeto anterior: " << deltaPrevDisp;
+                //std::cout << std::endl;
 
                 int deltaCurrDisp = 0;
                 // quanto posso chegar o curr para frente?
@@ -1581,9 +1581,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     temp2 = std::next(itr, 1)->getIntervalo().getInicio() - 1;
                     deltaCurrDisp = std::min(temp1, temp2) - itr->getIntervalo().getFinal();
                 }
-                std::cout << std::endl;
-                std::cout << "Espaço disponível realocando projeto posterior: " << deltaCurrDisp;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Espaço disponível realocando projeto posterior: " << deltaCurrDisp;
+                //std::cout << std::endl;
 
                 // se deltaDesloc é positivo, verificar viabilidade de aumentar o curr para frente e descontar valor
                 bool deltaViavel = true;
@@ -1610,9 +1610,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     // verifica se, com realocações, projeto cabe
                     if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax - deltaDeslocEfetivo)
                     {
-                        std::cout << std::endl;
-                        std::cout << "Tamanho do projeto cabe na sonda, com realocações.";
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Tamanho do projeto cabe na sonda, com realocações.";
+                        //std::cout << std::endl;
 
                         // escolher intervalo
                         int inicioIntervalo = -1, finalIntervalo = -1;
@@ -1626,11 +1626,11 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                         }
                         finalIntervalo = inicioIntervalo + desloc + projeto.getTempExec() - 1;
                         intervaloAloc.setIntervalo(inicioIntervalo, finalIntervalo);
-                        std::cout << std::endl;
-                        std::cout << "Intervalo escolhido: " << std::endl;
-                        std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
-                        std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Intervalo escolhido: " << std::endl;
+                        //std::cout << "Início do intervalo: " << intervaloAloc.getInicio() << std::endl;
+                        //std::cout << "Final do intervalo: " << intervaloAloc.getFinal() << std::endl;
+                        //std::cout << std::endl;
 
                         // alocar
                         alocExiste = true;
@@ -1656,31 +1656,31 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     }
                     else
                     {
-                        std::cout << std::endl;
-                        std::cout << "Tamanho do projeto NÃO cabe na janela, mesmo com realocações.";
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Tamanho do projeto NÃO cabe na janela, mesmo com realocações.";
+                        //std::cout << std::endl;
                     }
                 }
                 else
                 {
-                    std::cout << std::endl;
-                    std::cout << "Não é possível abrir o espaço necessário, pois o aumento do desloc é inviável.";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Não é possível abrir o espaço necessário, pois o aumento do desloc é inviável.";
+                    //std::cout << std::endl;
                 }
             }
             else
             {
-                std::cout << std::endl;
-                std::cout << "Tamanho do projeto NÃO cabe na janela.";
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Tamanho do projeto NÃO cabe na janela.";
+                //std::cout << std::endl;
             }
         }
         // se ainda não conseguiu alocar, tenta na janela após a última alocação
         if (alocExiste == false)
         {
-            std::cout << std::endl;
-            std::cout << "Alocação ainda não viável. Tentando na ÚLTIMA janela.";
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Alocação ainda não viável. Tentando na ÚLTIMA janela.";
+            //std::cout << std::endl;
 
             int gapInit = -1, gapFinal = -1;
             int dataMin = -1, dataMax = -1;
@@ -1691,9 +1691,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             std::list<Alocacao>::iterator itr = std::prev(this->_alocacoes[sonda].end(), 1);
             if (itr->getIntervalo().getFinal() < projeto.getFinalJanela())
             {
-                std::cout << std::endl;
-                std::cout << "Existe janela após última alocação e antes da due do projeto a ser alocado.";
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Existe janela após última alocação e antes da due do projeto a ser alocado.";
+                //std::cout << std::endl;
 
                 janelaExiste = true;
 
@@ -1703,18 +1703,18 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
             }
             else
             {
-                std::cout << std::endl;
-                std::cout << "NÃO existe janela após última alocação e antes da due do projeto a ser alocado.";
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "NÃO existe janela após última alocação e antes da due do projeto a ser alocado.";
+                //std::cout << std::endl;
 
                 janelaExiste = false;
             }
             if (janelaExiste)
             {
-                std::cout << std::endl;
-                std::cout << "Janela após última alocação disponível: " << std::endl;
-                std::cout << "Início: " << gapInit << ", e final: " << gapFinal << std::endl;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Janela após última alocação disponível: " << std::endl;
+                //std::cout << "Início: " << gapInit << ", e final: " << gapFinal << std::endl;
+                //std::cout << std::endl;
 
                 // calcula setup, caso projeto seja inserido
                 desloc = calc.getDesloc(itr->getProjeto(), projeto, deltaT);
@@ -1724,9 +1724,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                 dataMax = std::min(gapFinal, projeto.getFinalJanela());
                 if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax)
                 {
-                    std::cout << std::endl;
-                    std::cout << "Tamanho do projeto cabe na janela após última alocação. Inserção viável.";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Tamanho do projeto cabe na janela após última alocação. Inserção viável.";
+                    //std::cout << std::endl;
 
                     alocExiste = true;
                     caso = 6;
@@ -1743,9 +1743,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                 {
                     int deltaNecessario = ((int)desloc + projeto.getTempExec()) - (dataMax - dataMin + 1);
 
-                    std::cout << std::endl;
-                    std::cout << "Tamanho do projeto NÃO cabe na janela após última alocação. Tentando realocações.";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Tamanho do projeto NÃO cabe na janela após última alocação. Tentando realocações.";
+                    //std::cout << std::endl;
 
                     // verifica espaço realocando projeto anterior
                     int deltaDisponivel;
@@ -1760,9 +1760,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                         temp2 = std::prev(itr, 1)->getIntervalo().getFinal() + 1;
                         deltaDisponivel = itr->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
-                    std::cout << std::endl;
-                    std::cout << "O espaço disponível ao realocar o projeto anterior é: " << deltaDisponivel;
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "O espaço disponível ao realocar o projeto anterior é: " << deltaDisponivel;
+                    //std::cout << std::endl;
 
                     // atualiza valores da janela considerando o delta de realocação
                     dataMin = std::max(gapInit - deltaDisponivel, projeto.getInicioJanela());
@@ -1770,9 +1770,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     // verifica se projeto cabe na janela alterada
                     if (dataMin + (int)desloc + projeto.getTempExec() - 1 <= dataMax)
                     {
-                        std::cout << std::endl;
-                        std::cout << "Inserção viável com alteração da janela.";
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Inserção viável com alteração da janela.";
+                        //std::cout << std::endl;
 
                         alocExiste = true;
                         caso = 6;
@@ -1787,23 +1787,23 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
                     }
                     else
                     {
-                        std::cout << std::endl;
-                        std::cout << "Inserção NÃO viável mesmo com alteração da janela.";
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
+                        //std::cout << "Inserção NÃO viável mesmo com alteração da janela.";
+                        //std::cout << std::endl;
                     }
                 }
                 else
                 {
-                    std::cout << std::endl;
-                    std::cout << "Tamanho do projeto NÃO cabe na janela após última alocação.";
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
+                    //std::cout << "Tamanho do projeto NÃO cabe na janela após última alocação.";
+                    //std::cout << std::endl;
                 }
             }
             else
             {
-                std::cout << std::endl;
-                std::cout << "Janela após última alocação NÃO disponível: " << std::endl;
-                std::cout << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "Janela após última alocação NÃO disponível: " << std::endl;
+                //std::cout << std::endl;
             }
         }
         return std::make_tuple(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso);
@@ -1813,9 +1813,9 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesList::buscarJ
 void AlocacoesList::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
                                      int prevMinus, int currMinus, int currPlus, int nextPlus, int caso)
 {
-    std::cout << std::endl;
-    std::cout << "Inserindo projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
-    std::cout << std::endl;
+    //std::cout << std::endl;
+    //std::cout << "Inserindo projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+    //std::cout << std::endl;
 
     // verificar se sonda existe nas alocações
     std::map<Sonda, std::list<Alocacao>>::iterator it = this->_alocacoes.find(sonda);
@@ -1897,9 +1897,9 @@ void AlocacoesList::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc
         assert ( (prevMinus==0) && (currMinus<0) && (currPlus==0) && (nextPlus==0) );
 
         // caso: cabe na janela e deltaSetup é menor que zero
-        std::cout << std::endl;
-        std::cout << "Fazendo modificação de setup no valor de " << currMinus;
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Fazendo modificação de setup no valor de " << currMinus;
+        //std::cout << std::endl;
 
         // alterar setup do projeto seguinte: posterga início
         std::list<Alocacao>::iterator itr = std::next(this->_alocacoes[sonda].begin(), posicaoAloc);
@@ -2018,17 +2018,17 @@ void AlocacoesList::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc
     // insere
     if (posicaoAloc == 999) // 999 é a posição que indica inserção no final
     {
-        std::cout << std::endl;
-        std::cout << "Inserindo no final.";
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Inserindo no final.";
+        //std::cout << std::endl;
 
         this->_alocacoes[sonda].push_back(x);
     }
     else
     {
-        std::cout << std::endl;
-        std::cout << "Inserindo na posição " << posicaoAloc;
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Inserindo na posição " << posicaoAloc;
+        //std::cout << std::endl;
 
         std::list<Alocacao>::iterator posicao = std::next(this->_alocacoes[sonda].begin(), posicaoAloc);
         this->_alocacoes[sonda].insert(posicao, x);
@@ -2071,9 +2071,9 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
     // se projeto é a última alocação
     if (std::next(posicao, 1) == this->_alocacoes[sonda].end())
     {
-        std::cout << std::endl;
-        std::cout << "Removendo última alocação.";
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Removendo última alocação.";
+        //std::cout << std::endl;
 
         // remove
         this->_alocacoes[sonda].erase(posicao);
@@ -2099,9 +2099,9 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
 
         if (deltaDesloc == 0)
         {
-            std::cout << std::endl;
-            std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
+            //std::cout << std::endl;
 
             // remove
             this->_alocacoes[sonda].erase(posicao);
@@ -2110,9 +2110,9 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
         }
         else if (deltaDesloc < 0)
         {
-            std::cout << std::endl;
-            std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Removendo alocação com deltaSetup: " << deltaDesloc;
+            //std::cout << std::endl;
 
             // altera projeto seguinte
             std::list<Alocacao>::iterator itrNext = std::next(posicao, 1);
@@ -2159,10 +2159,10 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
             // se espaço para trás basta
             if (deltaLeftDisp >= deltaDesloc)
             {
-                std::cout << std::endl;
-                std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
-                std::cout << "Espaço disponível para trás é suficiente: " << deltaLeftDisp << std::endl;
-                std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
+                //std::cout << "Espaço disponível para trás é suficiente: " << deltaLeftDisp << std::endl;
+                //std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
 
                 Projeto projetoTemp = itrNext->getProjeto();
                 Sonda sondaTemp = itrNext->getSonda();
@@ -2176,12 +2176,12 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
             }
             else if ( (deltaLeftDisp + deltaRightDisp) >= deltaDesloc)
             {
-                std::cout << std::endl;
-                std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
-                std::cout << "Espaço disponível para trás e para frente são suficientes."<< std::endl;
-                std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
-                std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
-                std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
+                //std::cout << std::endl;
+                //std::cout << "deltaSetup positivo>: " << deltaDesloc << std::endl;
+                //std::cout << "Espaço disponível para trás e para frente são suficientes."<< std::endl;
+                //std::cout << "Espaço disponível para trás: " << deltaLeftDisp << std::endl;
+                //std::cout << "Espaço disponível para frente: " << deltaRightDisp << std::endl;
+                //std::cout << "Removendo projeto alterando próxima alocação" << std::endl;
 
                 Projeto projetoTemp = itrNext->getProjeto();
                 Sonda sondaTemp = itrNext->getSonda();

@@ -1343,7 +1343,33 @@ void Testador::testarConstrutorHeuristico()
     std::cout << std::endl;
     std::cout << "################### Testando classe construtor heuristico ###################" << std::endl;
 
-    // TODO
+    // ler dataset
+    std::string filename;
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancia_10projetos_2sondas_delta_t28.dat";
+    LeitorDeDados leitor;
+    DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
+
+    ConstrutorHeuristico construtor{};
+    construtor.setAlpha(0.99);
+    construtor.setCriterio(1);
+    construtor.setEstrutura(1);
+    construtor.setModoRealoc(1);
+
+    long long tempo;
+    std::map<Sonda, std::vector<Alocacao>> alocsMap;
+    double fitness;
+    double gastos;
+    int totalFree;
+    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = construtor.ConstruirSolucao(dataset);
+
+    std::cout << std::endl;
+    std::cout << "A solução tem: " << std::endl;
+    std::cout << "fitness: " << fitness << std::endl;
+    std::cout << "gastos: " << gastos << std::endl;
+    std::cout << "total free: " << totalFree << std::endl;
+    std::cout << "Alocações:" << std::endl;
+    AlocacoesVector alocs{alocsMap, dataset.getDelta()};
+    alocs.print();
 
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;

@@ -154,19 +154,19 @@ void ConstrutorHeuristico::setModoRealoc(int modoRealoc)
     assert( (modoRealoc==0) || (modoRealoc==1) );
 }
 
-std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset)
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
-    std::cout << std::endl;
-    std::cout << "Construindo solução ===================================================";
-    std::cout << std::endl;
+    //std::cout << std::endl;
+    //std::cout << "Construindo solução ===================================================";
+    //std::cout << std::endl;
 
     // inicializa solução
     Solucao solucao{this->_estrutura, dataset};
 
-    std::cout << "Mostrando solução inicial " << std::endl;
-    solucao.print();
+    //std::cout << "Mostrando solução inicial " << std::endl;
+    //solucao.print();
 
     // inicializa vetor de projetos não alocados
     std::vector<Projeto> projetos = dataset.getProjetos();
@@ -211,15 +211,15 @@ std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada d
     std::vector<Sonda> sondas = dataset.getSondas();
 
     // enquanto nenhuma restrição for alcançada
-    while ( (dataset.getCapitalTotal() < solucao.getGastos()) && (!candidatos.empty()))
+    while ( (dataset.getCapitalTotal() > solucao.getGastos()) && (candidatos.empty() == false))
     {
-        std::cout << std::endl;
-        std::cout << "Mostrando projetos candidatos ordenados (nome, critério): ";
-        for (std::vector<std::pair<double, Projeto>>::iterator itP=candidatos.begin(); itP!=candidatos.end(); ++itP)
-        {
-            std::cout << "(" << (*itP).second.getNome() << ", " << (*itP).first << ")";
-        }
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Mostrando projetos candidatos ordenados (nome, critério): ";
+        //for (std::vector<std::pair<double, Projeto>>::iterator itP=candidatos.begin(); itP!=candidatos.end(); ++itP)
+        //{
+        //    std::cout << "(" << (*itP).second.getNome() << ", " << (*itP).first << ")" << ", ";
+        //}
+        //std::cout << std::endl;
 
         // escolhe projeto
         double sMin = candidatos[0].first;
@@ -242,10 +242,10 @@ std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada d
             int projIdx = rand()%(posMax - posMin + 1) + posMin;
             projeto = candidatos[projIdx].second;
             
-            std::cout << std::endl;
-            std::cout << "Projeto escolhido (nome, critério): (" << projeto.getNome() << ", " 
-                                                                  << candidatos[projIdx].first << ")";
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Projeto escolhido (nome, critério): (" << projeto.getNome() << ", " 
+            //                                                      << candidatos[projIdx].first << ")";
+            //std::cout << std::endl;
 
             candidatos.erase(std::next(candidatos.begin(), projIdx));
         }
@@ -276,9 +276,9 @@ std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada d
             // buscar janela viável
             Sonda sonda = *itrS;
 
-            std::cout << std::endl;
-            std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
-            std::cout << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+            //std::cout << std::endl;
 
             int modo = this->_modoRealoc;
             bool alocExiste = false;
@@ -293,14 +293,14 @@ std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada d
                                                                     solucao.buscarJanelaViavel(sonda, projeto, modo);
 
             // mostra resultados da busca
-            std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
-            std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
-            std::cout << "prevMinus: " << prevMinus << std::endl;
-            std::cout << "currMinus: " << currMinus << std::endl;
-            std::cout << "currPlus: " << currPlus << std::endl;
-            std::cout << "nextPlus: " << nextPlus << std::endl;
-            std::cout << "Intervalo para alocação: " << std::endl;
-            intervaloAloc.print();
+            //std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+            //std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+            //std::cout << "prevMinus: " << prevMinus << std::endl;
+            //std::cout << "currMinus: " << currMinus << std::endl;
+            //std::cout << "currPlus: " << currPlus << std::endl;
+            //std::cout << "nextPlus: " << nextPlus << std::endl;
+            //std::cout << "Intervalo para alocação: " << std::endl;
+            //intervaloAloc.print();
 
             // se viável, insere
             if (alocExiste)
@@ -308,25 +308,208 @@ std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada d
                 solucao.inserirProjeto(sonda, projeto, posicaoAloc, intervaloAloc, prevMinus, 
                                                 currMinus, currPlus, nextPlus, caso);
                 
-                std::cout << "Mostrando alocações após inserção do projeto " << projeto.getNome() << std::endl;
-                solucao.print();
+                //std::cout << "Mostrando alocações após inserção do projeto " << projeto.getNome() << std::endl;
+                //solucao.print();
+
+                break;
             }
         }
     }
 
-    std::cout << std::endl;
-    std::cout << "Solução construída =============================================";
-    std::cout << std::endl;
+    //std::cout << std::endl;
+    //std::cout << "Solução construída =============================================";
+    //std::cout << std::endl;
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     long long tempo = duration.count();
 
-    return std::make_tuple(solucao, tempo);
+    std::map<Sonda, std::vector<Alocacao>> alocs = solucao.getAlocacoes();
+    double fitness = solucao.getFitness();
+    double custo = solucao.getGastos();
+    int totalFree = solucao.getTotalFree();
+    return std::make_tuple(tempo, alocs, fitness, custo, totalFree);
 }
 
-std::tuple<Solucao, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes)
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes)
 {
-    // TODO
+    auto start = std::chrono::high_resolution_clock::now();
+
+    //std::cout << std::endl;
+    //std::cout << "Construindo solução ===================================================";
+    //std::cout << std::endl;
+
+    // inicializa solução
+    Solucao solucao{alocacoes, this->_estrutura, dataset};
+
+    //std::cout << "Mostrando solução inicial " << std::endl;
+    //solucao.print();
+
+    // inicializa vetor de projetos não alocados
+    std::set<Projeto> projetosSet = solucao.getProjetosNaoAlocados();
+    std::vector<Projeto> projetos;
+    for (std::set<Projeto>::iterator it=projetosSet.begin(); it!=projetosSet.end(); ++it)
+    {
+        projetos.push_back(*it);
+    }
+
+    // calcula critério guloso e guarda num vetor de tupla
+    std::vector<std::pair<double, Projeto>> candidatos;
+    for (std::vector<Projeto>::iterator itrP=projetos.begin(); itrP!=projetos.end(); ++itrP)
+    {
+        Projeto x = *itrP;
+
+        // calcula critério
+        double y;
+        if (this->_criterio == 1)
+        {
+            y = x.getMiVpl() / x.getCusto();
+        }
+        else if (this->_criterio == 2)
+        {
+            y = x.getMiVpl();
+        }
+        else if (this->_criterio == 3)
+        {
+            y = x.getMiVpl() / x.getTempExec();
+        }
+        else if (this->_criterio == 4)
+        {
+            y = - x.getTempExec();
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << "Critério inválido! ====================================== ERRO!";
+            std::cout << std::endl;
+        }
+        candidatos.push_back(std::make_pair(y, x));
+    }
+
+    // ordena candidatos pelo critério guloso (crescente)
+    std::sort(candidatos.begin(), candidatos.end());
+
+    // inicializa sondas
+    std::vector<Sonda> sondas = dataset.getSondas();
+
+    // enquanto nenhuma restrição for alcançada
+    while ( (dataset.getCapitalTotal() > solucao.getGastos()) && (candidatos.empty() == false))
+    {
+        //std::cout << std::endl;
+        //std::cout << "Mostrando projetos candidatos ordenados (nome, critério): ";
+        //for (std::vector<std::pair<double, Projeto>>::iterator itP=candidatos.begin(); itP!=candidatos.end(); ++itP)
+        //{
+        //    std::cout << "(" << (*itP).second.getNome() << ", " << (*itP).first << ")" << ", ";
+        //}
+        //std::cout << std::endl;
+
+        // escolhe projeto
+        double sMin = candidatos[0].first;
+        double sMax = candidatos[candidatos.size() - 1].first;
+        double cutoff = sMin + this->_alpha*(sMax - sMin);
+        int posMax = candidatos.size() - 1;
+        int posMin = -1;
+        for (std::vector<std::pair<double, Projeto>>::iterator itP=candidatos.begin(); itP!=candidatos.end(); ++itP)
+        {
+            posMin++;
+            double x = (*itP).first;
+            if (x >= cutoff)
+            {
+                break;
+            }
+        }
+        Projeto projeto{};
+        if ((posMin >= 0) && (posMin <= posMax))
+        {
+            int projIdx = rand()%(posMax - posMin + 1) + posMin;
+            projeto = candidatos[projIdx].second;
+            
+            //std::cout << std::endl;
+            //std::cout << "Projeto escolhido (nome, critério): (" << projeto.getNome() << ", " 
+            //                                                      << candidatos[projIdx].first << ")";
+            //std::cout << std::endl;
+
+            candidatos.erase(std::next(candidatos.begin(), projIdx));
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << "Posições inválidas! ================================ ERRO!" << std::endl;
+            std::cout << "posição mínima: " << posMin << std::endl;
+            std::cout << "posição máxima: " << posMax << std::endl;
+            assert((posMin >= 0) && (posMin <= posMax));
+        }
+
+        // se projeto não aumenta função objetivo, pular
+        if (projeto.getMiVpl() <= 0)
+        {
+            continue;
+        }
+
+        // se inserir projeto ultrapassa restrição de gastos, pular
+        if (projeto.getCusto() + solucao.getGastos() > dataset.getCapitalTotal())
+        {
+            continue;
+        }
+
+        // para cada sonda
+        for (std::vector<Sonda>::iterator itrS=sondas.begin(); itrS!=sondas.end(); ++itrS)
+        {
+            // buscar janela viável
+            Sonda sonda = *itrS;
+
+            //std::cout << std::endl;
+            //std::cout << "Buscando janela viável para o projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+            //std::cout << std::endl;
+
+            int modo = this->_modoRealoc;
+            bool alocExiste = false;
+            int posicaoAloc = -1;
+            Intervalo intervaloAloc{};
+            int prevMinus = 0;
+            int currMinus = 0;
+            int currPlus = 0;
+            int nextPlus = 0;
+            int caso = 0;
+            std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
+                                                                    solucao.buscarJanelaViavel(sonda, projeto, modo);
+
+            // mostra resultados da busca
+            //std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
+            //std::cout << "Posição para alocação: " << posicaoAloc << std::endl;
+            //std::cout << "prevMinus: " << prevMinus << std::endl;
+            //std::cout << "currMinus: " << currMinus << std::endl;
+            //std::cout << "currPlus: " << currPlus << std::endl;
+            //std::cout << "nextPlus: " << nextPlus << std::endl;
+            //std::cout << "Intervalo para alocação: " << std::endl;
+            //intervaloAloc.print();
+
+            // se viável, insere
+            if (alocExiste)
+            {
+                solucao.inserirProjeto(sonda, projeto, posicaoAloc, intervaloAloc, prevMinus, 
+                                                currMinus, currPlus, nextPlus, caso);
+                
+                //std::cout << "Mostrando alocações após inserção do projeto " << projeto.getNome() << std::endl;
+                //solucao.print();
+
+                break;
+            }
+        }
+    }
+
+    //std::cout << std::endl;
+    //std::cout << "Solução construída =============================================";
+    //std::cout << std::endl;
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    long long tempo = duration.count();
+
+    std::map<Sonda, std::vector<Alocacao>> alocs = solucao.getAlocacoes();
+    double fitness = solucao.getFitness();
+    double custo = solucao.getGastos();
+    int totalFree = solucao.getTotalFree();
+    return std::make_tuple(tempo, alocs, fitness, custo, totalFree);
 }
 

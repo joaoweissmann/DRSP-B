@@ -66,10 +66,10 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
 
     if (infile.is_open())
     {
-        std::cout << std::endl << std::endl;
-        std::cout << "Arquivo aberto corretamente." << std::endl;
-        std::cout << "Lendo dados..." << std::endl;
-        std::cout << std::endl;
+        //std::cout << std::endl << std::endl;
+        //std::cout << "Arquivo aberto corretamente." << std::endl;
+        //std::cout << "Lendo dados..." << std::endl;
+        //std::cout << std::endl;
         
         int nProjetos, tInit, tFinal, delta, nPeriodos;
         double capitalTotal;
@@ -272,7 +272,7 @@ DadosDeEntrada LeitorDeDados::lerDadosDeEntrada(std::string filename)
         // fechar aquivo
         infile.close();
 
-        std::cout << "Dados lidos." << std::endl;
+        //std::cout << "Dados lidos." << std::endl;
 
         return dataset;
     }
