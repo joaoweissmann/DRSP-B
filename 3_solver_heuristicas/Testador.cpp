@@ -1371,6 +1371,22 @@ void Testador::testarConstrutorHeuristico()
     AlocacoesVector alocs{alocsMap, dataset.getDelta()};
     alocs.print();
 
+    VerificadorDeSolucao verificador{};
+    Solucao solut{alocsMap, construtor.getEstrutura(), dataset};
+    bool viavel = verificador.verificarSolucao(solut, dataset);
+    if (viavel)
+    {
+        std::cout << std::endl;
+        std::cout << "Solução viável: " << viavel;
+        std::cout << std::endl;
+    }
+    else
+    {
+        std::cout << std::endl;
+        std::cout << "Solução INviável: " << viavel;
+        std::cout << std::endl;
+    }
+
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;
 }

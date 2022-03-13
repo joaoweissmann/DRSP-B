@@ -28,6 +28,7 @@
 #include "AlocacoesList.h"
 #include "Solucao.h"
 #include "ConstrutorHeuristico.h"
+#include "VerificadorDeSolucao.h"
 
 class Testador
 {
