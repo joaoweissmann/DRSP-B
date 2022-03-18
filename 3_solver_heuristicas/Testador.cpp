@@ -1371,6 +1371,7 @@ void Testador::testarConstrutorHeuristico()
     AlocacoesVector alocs{alocsMap, dataset.getDelta()};
     alocs.print();
 
+    // testando verificador de solução ------------------------------
     VerificadorDeSolucao verificador{};
     Solucao solut{alocsMap, construtor.getEstrutura(), dataset};
     bool viavel = verificador.verificarSolucao(solut, dataset);
@@ -1386,6 +1387,28 @@ void Testador::testarConstrutorHeuristico()
         std::cout << "Solução INviável: " << viavel;
         std::cout << std::endl;
     }
+    // --------------------------------------------------------------
+
+    // testando movimentador em vizinhanças -------------------------
+    std::cout << "Testando vizinhanças XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+    MovimentadorEmVizinhancas movimentador{};
+
+    // shift1x0InterRota
+    std::map<Sonda, std::vector<Alocacao>> newAlocsMap;
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaShift1x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaShift2x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap1x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    Solucao solutTemp{newAlocsMap, construtor.getEstrutura(), dataset};
+    viavel = verificador.verificarSolucao(solutTemp, dataset);
+    std::cout << "Nova solução encontrada, após shift1x0interRota, com: " << std::endl;
+    std::cout << "fitness: " << newFitness << ", gastos: " << newGastos << ", totalFree: " << newTotalFree << std::endl;
+    std::cout << "Solução viável(?): " << viavel << std::endl;
+
+    // --------------------------------------------------------------
 
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;

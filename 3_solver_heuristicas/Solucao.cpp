@@ -167,6 +167,11 @@ std::map<Sonda, std::vector<Alocacao>> Solucao::getAlocacoes()
     return this->_ptrAlocacoes->getAlocacoes();
 }
 
+std::set<Sonda> Solucao::getSondas()
+{
+    return this->_ptrAlocacoes->getSondas();
+}
+
 std::tuple<bool, int, Intervalo, int, int, int, int, int> Solucao::buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo)
 {
     return this->_ptrAlocacoes->buscarJanelaViavel(sonda, projeto, modo, this->_deltaT);

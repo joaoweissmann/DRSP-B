@@ -373,9 +373,18 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
+Solução híbrida
+    - warm start
+
 Anotar lições aprendidas no mestrado
 
 Rever operações das classes implementadas e verificar se posso deixar mais eficiente
+
+Usar enums para parâmetros 1, 2, 3, 4
+
+Incluir pré-processamento na busca local
+
+Implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
 
 Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 
@@ -383,13 +392,49 @@ Rever gerador de instâncias
 
 Listar produtos que já tenho
 
-Classe pré-processamento
-
 Classe movimentador em vizinhanças
+    shift_1x0_interrota --------------------------------------------- OK
+    shift_2x0_interrota --------------------------------------------- OK
+    swap_1x1_interrota --------------------------------------------- OK
+    swap_2x1_interrota --------------------------------------------- OK
+    swap_2x2_interrota --------------------------------------------- OK
+    reinserção_1_intrarota
+    reinserção_2_intrarota
+    inserir_novo_fo
+    swap_1x1_fo
+    swap_1x2_fo
+    swap_2x1_fo
+    swap_2x2_fo
+    
+    buscaShift_1x0_interrota --------------------------------------- OK
+    buscaShift_2x0_interrota --------------------------------------- OK
+    buscaSwap_1x1_interrota --------------------------------------- OK
+    buscaSwap_2x1_interrota --------------------------------------- OK
+    buscaSwap_2x2_interrota --------------------------------------- OK
+    buscaReinserção_1_intrarota
+    buscaReinserção_2_intrarota
+    buscaInserir_novo_fo
+    buscaSwap_1x1_fo
+    buscaSwap_1x2_fo
+    buscaSwap_2x1_fo
+    buscaSwap_2x2_fo
+    
+    perturbaShift_1x0_interrota 
+    perturbaShift_2x0_interrota
+    perturbaSwap_1x1_interrota 
+    perturbaSwap_2x1_interrota
+    perturbaSwap_2x2_interrota
+    perturbaReinserção_1_intrarota
+    perturbaReinserção_2_intrarota
+    perturbaInserir_novo_fo
+    perturbaSwap_1x1_fo
+    perturbaSwap_1x2_fo
+    perturbaSwap_2x1_fo
+    perturbaSwap_2x2_fo
+
+Classe executador de busca local
 
 Classe para rodar metaheurísticas
-    - mult start heuristic
-    - iterated greedy
 
 ---------------------------------
 Observações e dúvidas:
@@ -447,8 +492,8 @@ Janeiro
 Fevereiro
     - Escrever classe construtor heurístico -------------------------------------------------- OK
     - Escrever classe verificador de solução ------------------------------------------------- OK
-    - Escrever classe pré-processamento  --------------------------------------------------- FAZENDO
-    - Escrever classe movimentador em vizinhanças 
+    - Escrever classe pré-processamento  --------------------------------------------------- OK
+    - Escrever classe movimentador em vizinhanças  --------------------------------------- FAZENDO
     - Escrever classe busca local
     - Escrever classe executador de metaheurísticas
 

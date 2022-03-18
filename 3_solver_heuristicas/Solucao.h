@@ -46,6 +46,7 @@ class Solucao
         double getFitness();
         int getTotalFree();
         std::map<Sonda, std::vector<Alocacao>> getAlocacoes();
+        std::set<Sonda> getSondas();
 
         std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo);
 

@@ -2085,7 +2085,8 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
     {
         // verifica mudança de setup
         CalculadorDeDesloc calc{};
-        int oldDesloc=0, newDesloc=0, deltaDesloc=0;
+        double oldDesloc=0, newDesloc=0;
+        int deltaDesloc=0;
         oldDesloc = calc.getDesloc(projeto, std::next(posicao, 1)->getProjeto(), deltaT);
         if (posicao == this->_alocacoes[sonda].begin())
         {
@@ -2095,7 +2096,7 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
         {
             newDesloc = calc.getDesloc(std::prev(posicao, 1)->getProjeto(), std::next(posicao, 1)->getProjeto(), deltaT);
         }
-        deltaDesloc = newDesloc - oldDesloc;
+        deltaDesloc = (int)newDesloc - (int)oldDesloc;
 
         if (deltaDesloc == 0)
         {
@@ -2140,7 +2141,7 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
             else
             {
                 int temp1 = itrNext->getProjeto().getInicioJanela();
-                int temp2 = std::prev(posicao, 1)->getIntervalo().getFinal();
+                int temp2 = std::prev(posicao, 1)->getIntervalo().getFinal() + 1;
                 deltaLeftDisp = itrNext->getIntervalo().getInicio() - std::max(temp1, temp2);
             }
 
@@ -2152,7 +2153,7 @@ bool AlocacoesList::removerProjeto(Sonda sonda, Projeto projeto, int deltaT)
             else
             {
                 int temp1 = itrNext->getProjeto().getFinalJanela();
-                int temp2 = std::next(itrNext, 1)->getIntervalo().getInicio();
+                int temp2 = std::next(itrNext, 1)->getIntervalo().getInicio() - 1;
                 deltaRightDisp = std::min(temp1, temp2) - itrNext->getIntervalo().getFinal();
             }
 

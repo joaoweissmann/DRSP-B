@@ -13,10 +13,11 @@
 # limitations under the License.
 
 objects = main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o Intervalo.o \
-Alocacao.o AlocacoesVector.o AlocacoesList.o Solucao.o ConstrutorHeuristico.o VerificadorDeSolucao.o
+Alocacao.o AlocacoesVector.o AlocacoesList.o Solucao.o ConstrutorHeuristico.o VerificadorDeSolucao.o \
+MovimentadorEmVizinhancas.o
 
 headers = Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h Intervalo.h Alocacao.h Alocacoes.h \
-AlocacoesVector.h AlocacoesList.h Solucao.h ConstrutorHeuristico.h VerificadorDeSolucao.h
+AlocacoesVector.h AlocacoesList.h Solucao.h ConstrutorHeuristico.h VerificadorDeSolucao.h MovimentadorEmVizinhancas.h
 
 CFLAGS = -std=c++11 -O2 # -Wall
 
@@ -66,6 +67,9 @@ ConstrutorHeuristico.o: ConstrutorHeuristico.cpp $(headers)
 
 VerificadorDeSolucao.o: VerificadorDeSolucao.cpp $(headers)
 	g++ -c -o VerificadorDeSolucao.o $(CFLAGS) VerificadorDeSolucao.cpp
+
+MovimentadorEmVizinhancas.o: MovimentadorEmVizinhancas.cpp $(headers)
+	g++ -c -o MovimentadorEmVizinhancas.o $(CFLAGS) MovimentadorEmVizinhancas.cpp
 
 clean:
 	rm -rf *.o *~ metaheuristicas
