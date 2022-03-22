@@ -1573,6 +1573,331 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     return std::make_tuple(tempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT)
+{
+    // inicializa conjunto de vizinhanças
+    std::set<int> vizinhancas;
+    vizinhancas.insert(1);
+    vizinhancas.insert(2);
+    vizinhancas.insert(3);
+    vizinhancas.insert(4);
+    vizinhancas.insert(5);
+    vizinhancas.insert(6);
+    vizinhancas.insert(7);
+    vizinhancas.insert(8);
+    vizinhancas.insert(9);
+    vizinhancas.insert(10);
+    vizinhancas.insert(11);
+    vizinhancas.insert(12);
+
+    // inicializa valores a serem retornados
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+
+    // inicializa bests
+    Solucao bestSolucao{alocsMap, estrutura, dataset};
+    double bestFitness = bestSolucao.getFitness();
+    double bestGastos = bestSolucao.getGastos();
+    int bestTotalFree = bestSolucao.getTotalFree();
+    long long bestTempo = 0;
+    std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // enquanto ainda tem vizinhaças
+    while (vizinhancas.empty() == false)
+    {
+        // seleciona vizinhança
+        int vizinhanca = *(vizinhancas.begin());
+
+        // remove vizinhança do conjunto
+        vizinhancas.erase(vizinhancas.begin());
+
+        // faz busca pela vizinhança
+        if (vizinhanca == 1)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift1x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 2)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift2x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 3)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 4)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 5)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 6)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao1IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 7)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao2IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 8)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaInserirNovoFO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 9)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 10)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 11)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 12)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+
+        // se melhora FO
+        if (newFitness > bestFitness)
+        {
+            // reinsere vizinhança
+            vizinhancas.insert(vizinhanca);
+
+            // substitui bests
+            bestAlocsMap = alocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+        }
+    }
+    return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
+}
+
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT)
+{
+    // inicializa conjunto de vizinhanças
+    std::set<int> vizinhancas;
+    vizinhancas.insert(1);
+    vizinhancas.insert(2);
+    vizinhancas.insert(3);
+    vizinhancas.insert(4);
+    vizinhancas.insert(5);
+    vizinhancas.insert(6);
+    vizinhancas.insert(7);
+    vizinhancas.insert(8);
+    vizinhancas.insert(9);
+    vizinhancas.insert(10);
+    vizinhancas.insert(11);
+    vizinhancas.insert(12);
+
+    // inicializa valores a serem retornados
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+
+    // inicializa bests
+    Solucao bestSolucao{alocsMap, estrutura, dataset};
+    double bestFitness = bestSolucao.getFitness();
+    double bestGastos = bestSolucao.getGastos();
+    int bestTotalFree = bestSolucao.getTotalFree();
+    long long bestTempo = 0;
+    std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // enquanto ainda tem vizinhaças
+    while (vizinhancas.empty() == false)
+    {
+        // seleciona vizinhança
+        int idx = rand() % vizinhancas.size();
+        std::set<int>::iterator itr = std::next(vizinhancas.begin(), idx);
+        int vizinhanca = *(itr);
+
+        // remove vizinhança do conjunto
+        vizinhancas.erase(*itr);
+
+        // faz busca pela vizinhança
+        if (vizinhanca == 1)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift1x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 2)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift2x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 3)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 4)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 5)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 6)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao1IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 7)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao2IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 8)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaInserirNovoFO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 9)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 10)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 11)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+        else if (vizinhanca == 12)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+        }
+
+        // se melhora FO
+        if (newFitness > bestFitness)
+        {
+            // reinsere vizinhança
+            vizinhancas.insert(vizinhanca);
+
+            // substitui bests
+            bestAlocsMap = alocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+        }
+    }
+    return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
+}
+
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaLocal(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                          DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca)
+{
+    // inicializa valores a serem retornados
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+
+    // faz busca pela vizinhança
+    if (vizinhanca == 1)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift1x0InterRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 2)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift2x0InterRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 3)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1InterRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 4)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1InterRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 5)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2InterRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 6)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao1IntraRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 7)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao2IntraRota(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 8)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaInserirNovoFO(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 9)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1FO(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 10)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1FO(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 11)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x2FO(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 12)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2FO(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 13)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaVND(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    else if (vizinhanca == 14)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaRVND(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta());
+    }
+    return std::make_tuple(newTempo, alocsMap, newFitness, newGastos, newTotalFree);
+}
+
 std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaShift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, int k)
 {
@@ -2401,5 +2726,146 @@ std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaSwap2x
         }
         return alocsMap;
     }
+}
+
+std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaAleatorio(std::map<Sonda, std::vector<Alocacao>> alocsMap,
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k)
+{
+    // inicializa conjunto de vizinhanças
+    std::set<int> vizinhancas;
+    vizinhancas.insert(1);
+    vizinhancas.insert(2);
+    vizinhancas.insert(3);
+    vizinhancas.insert(4);
+    vizinhancas.insert(5);
+    vizinhancas.insert(6);
+    vizinhancas.insert(7);
+    vizinhancas.insert(8);
+    vizinhancas.insert(9);
+    vizinhancas.insert(10);
+    vizinhancas.insert(11);
+    vizinhancas.insert(12);
+
+    int count = 0;
+    while (count < k)
+    {
+        // seleciona vizinhança
+        int idx = rand() % vizinhancas.size();
+        std::set<int>::iterator itr = std::next(vizinhancas.begin(), idx);
+        int vizinhanca = *(itr);
+
+        // faz busca pela vizinhança
+        if (vizinhanca == 1)
+        {
+            alocsMap = perturbaShift1x0InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 2)
+        {
+            alocsMap = perturbaShift2x0InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 3)
+        {
+            alocsMap = perturbaSwap1x1InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 4)
+        {
+            alocsMap = perturbaSwap2x1InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 5)
+        {
+            alocsMap = perturbaSwap2x2InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 6)
+        {
+            alocsMap = perturbaReinsercao1InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 7)
+        {
+            alocsMap = perturbaReinsercao2InterRota(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 8)
+        {
+            alocsMap = perturbaInserirNovoFO(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 9)
+        {
+            alocsMap = perturbaSwap1x1FO(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 10)
+        {
+            alocsMap = perturbaSwap2x1FO(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 11)
+        {
+            alocsMap = perturbaSwap1x2FO(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+        else if (vizinhanca == 12)
+        {
+            alocsMap = perturbaSwap2x2FO(alocsMap, dataset, estrutura, modoRealoc, 1);
+        }
+
+        // contabiliza movimento feito
+        count++;
+    }
+    return alocsMap;
+}
+
+std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaSolucao(std::map<Sonda, std::vector<Alocacao>> alocsMap,
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, 
+                                                                int k, int vizinhanca)
+{
+    if (vizinhanca == 1)
+    {
+        alocsMap = perturbaShift1x0InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 2)
+    {
+        alocsMap = perturbaShift2x0InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 3)
+    {
+        alocsMap = perturbaSwap1x1InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 4)
+    {
+        alocsMap = perturbaSwap2x1InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 5)
+    {
+        alocsMap = perturbaSwap2x2InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 6)
+    {
+        alocsMap = perturbaReinsercao1InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 7)
+    {
+        alocsMap = perturbaReinsercao2InterRota(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 8)
+    {
+        alocsMap = perturbaInserirNovoFO(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 9)
+    {
+        alocsMap = perturbaSwap1x1FO(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 10)
+    {
+        alocsMap = perturbaSwap2x1FO(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 11)
+    {
+        alocsMap = perturbaSwap1x2FO(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 12)
+    {
+        alocsMap = perturbaSwap2x2FO(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    else if (vizinhanca == 13)
+    {
+        alocsMap = perturbaAleatorio(alocsMap, dataset, estrutura, modoRealoc, k);
+    }
+    return alocsMap;
 }
 

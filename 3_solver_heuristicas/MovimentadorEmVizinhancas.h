@@ -84,6 +84,12 @@ class MovimentadorEmVizinhancas
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaSwap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaLocal(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca);
         
         std::map<Sonda, std::vector<Alocacao>> perturbaShift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
@@ -109,6 +115,11 @@ class MovimentadorEmVizinhancas
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
         std::map<Sonda, std::vector<Alocacao>> perturbaSwap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap,
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaAleatorio(std::map<Sonda, std::vector<Alocacao>> alocsMap,
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSolucao(std::map<Sonda, std::vector<Alocacao>> alocsMap,
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, 
+                                                                int k, int vizinhanca);
 };
 
 #endif

@@ -373,21 +373,16 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
-Ao invés de alocar na primeira janela viável, qual a melhor janela dentre todas as viáveis?
-
 Solução híbrida
     - warm start
 
-Anotar lições aprendidas no mestrado
-
-Rever operações das classes implementadas e verificar se posso deixar mais eficiente
-
-Usar enums para parâmetros 1, 2, 3, 4
-
 Incluir pré-processamento na busca local
-    - k melhores vizinhos aleatórios VS k melhores vizinhos por critérios gulosos
+    - k vizinhos aleatórios
+    - k melhores vizinhos por critérios gulosos
 
 Implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
+
+Anotar lições aprendidas no mestrado
 
 Listar produtos que já tenho
 
@@ -397,9 +392,11 @@ Rever gerador de instâncias
 
 add no verificador de solução, se gastos passa do limite
 
-Classe executador de busca local
-
 Classe para rodar metaheurísticas
+    - multstart heuristic ---------------------------------------------- 
+    - iterated greedy ------------------------------------------------- 
+    - GRASP ----------------------------------------------------------
+    - ILS --------------------------------------------------------------
 
 ---------------------------------
 Observações e dúvidas:
@@ -462,8 +459,8 @@ Fevereiro
 
 Março
     - Escrever novas perturbações ---------------------------------------------------------- OK
-    - Escrever classe busca local
-    - Escrever classe executador de metaheurísticas
+    - Escrever classe busca local ------------------------------------------------------------ OK
+    - Escrever classe executador de metaheurísticas ---------------------------------------- FAZENDO
     - Realizar experimentos
 
 Férias
@@ -512,3 +509,4 @@ LIÇÕES APRENDIDAS
 - fazer previsões realistas de cronograma
 
 - debug mode para funções complexas
+
