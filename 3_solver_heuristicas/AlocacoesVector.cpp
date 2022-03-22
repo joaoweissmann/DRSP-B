@@ -1527,6 +1527,14 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                         temp2 = std::prev(itrPrev, 1)->getIntervalo().getFinal() + 1;
                         deltaPrevDisp = itrPrev->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
+                    if (itrPrev->getIntervalo().getFinal() <= projeto.getInicioJanela())
+                    {
+                        deltaPrevDisp = 0;
+                    }
+                    else
+                    {
+                        deltaPrevDisp = std::min(deltaPrevDisp, (itrPrev->getIntervalo().getFinal() - projeto.getInicioJanela()));
+                    }
                 }
                 std::cout << std::endl;
                 std::cout << "Espaço disponível realocando projeto anterior: " << deltaPrevDisp;
@@ -1544,6 +1552,14 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                     temp1 = itr->getProjeto().getFinalJanela();
                     temp2 = std::next(itr, 1)->getIntervalo().getInicio() - 1;
                     deltaCurrDisp = std::min(temp1, temp2) - itr->getIntervalo().getFinal();
+                }
+                if (itr->getIntervalo().getInicio() >= projeto.getFinalJanela())
+                {
+                    deltaCurrDisp = 0;
+                }
+                else
+                {
+                    deltaCurrDisp = std::min(deltaCurrDisp, projeto.getFinalJanela() - itr->getIntervalo().getInicio());
                 }
                 std::cout << std::endl;
                 std::cout << "Espaço disponível realocando projeto posterior: " << deltaCurrDisp;
@@ -1724,6 +1740,14 @@ std::tuple<bool, int, Intervalo, int, int, int, int, int> AlocacoesVector::busca
                         temp2 = std::prev(itr, 1)->getIntervalo().getFinal() + 1;
                         deltaDisponivel = itr->getIntervalo().getInicio() - std::max(temp1, temp2);
                     }
+                    if (itr->getIntervalo().getFinal() <= projeto.getInicioJanela())
+                    {
+                        deltaDisponivel = 0;
+                    }
+                    else
+                    {
+                        deltaDisponivel = std::min(deltaDisponivel, itr->getIntervalo().getFinal() - projeto.getInicioJanela());
+                    }
                     std::cout << std::endl;
                     std::cout << "O espaço disponível ao realocar o projeto anterior é: " << deltaDisponivel;
                     std::cout << std::endl;
@@ -1779,6 +1803,14 @@ void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAl
 {
     std::cout << std::endl;
     std::cout << "Inserindo projeto " << projeto.getNome() << " na sonda " << sonda.getNome();
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "Valores fornecidos:";
+    std::cout << "prevMinus: " << prevMinus << std::endl;
+    std::cout << "currMinus: " << currMinus << std::endl;
+    std::cout << "currPlus: " << currPlus << std::endl;
+    std::cout << "nextPlus: " << nextPlus << std::endl;
     std::cout << std::endl;
 
     // verificar se sonda existe nas alocações
@@ -1861,9 +1893,9 @@ void AlocacoesVector::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAl
         assert ( (prevMinus==0) && (currMinus<0) && (currPlus==0) && (nextPlus==0) );
 
         // caso: cabe na janela e deltaSetup é menor que zero
-        //std::cout << std::endl;
-        //std::cout << "Fazendo modificação de setup no valor de " << currMinus;
-        //std::cout << std::endl;
+        std::cout << std::endl;
+        std::cout << "Fazendo modificação de setup no valor de " << currMinus;
+        std::cout << std::endl;
 
         // alterar setup do projeto seguinte: posterga início
         std::vector<Alocacao>::iterator itr = std::next(this->_alocacoes[sonda].begin(), posicaoAloc);

@@ -373,6 +373,8 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
+Ao invés de alocar na primeira janela viável, qual a melhor janela dentre todas as viáveis?
+
 Solução híbrida
     - warm start
 
@@ -383,54 +385,17 @@ Rever operações das classes implementadas e verificar se posso deixar mais efi
 Usar enums para parâmetros 1, 2, 3, 4
 
 Incluir pré-processamento na busca local
+    - k melhores vizinhos aleatórios VS k melhores vizinhos por critérios gulosos
 
 Implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
+
+Listar produtos que já tenho
 
 Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 
 Rever gerador de instâncias
 
-Listar produtos que já tenho
-
-Classe movimentador em vizinhanças
-    shift_1x0_interrota --------------------------------------------- OK
-    shift_2x0_interrota --------------------------------------------- OK
-    swap_1x1_interrota --------------------------------------------- OK
-    swap_2x1_interrota --------------------------------------------- OK
-    swap_2x2_interrota --------------------------------------------- OK
-    reinserção_1_intrarota
-    reinserção_2_intrarota
-    inserir_novo_fo
-    swap_1x1_fo
-    swap_1x2_fo
-    swap_2x1_fo
-    swap_2x2_fo
-    
-    buscaShift_1x0_interrota --------------------------------------- OK
-    buscaShift_2x0_interrota --------------------------------------- OK
-    buscaSwap_1x1_interrota --------------------------------------- OK
-    buscaSwap_2x1_interrota --------------------------------------- OK
-    buscaSwap_2x2_interrota --------------------------------------- OK
-    buscaReinserção_1_intrarota
-    buscaReinserção_2_intrarota
-    buscaInserir_novo_fo
-    buscaSwap_1x1_fo
-    buscaSwap_1x2_fo
-    buscaSwap_2x1_fo
-    buscaSwap_2x2_fo
-    
-    perturbaShift_1x0_interrota 
-    perturbaShift_2x0_interrota
-    perturbaSwap_1x1_interrota 
-    perturbaSwap_2x1_interrota
-    perturbaSwap_2x2_interrota
-    perturbaReinserção_1_intrarota
-    perturbaReinserção_2_intrarota
-    perturbaInserir_novo_fo
-    perturbaSwap_1x1_fo
-    perturbaSwap_1x2_fo
-    perturbaSwap_2x1_fo
-    perturbaSwap_2x2_fo
+add no verificador de solução, se gastos passa do limite
 
 Classe executador de busca local
 
@@ -493,19 +458,14 @@ Fevereiro
     - Escrever classe construtor heurístico -------------------------------------------------- OK
     - Escrever classe verificador de solução ------------------------------------------------- OK
     - Escrever classe pré-processamento  --------------------------------------------------- OK
-    - Escrever classe movimentador em vizinhanças  --------------------------------------- FAZENDO
-    - Escrever classe busca local
-    - Escrever classe executador de metaheurísticas
+    - Escrever classe movimentador em vizinhanças  ---------------------------------------- OK
 
 Março
-    - Escrever novas perturbações
-    - Adaptar ILS
-    - Escrever GRASP ILS
-    - Testar alpha e critério guloso
-    - Testar hiperparâmetros
+    - Escrever novas perturbações ---------------------------------------------------------- OK
+    - Escrever classe busca local
+    - Escrever classe executador de metaheurísticas
     - Realizar experimentos
-    - Comparar Python com C++
-    
+
 Férias
 
 ----------------------------------
@@ -551,3 +511,4 @@ LIÇÕES APRENDIDAS
 
 - fazer previsões realistas de cronograma
 
+- debug mode para funções complexas

@@ -37,13 +37,28 @@ class MovimentadorEmVizinhancas
                                                                  DadosDeEntrada dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, Alocacao alocacao2, 
                                                                  Alocacao alocacao3, Alocacao alocacao4);
-        std::map<Sonda, std::vector<Alocacao>> reinsercao1InterRota();
-        std::map<Sonda, std::vector<Alocacao>> reinsercao2InterRota();
-        std::map<Sonda, std::vector<Alocacao>> inserirNovoFO();
-        std::map<Sonda, std::vector<Alocacao>> swap1x1FO();
-        std::map<Sonda, std::vector<Alocacao>> swap2x1FO();
-        std::map<Sonda, std::vector<Alocacao>> swap1x2FO();
-        std::map<Sonda, std::vector<Alocacao>> swap2x2FO();
+        std::map<Sonda, std::vector<Alocacao>> reinsercao1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                                 Alocacao alocacao1);
+        std::map<Sonda, std::vector<Alocacao>> reinsercao2InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                                 Alocacao alocacao1, Alocacao alocacao2);
+        std::map<Sonda, std::vector<Alocacao>> inserirNovoFO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                             DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                             Sonda sonda1, Projeto projeto1);
+        std::map<Sonda, std::vector<Alocacao>> swap1x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                         Alocacao alocacao1, Projeto projeto1);
+        std::map<Sonda, std::vector<Alocacao>> swap2x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                         Alocacao alocacao1, Alocacao alocacao2, Projeto projeto1);
+        std::map<Sonda, std::vector<Alocacao>> swap1x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                         Alocacao alocacao1, Projeto projeto1, Projeto projeto2);
+        std::map<Sonda, std::vector<Alocacao>> swap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+                                                         Alocacao alocacao1, Alocacao alocacao2, 
+                                                         Projeto projeto1, Projeto projeto2);
 
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaShift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
@@ -70,18 +85,30 @@ class MovimentadorEmVizinhancas
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaSwap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT);
         
-        void perturbaShift1x0InterRota();
-        void perturbaShift2x0InterRota();
-        void perturbaSwap1x1InterRota();
-        void perturbaSwap2x1InterRota();
-        void perturbaSwap2x2InterRota();
-        void perturbaReinsercao1InterRota();
-        void perturbaReinsercao2InterRota();
-        void perturbaInserirNovoFO();
-        void perturbaSwap1x1FO();
-        void perturbaSwap2x1FO();
-        void perturbaSwap1x2FO();
-        void perturbaSwap2x2FO();
+        std::map<Sonda, std::vector<Alocacao>> perturbaShift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaShift2x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap1x1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap2x1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap2x2InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaReinsercao1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaReinsercao2InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaInserirNovoFO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap1x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap2x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap1x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
+        std::map<Sonda, std::vector<Alocacao>> perturbaSwap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap,
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k);
 };
 
 #endif

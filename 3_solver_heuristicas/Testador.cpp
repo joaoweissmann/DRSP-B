@@ -1393,19 +1393,44 @@ void Testador::testarConstrutorHeuristico()
     std::cout << "Testando vizinhanças XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
     MovimentadorEmVizinhancas movimentador{};
 
-    // shift1x0InterRota
     std::map<Sonda, std::vector<Alocacao>> newAlocsMap;
     double newFitness = 0;
     double newGastos = 0;
     int newTotalFree = 0;
     long long newTempo = 0;
+    
     //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaShift1x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
     //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaShift2x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
-    std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap1x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap1x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap2x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap2x2InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaReinsercao1IntraRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaReinsercao2IntraRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaInserirNovoFO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap1x1FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap2x1FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap1x2FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    //std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaSwap2x2FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta());
+    
+    int k = 20;
+    //newAlocsMap = movimentador.perturbaShift1x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaShift2x0InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap1x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap2x1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap2x2InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaReinsercao1InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaReinsercao2InterRota(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaInserirNovoFO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap1x1FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap2x1FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    //newAlocsMap = movimentador.perturbaSwap1x2FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+    newAlocsMap = movimentador.perturbaSwap2x2FO(alocsMap, dataset, construtor.getEstrutura(), construtor.getModoRealoc(), k);
+
     Solucao solutTemp{newAlocsMap, construtor.getEstrutura(), dataset};
     viavel = verificador.verificarSolucao(solutTemp, dataset);
-    std::cout << "Nova solução encontrada, após shift1x0interRota, com: " << std::endl;
-    std::cout << "fitness: " << newFitness << ", gastos: " << newGastos << ", totalFree: " << newTotalFree << std::endl;
+    std::cout << "Nova solução encontrada com: " << std::endl;
+    std::cout << "fitness: " << solutTemp.getFitness() << ", gastos: " << solutTemp.getGastos() << 
+                 ", totalFree: " << solutTemp.getTotalFree() << std::endl;
     std::cout << "Solução viável(?): " << viavel << std::endl;
 
     // --------------------------------------------------------------

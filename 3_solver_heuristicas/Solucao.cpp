@@ -267,9 +267,9 @@ bool Solucao::removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo)
     }
     else
     {
-        std::cout << std::endl;
-        std::cout << "Não é possível fazer a remoção do projeto.";
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << "Não é possível fazer a remoção do projeto.";
+        //std::cout << std::endl;
     }
 
     return result;
