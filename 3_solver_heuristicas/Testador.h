@@ -30,6 +30,7 @@
 #include "ConstrutorHeuristico.h"
 #include "VerificadorDeSolucao.h"
 #include "MovimentadorEmVizinhancas.h"
+#include "ExecutadorDeMetaheuristicas.h"
 
 class Testador
 {
@@ -44,6 +45,7 @@ class Testador
         void testarAlocacoes();
         void testarSolucao();
         void testarConstrutorHeuristico();
+        void testarExecutadorDeMetaheuristicas();
 };
 
 #endif

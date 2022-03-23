@@ -18,16 +18,17 @@
 int main()
 {
     Testador test;
-    // test.testarProjeto();
-    // test.testarSonda();
-    // test.testarCalculadorDeDesloc();
-    // test.testarDadosDeEntrada();
-    // test.testarLeitorDeDados();
-    // test.testarIntervalo();
-    // test.testarAlocacao();
-    // test.testarAlocacoes();
-    // test.testarSolucao();
-    test.testarConstrutorHeuristico();
+    //test.testarProjeto();
+    //test.testarSonda();
+    //test.testarCalculadorDeDesloc();
+    //test.testarDadosDeEntrada();
+    //test.testarLeitorDeDados();
+    //test.testarIntervalo();
+    //test.testarAlocacao();
+    //test.testarAlocacoes();
+    //test.testarSolucao();
+    //test.testarConstrutorHeuristico();
+    test.testarExecutadorDeMetaheuristicas();
 
     return 0;
 };

@@ -373,8 +373,14 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
+Problema expandido
+
 Solução híbrida
     - warm start
+
+Incluir aprendizado nos algoritmos
+    - algoritmo para calibração adaptativa dos parâmetros (enquanto roda)
+    - algoritmo para calibração por machine learning dos parâmetros (exemplos já rodados)
 
 Incluir pré-processamento na busca local
     - k vizinhos aleatórios
@@ -391,12 +397,6 @@ Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
 Rever gerador de instâncias
 
 add no verificador de solução, se gastos passa do limite
-
-Classe para rodar metaheurísticas
-    - multstart heuristic ---------------------------------------------- 
-    - iterated greedy ------------------------------------------------- 
-    - GRASP ----------------------------------------------------------
-    - ILS --------------------------------------------------------------
 
 ---------------------------------
 Observações e dúvidas:

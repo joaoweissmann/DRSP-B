@@ -1266,6 +1266,24 @@ void Testador::testarSolucao()
     std::cout << "Mostrando alocações iniciais =================================================" << std::endl;
     solucao1.print();
 
+    // inicializa conjunto de projetos não alocados
+    std::set<Projeto> projetosNaoAlocs = solucao1.getProjetosNaoAlocados();
+    std::cout << "Mostrando projetos não alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosNaoAlocs.begin(); itS!=projetosNaoAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
+    }
+
+    // inicializa conjunto de projetos alocados
+    std::set<Projeto> projetosAlocs = solucao1.getProjetosAlocados();
+    std::cout << "Mostrando projetos alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosAlocs.begin(); itS!=projetosAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
+    }
+
     // inserir projetos na solução
     std::vector<Projeto> projetos = dataset.getProjetos();
     Projeto projeto1 = projetos[0];
@@ -1303,6 +1321,24 @@ void Testador::testarSolucao()
         solucao1.print();
     }
 
+    // inicializa conjunto de projetos não alocados
+    projetosNaoAlocs = solucao1.getProjetosNaoAlocados();
+    std::cout << "Mostrando projetos não alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosNaoAlocs.begin(); itS!=projetosNaoAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
+    }
+
+    // inicializa conjunto de projetos alocados
+    projetosAlocs = solucao1.getProjetosAlocados();
+    std::cout << "Mostrando projetos alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosAlocs.begin(); itS!=projetosAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
+    }
+
     // mais um projeto
     Projeto projeto2 = projetos[1];
 
@@ -1326,6 +1362,24 @@ void Testador::testarSolucao()
                                         currMinus, currPlus, nextPlus, caso);
         std::cout << "Mostrando alocações após inserção do projeto " << projeto2.getNome() << std::endl;
         solucao1.print();
+    }
+
+    // inicializa conjunto de projetos não alocados
+    projetosNaoAlocs = solucao1.getProjetosNaoAlocados();
+    std::cout << "Mostrando projetos não alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosNaoAlocs.begin(); itS!=projetosNaoAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
+    }
+
+    // inicializa conjunto de projetos alocados
+    projetosAlocs = solucao1.getProjetosAlocados();
+    std::cout << "Mostrando projetos alocados" << std::endl;
+    for (std::set<Projeto>::iterator itS=projetosAlocs.begin(); itS!=projetosAlocs.end(); ++itS)
+    {
+        Projeto x = *itS;
+        std::cout << "Projeto: " << x.getNome() << std::endl;
     }
 
     std::map<Sonda, std::vector<Alocacao>> mapAlocs = solucao1.getAlocacoes();
@@ -1363,13 +1417,8 @@ void Testador::testarConstrutorHeuristico()
     std::tie(tempo, alocsMap, fitness, gastos, totalFree) = construtor.ConstruirSolucao(dataset);
 
     std::cout << std::endl;
-    std::cout << "A solução tem: " << std::endl;
-    std::cout << "fitness: " << fitness << std::endl;
-    std::cout << "gastos: " << gastos << std::endl;
-    std::cout << "total free: " << totalFree << std::endl;
-    std::cout << "Alocações:" << std::endl;
-    AlocacoesVector alocs{alocsMap, dataset.getDelta()};
-    alocs.print();
+    Solucao solucao1{alocsMap, construtor.getEstrutura(), dataset};
+    solucao1.print();
 
     // testando verificador de solução ------------------------------
     VerificadorDeSolucao verificador{};
@@ -1437,14 +1486,70 @@ void Testador::testarConstrutorHeuristico()
     std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(alocsMap, dataset, 
                                         construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta(), modoBusca);
 
-    Solucao solutTemp{newAlocsMap, construtor.getEstrutura(), dataset};
-    viavel = verificador.verificarSolucao(solutTemp, dataset);
-    std::cout << "Nova solução encontrada com: " << std::endl;
-    std::cout << "fitness: " << solutTemp.getFitness() << ", gastos: " << solutTemp.getGastos() << 
-                 ", totalFree: " << solutTemp.getTotalFree() << std::endl;
-    std::cout << "Solução viável(?): " << viavel << std::endl;
+    std::cout << std::endl;
+    Solucao solucao2{newAlocsMap, construtor.getEstrutura(), dataset};
+    solucao2.print();
 
     // --------------------------------------------------------------
+
+    std::cout << std::endl;
+    std::cout << "################### Teste concluído ###################" << std::endl;
+}
+
+void Testador::testarExecutadorDeMetaheuristicas()
+{
+    std::cout << std::endl;
+    std::cout << "################### Testando classe executador de metaheuristicas ###################" << std::endl;
+
+    // ler dataset
+    std::string filename;
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancia_10projetos_2sondas_delta_t28.dat";
+    LeitorDeDados leitor;
+    DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
+
+    int estrutura = 1;
+    int modoRealoc = 1;
+    int criterio = 1;
+    double alpha = 0.99;
+    int modoBusca = 14;
+    int modoPerturba = 13;
+    int nivelPerturba = 10;
+    ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alpha, modoBusca, modoPerturba, nivelPerturba};
+
+    int nIter = 10;
+    long long tempo;
+    std::map<Sonda, std::vector<Alocacao>> alocsMap;
+    double fitness;
+    double gastos;
+    int totalFree;
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter);
+    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter);
+
+    std::cout << std::endl;
+    std::cout << "A solução tem: " << std::endl;
+    std::cout << "Alocações:" << std::endl;
+    AlocacoesVector alocs{alocsMap, dataset.getDelta()};
+    alocs.print();
+    std::cout << "fitness: " << fitness << std::endl;
+    std::cout << "gastos: " << gastos << std::endl;
+    std::cout << "total free: " << totalFree << std::endl;
+
+    VerificadorDeSolucao verificador{};
+    Solucao solut{alocsMap, estrutura, dataset};
+    bool viavel = verificador.verificarSolucao(solut, dataset);
+    if (viavel)
+    {
+        std::cout << std::endl;
+        std::cout << "Solução viável: " << viavel;
+        std::cout << std::endl;
+    }
+    else
+    {
+        std::cout << std::endl;
+        std::cout << "Solução INviável: " << viavel;
+        std::cout << std::endl;
+    }
 
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;

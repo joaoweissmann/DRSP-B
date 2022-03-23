@@ -1278,15 +1278,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             Solucao solucaoLocal{alocsMapAlt, estrutura, dataset};
 
             // se for melhor que best
-            if (solucaoLocal.getFitness() >= bestFitness)
+            if (solucaoLocal.getFitness() > bestFitness)
             {
-                if (solucaoLocal.getTotalFree() > bestTotalFree)
-                {
-                    bestAlocsMap = solucaoLocal.getAlocacoes();
-                    bestFitness = solucaoLocal.getFitness();
-                    bestGastos = solucaoLocal.getGastos();
-                    bestTotalFree = solucaoLocal.getTotalFree();
-                }
+                bestAlocsMap = solucaoLocal.getAlocacoes();
+                bestFitness = solucaoLocal.getFitness();
+                bestGastos = solucaoLocal.getGastos();
+                bestTotalFree = solucaoLocal.getTotalFree();
             }
         }
     }
@@ -1338,15 +1335,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 Solucao solucaoLocal{alocsMapAlt, estrutura, dataset};
 
                 // se for melhor que best
-                if (solucaoLocal.getFitness() >= bestFitness)
+                if (solucaoLocal.getFitness() > bestFitness)
                 {
-                    if (solucaoLocal.getTotalFree() > bestTotalFree)
-                    {
-                        bestAlocsMap = solucaoLocal.getAlocacoes();
-                        bestFitness = solucaoLocal.getFitness();
-                        bestGastos = solucaoLocal.getGastos();
-                        bestTotalFree = solucaoLocal.getTotalFree();
-                    }
+                    bestAlocsMap = solucaoLocal.getAlocacoes();
+                    bestFitness = solucaoLocal.getFitness();
+                    bestGastos = solucaoLocal.getGastos();
+                    bestTotalFree = solucaoLocal.getTotalFree();
                 }
             }
         }
@@ -1406,15 +1400,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     Solucao solucaoLocal{alocsMapAlt, estrutura, dataset};
 
                     // se for melhor que best
-                    if (solucaoLocal.getFitness() >= bestFitness)
+                    if (solucaoLocal.getFitness() > bestFitness)
                     {
-                        if (solucaoLocal.getTotalFree() > bestTotalFree)
-                        {
-                            bestAlocsMap = solucaoLocal.getAlocacoes();
-                            bestFitness = solucaoLocal.getFitness();
-                            bestGastos = solucaoLocal.getGastos();
-                            bestTotalFree = solucaoLocal.getTotalFree();
-                        }
+                        bestAlocsMap = solucaoLocal.getAlocacoes();
+                        bestFitness = solucaoLocal.getFitness();
+                        bestGastos = solucaoLocal.getGastos();
+                        bestTotalFree = solucaoLocal.getTotalFree();
                     }
                 }
             }
@@ -1474,15 +1465,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     Solucao solucaoLocal{alocsMapAlt, estrutura, dataset};
 
                     // se for melhor que best
-                    if (solucaoLocal.getFitness() >= bestFitness)
+                    if (solucaoLocal.getFitness() > bestFitness)
                     {
-                        if (solucaoLocal.getTotalFree() > bestTotalFree)
-                        {
-                            bestAlocsMap = solucaoLocal.getAlocacoes();
-                            bestFitness = solucaoLocal.getFitness();
-                            bestGastos = solucaoLocal.getGastos();
-                            bestTotalFree = solucaoLocal.getTotalFree();
-                        }
+                        bestAlocsMap = solucaoLocal.getAlocacoes();
+                        bestFitness = solucaoLocal.getFitness();
+                        bestGastos = solucaoLocal.getGastos();
+                        bestTotalFree = solucaoLocal.getTotalFree();
                     }
                 }
             }
@@ -1551,15 +1539,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                         Solucao solucaoLocal{alocsMapAlt, estrutura, dataset};
 
                         // se for melhor que best
-                        if (solucaoLocal.getFitness() >= bestFitness)
+                        if (solucaoLocal.getFitness() > bestFitness)
                         {
-                            if (solucaoLocal.getTotalFree() > bestTotalFree)
-                            {
-                                bestAlocsMap = solucaoLocal.getAlocacoes();
-                                bestFitness = solucaoLocal.getFitness();
-                                bestGastos = solucaoLocal.getGastos();
-                                bestTotalFree = solucaoLocal.getTotalFree();
-                            }
+                            bestAlocsMap = solucaoLocal.getAlocacoes();
+                            bestFitness = solucaoLocal.getFitness();
+                            bestGastos = solucaoLocal.getGastos();
+                            bestTotalFree = solucaoLocal.getTotalFree();
                         }
                     }
                 }

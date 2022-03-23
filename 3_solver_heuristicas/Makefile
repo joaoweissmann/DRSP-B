@@ -14,10 +14,11 @@
 
 objects = main.o Testador.o Projeto.o Sonda.o CalculadorDeDesloc.o DadosDeEntrada.o LeitorDeDados.o Intervalo.o \
 Alocacao.o AlocacoesVector.o AlocacoesList.o Solucao.o ConstrutorHeuristico.o VerificadorDeSolucao.o \
-MovimentadorEmVizinhancas.o
+MovimentadorEmVizinhancas.o ExecutadorDeMetaheuristicas.o
 
 headers = Testador.h Projeto.h Sonda.h CalculadorDeDesloc.h DadosDeEntrada.h LeitorDeDados.h Intervalo.h Alocacao.h Alocacoes.h \
-AlocacoesVector.h AlocacoesList.h Solucao.h ConstrutorHeuristico.h VerificadorDeSolucao.h MovimentadorEmVizinhancas.h
+AlocacoesVector.h AlocacoesList.h Solucao.h ConstrutorHeuristico.h VerificadorDeSolucao.h MovimentadorEmVizinhancas.h \
+ExecutadorDeMetaheuristicas.h
 
 CFLAGS = -std=c++11 -O2 # -Wall
 
@@ -70,6 +71,9 @@ VerificadorDeSolucao.o: VerificadorDeSolucao.cpp $(headers)
 
 MovimentadorEmVizinhancas.o: MovimentadorEmVizinhancas.cpp $(headers)
 	g++ -c -o MovimentadorEmVizinhancas.o $(CFLAGS) MovimentadorEmVizinhancas.cpp
+
+ExecutadorDeMetaheuristicas.o: ExecutadorDeMetaheuristicas.cpp $(headers)
+	g++ -c -o ExecutadorDeMetaheuristicas.o $(CFLAGS) ExecutadorDeMetaheuristicas.cpp
 
 clean:
 	rm -rf *.o *~ metaheuristicas
