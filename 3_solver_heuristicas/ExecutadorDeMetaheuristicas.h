@@ -36,11 +36,11 @@ class ExecutadorDeMetaheuristicas
                                     int modoPerturba, int nivelPerturba);
         
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> multStartHeuristic(DadosDeEntrada dataset,
-                                                                                                        int nIter);
+                                                                                                        int nIter, int modoDebug);
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
-                                                                                                        int nIter);
+                                                                                                        int nIter, int modoDebug);
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
-                                                                                                        int nIter);
+                                                                                                        int nIter, int modoDebug);
 };
 
 #endif

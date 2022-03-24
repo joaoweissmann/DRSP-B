@@ -382,21 +382,15 @@ Incluir aprendizado nos algoritmos
     - algoritmo para calibração adaptativa dos parâmetros (enquanto roda)
     - algoritmo para calibração por machine learning dos parâmetros (exemplos já rodados)
 
-Incluir pré-processamento na busca local
-    - k vizinhos aleatórios
-    - k melhores vizinhos por critérios gulosos
+pré-processamento local dentro de cada vizinhança 
 
 Implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
+
+add no verificador de solução, se gastos passa do limite
 
 Anotar lições aprendidas no mestrado
 
 Listar produtos que já tenho
-
-Tirar jupyter notebooks do repositório e deixar apenas códigos *.py
-
-Rever gerador de instâncias
-
-add no verificador de solução, se gastos passa do limite
 
 ---------------------------------
 Observações e dúvidas:
@@ -460,8 +454,8 @@ Fevereiro
 Março
     - Escrever novas perturbações ---------------------------------------------------------- OK
     - Escrever classe busca local ------------------------------------------------------------ OK
-    - Escrever classe executador de metaheurísticas ---------------------------------------- FAZENDO
-    - Realizar experimentos
+    - Escrever classe executador de metaheurísticas ---------------------------------------- OK
+    - Realizar experimentos ----------------------------------------------------------------- FAZENDO
 
 Férias
 

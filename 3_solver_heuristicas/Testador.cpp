@@ -1078,6 +1078,8 @@ void Testador::testarAlocacoes()
     p1.setInicioJanela(130);
     p1.setFinalJanela(150);
     
+    int modoDebug = 1;
+
     // faz busca
     int modo = 1; // sem realocações: 0; com realocações 1;
     bool alocExiste = false;
@@ -1089,7 +1091,7 @@ void Testador::testarAlocacoes()
     int nextPlus = 0;
     int caso = 0;
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p1, modo, deltaT);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p1, modo, deltaT, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1105,7 +1107,7 @@ void Testador::testarAlocacoes()
     if (alocExiste)
     {
         ptrAlocsVector2->inserirProjeto(sonda1, p1, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << p1.getNome() << std::endl;
         alocsVector2.print();
     }
@@ -1129,7 +1131,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p2, modo, deltaT);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p2, modo, deltaT, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1145,14 +1147,14 @@ void Testador::testarAlocacoes()
     if (alocExiste)
     {
         ptrAlocsVector2->inserirProjeto(sonda1, p2, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << p2.getNome() << std::endl;
         alocsVector2.print();
     }
 
     // removendo projeto
     bool removido;
-    removido = ptrAlocsVector2->removerProjeto(sonda1, p1, deltaT);
+    removido = ptrAlocsVector2->removerProjeto(sonda1, p1, deltaT, modoDebug);
     std::cout << "Mostrando alocações após remoção do projeto " << p1.getNome() << std::endl;
     alocsVector2.print();
 
@@ -1169,7 +1171,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p3, modo, deltaT);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p3, modo, deltaT, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1185,7 +1187,7 @@ void Testador::testarAlocacoes()
     if (alocExiste)
     {
         ptrAlocsVector2->inserirProjeto(sonda1, p3, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << p3.getNome() << std::endl;
         alocsVector2.print();
     }
@@ -1203,7 +1205,7 @@ void Testador::testarAlocacoes()
 
     // faz busca
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p4, modo, deltaT);
+                                                            ptrAlocsVector2->buscarJanelaViavel(sonda1, p4, modo, deltaT, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1219,7 +1221,7 @@ void Testador::testarAlocacoes()
     if (alocExiste)
     {
         ptrAlocsVector2->inserirProjeto(sonda1, p4, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << p4.getNome() << std::endl;
         alocsVector2.print();
     }
@@ -1289,6 +1291,8 @@ void Testador::testarSolucao()
     Projeto projeto1 = projetos[0];
     Sonda sonda1 = *sondas.begin();
 
+    int modoDebug = 1;
+
     // faz busca
     int modo = 1; // sem realocações: 0; com realocações 1;
     bool alocExiste = false;
@@ -1300,7 +1304,7 @@ void Testador::testarSolucao()
     int nextPlus = 0;
     int caso = 0;
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            solucao1.buscarJanelaViavel(sonda1, projeto1, modo);
+                                                            solucao1.buscarJanelaViavel(sonda1, projeto1, modo, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1316,7 +1320,7 @@ void Testador::testarSolucao()
     if (alocExiste)
     {
         solucao1.inserirProjeto(sonda1, projeto1, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << projeto1.getNome() << std::endl;
         solucao1.print();
     }
@@ -1343,7 +1347,7 @@ void Testador::testarSolucao()
     Projeto projeto2 = projetos[1];
 
     std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                            solucao1.buscarJanelaViavel(sonda1, projeto2, modo);
+                                                            solucao1.buscarJanelaViavel(sonda1, projeto2, modo, modoDebug);
 
     // mostra resultados da busca
     std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -1359,7 +1363,7 @@ void Testador::testarSolucao()
     if (alocExiste)
     {
         solucao1.inserirProjeto(sonda1, projeto2, posicaoAloc, intervaloAloc, prevMinus, 
-                                        currMinus, currPlus, nextPlus, caso);
+                                        currMinus, currPlus, nextPlus, caso, modoDebug);
         std::cout << "Mostrando alocações após inserção do projeto " << projeto2.getNome() << std::endl;
         solucao1.print();
     }
@@ -1409,12 +1413,14 @@ void Testador::testarConstrutorHeuristico()
     construtor.setEstrutura(1);
     construtor.setModoRealoc(1);
 
+    int modoDebug = 1;
+
     long long tempo;
     std::map<Sonda, std::vector<Alocacao>> alocsMap;
     double fitness;
     double gastos;
     int totalFree;
-    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = construtor.ConstruirSolucao(dataset);
+    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     std::cout << std::endl;
     Solucao solucao1{alocsMap, construtor.getEstrutura(), dataset};
@@ -1484,7 +1490,7 @@ void Testador::testarConstrutorHeuristico()
 
     int modoBusca = 14;
     std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(alocsMap, dataset, 
-                                        construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta(), modoBusca);
+                                        construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta(), modoBusca, modoDebug);
 
     std::cout << std::endl;
     Solucao solucao2{newAlocsMap, construtor.getEstrutura(), dataset};
@@ -1503,9 +1509,11 @@ void Testador::testarExecutadorDeMetaheuristicas()
 
     // ler dataset
     std::string filename;
-    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancia_10projetos_2sondas_delta_t28.dat";
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancia_100projetos_10sondas_delta_t28.dat";
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
+
+    int modoDebug = 0;
 
     int estrutura = 1;
     int modoRealoc = 1;
@@ -1522,9 +1530,9 @@ void Testador::testarExecutadorDeMetaheuristicas()
     double fitness;
     double gastos;
     int totalFree;
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter);
-    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter, modoDebug);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug);
+    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug);
 
     std::cout << std::endl;
     std::cout << "A solução tem: " << std::endl;

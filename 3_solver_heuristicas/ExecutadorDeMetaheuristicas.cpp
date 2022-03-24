@@ -38,7 +38,7 @@ ExecutadorDeMetaheuristicas::ExecutadorDeMetaheuristicas(int estrutura, int modo
     this->_nivelPerturba = nivelPerturba;
 }
 
-std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::multStartHeuristic(DadosDeEntrada dataset, int nIter)
+std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::multStartHeuristic(DadosDeEntrada dataset, int nIter, int modoDebug)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
 
@@ -48,7 +48,7 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
-    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset);
+    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     // inicializa vetor de alphas
     std::vector<double> alphas;
@@ -77,7 +77,7 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
         construtor.setAlpha(alpha);
 
         // constroi nova solução
-        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset);
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -93,7 +93,7 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
 }
 
 std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASP(DadosDeEntrada dataset,
-                                                                                                                int nIter)
+                                                                                                                int nIter, int modoDebug)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
     MovimentadorEmVizinhancas movimentador{};
@@ -104,7 +104,7 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
-    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset);
+    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     // inicializa vetor de alphas
     std::vector<double> alphas;
@@ -133,11 +133,11 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
         construtor.setAlpha(alpha);
 
         // constroi nova solução
-        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset);
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
         // realiza busca local
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug);
 
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -153,7 +153,7 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
 }
 
 std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILS(DadosDeEntrada dataset,
-                                                                                                                int nIter)
+                                                                                                                int nIter, int modoDebug)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
     MovimentadorEmVizinhancas movimentador{};
@@ -164,11 +164,11 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
-    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset);
+    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     // realiza busca local
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca);
+                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug);
 
     // inicializa vetor de alphas
     std::vector<double> alphas;
@@ -193,11 +193,11 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
 
         // perturba solução
         newAlocsMap = movimentador.perturbaSolucao(newAlocsMap, dataset, this->_estrutura, this->_modoRealoc, 
-                                                    this->_nivelPerturba, this->_modoPerturba);
+                                                    this->_nivelPerturba, this->_modoPerturba, modoDebug);
 
         // realiza busca local
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug);
 
         // se for melhor que best, substitui
         if (newFitness > bestFitness)

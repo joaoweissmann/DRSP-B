@@ -48,12 +48,13 @@ class Solucao
         std::map<Sonda, std::vector<Alocacao>> getAlocacoes();
         std::set<Sonda> getSondas();
 
-        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo);
+        std::tuple<bool, int, Intervalo, int, int, int, int, int> buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo,
+                                                                                    int modoDebug);
 
         void inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
-                                     int prevMinus, int currMinus, int currPlus, int nextPlus, int caso);
+                                     int prevMinus, int currMinus, int currPlus, int nextPlus, int caso, int modoDebug);
         
-        bool removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo);
+        bool removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo, int modoDebug);
 
         void print();
 };

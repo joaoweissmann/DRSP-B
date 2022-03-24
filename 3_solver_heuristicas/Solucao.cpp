@@ -172,13 +172,14 @@ std::set<Sonda> Solucao::getSondas()
     return this->_ptrAlocacoes->getSondas();
 }
 
-std::tuple<bool, int, Intervalo, int, int, int, int, int> Solucao::buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo)
+std::tuple<bool, int, Intervalo, int, int, int, int, int> Solucao::buscarJanelaViavel(Sonda sonda, Projeto projeto, int modo,
+                                                                                      int modoDebug)
 {
-    return this->_ptrAlocacoes->buscarJanelaViavel(sonda, projeto, modo, this->_deltaT);
+    return this->_ptrAlocacoes->buscarJanelaViavel(sonda, projeto, modo, this->_deltaT, modoDebug);
 }
 
 void Solucao::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Intervalo intervalo, 
-                                     int prevMinus, int currMinus, int currPlus, int nextPlus, int caso)
+                                     int prevMinus, int currMinus, int currPlus, int nextPlus, int caso, int modoDebug)
 {
     if (this->_projetosAlocados.find(projeto) == this->_projetosAlocados.end())
     {
@@ -219,12 +220,12 @@ void Solucao::inserirProjeto(Sonda sonda, Projeto projeto, int posicaoAloc, Inte
     this->_totalFree -= intervalo.getFinal() - intervalo.getInicio() + 1;
 
     this->_ptrAlocacoes->inserirProjeto(sonda, projeto, posicaoAloc, intervalo, 
-                                        prevMinus, currMinus, currPlus, nextPlus, caso);
+                                        prevMinus, currMinus, currPlus, nextPlus, caso, modoDebug);
 }
 
-bool Solucao::removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo)
+bool Solucao::removerProjeto(Sonda sonda, Projeto projeto, Intervalo intervalo, int modoDebug)
 {
-    bool result = this->_ptrAlocacoes->removerProjeto(sonda, projeto, this->_deltaT);
+    bool result = this->_ptrAlocacoes->removerProjeto(sonda, projeto, this->_deltaT, modoDebug);
 
     if (result)
     {

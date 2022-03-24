@@ -154,7 +154,7 @@ void ConstrutorHeuristico::setModoRealoc(int modoRealoc)
     assert( (modoRealoc==0) || (modoRealoc==1) );
 }
 
-std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset)
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset, int modoDebug)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -290,7 +290,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             int nextPlus = 0;
             int caso = 0;
             std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                                    solucao.buscarJanelaViavel(sonda, projeto, modo);
+                                                                    solucao.buscarJanelaViavel(sonda, projeto, modo, modoDebug);
 
             // mostra resultados da busca
             //std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -306,7 +306,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             if (alocExiste)
             {
                 solucao.inserirProjeto(sonda, projeto, posicaoAloc, intervaloAloc, prevMinus, 
-                                                currMinus, currPlus, nextPlus, caso);
+                                                currMinus, currPlus, nextPlus, caso, modoDebug);
                 
                 //std::cout << "Mostrando alocações após inserção do projeto " << projeto.getNome() << std::endl;
                 //solucao.print();
@@ -331,7 +331,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     return std::make_tuple(tempo, alocs, fitness, custo, totalFree);
 }
 
-std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes)
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstrutorHeuristico::ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes, int modoDebug)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -472,7 +472,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             int nextPlus = 0;
             int caso = 0;
             std::tie(alocExiste, posicaoAloc, intervaloAloc, prevMinus, currMinus, currPlus, nextPlus, caso) = 
-                                                                    solucao.buscarJanelaViavel(sonda, projeto, modo);
+                                                                    solucao.buscarJanelaViavel(sonda, projeto, modo, modoDebug);
 
             // mostra resultados da busca
             //std::cout << "Janela viável encontrada? " << alocExiste << std::endl;
@@ -488,7 +488,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             if (alocExiste)
             {
                 solucao.inserirProjeto(sonda, projeto, posicaoAloc, intervaloAloc, prevMinus, 
-                                                currMinus, currPlus, nextPlus, caso);
+                                                currMinus, currPlus, nextPlus, caso, modoDebug);
                 
                 //std::cout << "Mostrando alocações após inserção do projeto " << projeto.getNome() << std::endl;
                 //solucao.print();

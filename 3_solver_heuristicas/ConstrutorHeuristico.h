@@ -48,8 +48,8 @@ class ConstrutorHeuristico
         void setEstrutura(int estrutura);
         void setModoRealoc(int modoRealoc);
 
-        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstruirSolucao(DadosDeEntrada dataset);
-        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstruirSolucao(DadosDeEntrada dataset, int modoDebug);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ConstruirSolucao(DadosDeEntrada dataset, std::map<Sonda, std::vector<Alocacao>> alocacoes, int modoDebug);
 };
 
 #endif
