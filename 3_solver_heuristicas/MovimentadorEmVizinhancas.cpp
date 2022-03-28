@@ -15,7 +15,7 @@
 #include <bits/stdc++.h>
 #include "MovimentadorEmVizinhancas.h"
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::shift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, DadosDeEntrada dataset, 
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::shift1x0InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, const DadosDeEntrada & dataset, 
                                                   int estrutura, int modoRealoc, Alocacao alocacao1, Sonda sonda2, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -51,8 +51,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::shift2x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::shift2x0InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                         const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                          Alocacao alocacao1, Alocacao alocacao2, Sonda sonda2, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -113,8 +113,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x1InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                                 const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, Alocacao alocacao2, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -176,8 +176,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x1InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                                 const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, Alocacao alocacao2, Alocacao alocacao3, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -263,8 +263,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x2InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x2InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                                 const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, Alocacao alocacao2, 
                                                                  Alocacao alocacao3, Alocacao alocacao4, int modoDebug, double fitness, double gastos, int totalFree)
 {
@@ -375,8 +375,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::reinsercao1InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::reinsercao1InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                                 const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -412,8 +412,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::reinsercao2InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::reinsercao2InterRota(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                                 const DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                                  Alocacao alocacao1, Alocacao alocacao2, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -473,8 +473,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::inserirNovoFO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                             DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::inserirNovoFO(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                             DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                              Sonda sonda1, Projeto projeto1, int modoDebug, double fitness, double gastos, int totalFree)
 {
     // check de gastos
@@ -518,8 +518,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x1FO(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                         DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                          Alocacao alocacao1, Projeto projeto1, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -573,8 +573,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x1FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x1FO(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                         DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                          Alocacao alocacao1, Alocacao alocacao2, Projeto projeto1, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -637,8 +637,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap1x2FO(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                         DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                          Alocacao alocacao1, Projeto projeto1, Projeto projeto2, int modoDebug, double fitness, double gastos, int totalFree)
 {
     Sonda sonda1 = alocacao1.getSonda();
@@ -715,8 +715,8 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     return std::make_tuple(solucaoLocal.getAlocacoes(), solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
 }
 
-std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                         DadosDeEntrada dataset, int estrutura, int modoRealoc,
+std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::swap2x2FO(const std::map<Sonda, std::vector<Alocacao>> & alocsMap, 
+                                                         DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                          Alocacao alocacao1, Alocacao alocacao2, 
                                                          Projeto projeto1, Projeto projeto2, int modoDebug, double fitness, double gastos, int totalFree)
 {
@@ -1614,23 +1614,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug)
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas)
 {
-    // inicializa conjunto de vizinhanças
-    std::set<int> vizinhancas;
-    vizinhancas.insert(1);
-    vizinhancas.insert(2);
-    vizinhancas.insert(3);
-    vizinhancas.insert(4);
-    //vizinhancas.insert(5);
-    vizinhancas.insert(6);
-    vizinhancas.insert(7);
-    vizinhancas.insert(8);
-    vizinhancas.insert(9);
-    vizinhancas.insert(10);
-    vizinhancas.insert(11);
-    //vizinhancas.insert(12);
-
     // inicializa valores a serem retornados
     double newFitness = 0;
     double newGastos = 0;
@@ -1734,23 +1719,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug)
+                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas)
 {
-    // inicializa conjunto de vizinhanças
-    std::set<int> vizinhancas;
-    vizinhancas.insert(1);
-    vizinhancas.insert(2);
-    vizinhancas.insert(3);
-    vizinhancas.insert(4);
-    //vizinhancas.insert(5);
-    vizinhancas.insert(6);
-    vizinhancas.insert(7);
-    vizinhancas.insert(8);
-    vizinhancas.insert(9);
-    vizinhancas.insert(10);
-    vizinhancas.insert(11);
-    //vizinhancas.insert(12);
-
     // inicializa valores a serem retornados
     double newFitness = 0;
     double newGastos = 0;
@@ -1856,7 +1826,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaLocal(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                          DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca, int modoDebug)
+                                          DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca, int modoDebug, std::set<int> vizinhancas)
 {
     // inicializa valores a serem retornados
     double newFitness = 0;
@@ -1928,12 +1898,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     else if (vizinhanca == 13)
     {
         std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaVND(
-                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas);
     }
     else if (vizinhanca == 14)
     {
         std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaRVND(
-                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas);
     }
     return std::make_tuple(newTempo, alocsMap, newFitness, newGastos, newTotalFree);
 }
@@ -2817,23 +2787,8 @@ std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaSwap2x
 }
 
 std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaAleatorio(std::map<Sonda, std::vector<Alocacao>> alocsMap,
-                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k, int modoDebug)
+                                                                DadosDeEntrada dataset, int estrutura, int modoRealoc, int k, int modoDebug, std::set<int> vizinhancas)
 {
-    // inicializa conjunto de vizinhanças
-    std::set<int> vizinhancas;
-    vizinhancas.insert(1);
-    vizinhancas.insert(2);
-    vizinhancas.insert(3);
-    vizinhancas.insert(4);
-    //vizinhancas.insert(5);
-    vizinhancas.insert(6);
-    vizinhancas.insert(7);
-    vizinhancas.insert(8);
-    vizinhancas.insert(9);
-    vizinhancas.insert(10);
-    vizinhancas.insert(11);
-    //vizinhancas.insert(12);
-
     int count = 0;
     while (count < k)
     {
@@ -2900,7 +2855,7 @@ std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaAleato
 
 std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaSolucao(std::map<Sonda, std::vector<Alocacao>> alocsMap,
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, 
-                                                                int k, int vizinhanca, int modoDebug)
+                                                                int k, int vizinhanca, int modoDebug, std::set<int> vizinhancas)
 {
     if (vizinhanca == 1)
     {
@@ -2952,7 +2907,7 @@ std::map<Sonda, std::vector<Alocacao>> MovimentadorEmVizinhancas::perturbaSoluca
     }
     else if (vizinhanca == 13)
     {
-        alocsMap = perturbaAleatorio(alocsMap, dataset, estrutura, modoRealoc, k, modoDebug);
+        alocsMap = perturbaAleatorio(alocsMap, dataset, estrutura, modoRealoc, k, modoDebug, vizinhancas);
     }
     return alocsMap;
 }

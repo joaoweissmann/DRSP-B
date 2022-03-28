@@ -373,24 +373,20 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
-Problema expandido
-
-Solução híbrida
-    - warm start
-
-Incluir aprendizado nos algoritmos
-    - algoritmo para calibração adaptativa dos parâmetros (enquanto roda)
-    - algoritmo para calibração por machine learning dos parâmetros (exemplos já rodados)
-
-pré-processamento local dentro de cada vizinhança 
-
-Implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
-
-add no verificador de solução, se gastos passa do limite
+Melhorar heurística
+    - refinamento automático dos parâmetros (explora x intensifica)
+    - pré-processamento para busca local
+    - implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
 
 Anotar lições aprendidas no mestrado
 
 Listar produtos que já tenho
+
+Rodar todas instâncias
+    - MIP
+    - heurísticas
+
+Gerar instâncias novas
 
 ---------------------------------
 Observações e dúvidas:
@@ -455,9 +451,7 @@ Março
     - Escrever novas perturbações ---------------------------------------------------------- OK
     - Escrever classe busca local ------------------------------------------------------------ OK
     - Escrever classe executador de metaheurísticas ---------------------------------------- OK
-    - Realizar experimentos ----------------------------------------------------------------- FAZENDO
-
-Férias
+    - Realizar experimentos ----------------------------------------------------------------- OK
 
 ----------------------------------
 LIÇÕES APRENDIDAS

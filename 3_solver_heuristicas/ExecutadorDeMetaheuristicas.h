@@ -18,6 +18,8 @@
 #include <bits/stdc++.h>
 #include "ConstrutorHeuristico.h"
 #include "MovimentadorEmVizinhancas.h"
+#include <dirent.h>
+#include "LeitorDeDados.h"
 
 class ExecutadorDeMetaheuristicas
 {
@@ -38,9 +40,19 @@ class ExecutadorDeMetaheuristicas
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> multStartHeuristic(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug);
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
-                                                                                                        int nIter, int modoDebug);
+                                                                                                        int nIter, int modoDebug, 
+                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, double nivelIntensifica);
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
-                                                                                                        int nIter, int modoDebug);
+                                                                                                        int nIter, int modoDebug,
+                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                        double aceitacaoLimite, double nivelIntensifica);
+        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPILS(DadosDeEntrada dataset,
+                                                                                                        int nIter, int modoDebug,
+                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                        double aceitacaoLimite, double nivelIntensifica);
+        void rodarVariosArquivos(const char * caminho, int nIter, int modoDebug,
+                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                        double aceitacaoLimite, double nivelIntensifica);
 };
 
 #endif

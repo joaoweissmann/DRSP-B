@@ -651,7 +651,7 @@ def Gerar_Instancias_Batch(n_projetos=[10, 20], n_sondas=[2, 5], delta_t=[1*7*4,
     nx_bacias = 9
     ny_bacias = 1
     n_plays = 10
-    iteracoes = 1000
+    iteracoes = 250
     t_init = 0
     t_final = 5*12*4*7
     estrategias = [1, 2, 3]
@@ -677,9 +677,9 @@ def Gerar_Instancias_Batch(n_projetos=[10, 20], n_sondas=[2, 5], delta_t=[1*7*4,
 
 def main():
 
-    n_projetos = list(range(10, 110, 30))
-    n_sondas = [2, 10]
-    delta_t = [1*7*4, 1] # [1*7*4, 1*7*2, 1*7, 1]
+    n_projetos = [130, 200] # list(range(10, 200, 30))
+    n_sondas = [2] # [2, 5, 10]
+    delta_t = [1*7*2, 1*7] # [1*7*4, 1*7*2, 1*7, 1]
     Gerar_Instancias_Batch(n_projetos, n_sondas, delta_t)
 
 
