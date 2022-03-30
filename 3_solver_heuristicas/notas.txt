@@ -373,11 +373,6 @@ O QUE TENHO
 ---------------------------------
 TODO:
 
-Melhorar heurística
-    - refinamento automático dos parâmetros (explora x intensifica)
-    - pré-processamento para busca local
-    - implementar modo de realocação em cascata com pré-processamento usando programação dinâmica
-
 Anotar lições aprendidas no mestrado
 
 Listar produtos que já tenho
@@ -385,8 +380,6 @@ Listar produtos que já tenho
 Rodar todas instâncias
     - MIP
     - heurísticas
-
-Gerar instâncias novas
 
 ---------------------------------
 Observações e dúvidas:

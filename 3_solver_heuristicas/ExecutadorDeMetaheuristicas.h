@@ -39,20 +39,32 @@ class ExecutadorDeMetaheuristicas
         
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> multStartHeuristic(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug);
+
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug, 
-                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, double nivelIntensifica);
+                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                        int nivelIntensifica);
+        
+        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPadaptativo(DadosDeEntrada dataset,
+                                                                                                        int nIter, int modoDebug, 
+                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                        int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha);
+
         std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        double aceitacaoLimite, double nivelIntensifica);
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPILS(DadosDeEntrada dataset,
+                                                                                                        double aceitacaoLimite, int nivelIntensifica);
+        
+        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILSadaptativo(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        double aceitacaoLimite, double nivelIntensifica);
+                                                                                                        double aceitacaoLimite, int nivelIntensifica, int nIterMelhora, int taxaPerturba, double taxaAceitacao);
+
         void rodarVariosArquivos(const char * caminho, int nIter, int modoDebug,
                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                        double aceitacaoLimite, double nivelIntensifica);
+                                                        double aceitacaoLimite, int nivelIntensifica,
+                                                        int nIterMelhora, double taxaAlpha, int nIterAlpha,
+                                                        int taxaPerturba, double taxaAceitacao);
 };
 
 #endif

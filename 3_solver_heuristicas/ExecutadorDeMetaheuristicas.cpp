@@ -97,7 +97,8 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
 }
 
 std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASP(DadosDeEntrada dataset,
-                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, double nivelIntensifica)
+                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                                int nivelIntensifica)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
     MovimentadorEmVizinhancas movimentador{};
@@ -126,6 +127,10 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     double newGastos;
     int newTotalFree;
 
+    // inicializa conjunto de ótimos locais
+    std::set<int> otimosLocaisFitness;
+    std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
+
     int count = 0;
     while (count < nIter)
     {
@@ -146,14 +151,46 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
         // realiza busca local
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
-
-        // decide se intensifica
-        if (newFitness >= nivelIntensifica * bestFitness)
+        
+        // guarda ótimo local, se novo
+        if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
         {
-            // realiza busca local intensificada
-            std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+            otimosLocaisFitness.insert((int)newFitness);
+            otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
+
+        // se for melhor que best, substitui
+        if (newFitness > bestFitness)
+        {
+            bestAlocsMap = newAlocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+        }
+    }
+
+    // faz busca final para os melhores ótimos locais
+    struct sort_pred {
+        bool operator()(const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &left, const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &right) {
+            return left.first < right.first;
+        }
+    };
+    std::sort(otimosLocaisAlocs.begin(), otimosLocaisAlocs.end(), sort_pred());
+
+    int countOtimosLocais = 0;
+    for (std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>>::iterator it=otimosLocaisAlocs.begin(); it!=otimosLocaisAlocs.end(); ++it)
+    {
+        countOtimosLocais++;
+        if (countOtimosLocais > nivelIntensifica)
+        {
+            break;
+        }
+        newAlocsMap = it->second;
+
+        // realiza busca intensificada
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -165,15 +202,158 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
             bestTotalFree = newTotalFree;
         }
     }
-    // busca final
-    //std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-    //                                    this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+    
+    return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
+}
 
+std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASPadaptativo(DadosDeEntrada dataset,
+                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
+                                                                                                                int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha)
+{
+    ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
+    MovimentadorEmVizinhancas movimentador{};
+
+    // inicializa bests e constroi solução inicial
+    long long bestTempo;
+    std::map<Sonda, std::vector<Alocacao>> bestAlocsMap;
+    double bestFitness;
+    double bestGastos;
+    int bestTotalFree;
+    std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+
+    // inicializa valores intermediários
+    long long newTempo;
+    std::map<Sonda, std::vector<Alocacao>> newAlocsMap;
+    double newFitness;
+    double newGastos;
+    int newTotalFree;
+
+    // inicializa conjunto de critérios
+    std::set<int> criterios;
+    criterios.insert(1);
+    criterios.insert(2);
+    criterios.insert(3);
+    criterios.insert(4);
+    criterios.erase(this->_criterio);
+
+    // inicializa conjunto de ótimos locais
+    std::set<int> otimosLocaisFitness;
+    std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
+
+    // guarda alpha inicial
+    double alphaInit = construtor.getAlpha();
+
+    int count = 0;
+    int countSemMelhora = 0;
+    int countMudouAlpha = 0;
+    while (count < nIter)
+    {
+        count++;
+
+        // constroi nova solução
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+
+        // realiza busca local
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+        
+        // guarda ótimo local, se novo
+        if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
+        {
+            otimosLocaisFitness.insert((int)newFitness);
+            otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
+        }
+
+        // se for melhor que best, substitui
+        if (newFitness > bestFitness)
+        {
+            bestAlocsMap = newAlocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+
+            countSemMelhora = 0;
+            countMudouAlpha = 0;
+        }
+        else
+        {
+            countSemMelhora++;
+            if (countSemMelhora > nIterMelhora)
+            {
+                double newAlpha = taxaAlpha * construtor.getAlpha();
+                construtor.setAlpha(newAlpha);
+                countSemMelhora = 0;
+                countMudouAlpha++;
+            }
+            if (countMudouAlpha > nIterAlpha)
+            {
+                if (criterios.empty())
+                {
+                    criterios.insert(1);
+                    criterios.insert(2);
+                    criterios.insert(3);
+                    criterios.insert(4);
+
+                    int newCriterio = *criterios.begin();
+                    criterios.erase(newCriterio);
+                    construtor.setCriterio(newCriterio);
+                    construtor.setAlpha(alphaInit);
+                    countSemMelhora = 0;
+                    countMudouAlpha = 0;
+                }
+                else
+                {
+                    int newCriterio = *criterios.begin();
+                    criterios.erase(newCriterio);
+                    construtor.setCriterio(newCriterio);
+                    construtor.setAlpha(alphaInit);
+                    countSemMelhora = 0;
+                    countMudouAlpha = 0;
+                }
+            }
+        }
+    }
+
+    // faz busca final para os melhores ótimos locais
+    struct sort_pred {
+        bool operator()(const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &left, const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &right) {
+            return left.first < right.first;
+        }
+    };
+    std::sort(otimosLocaisAlocs.begin(), otimosLocaisAlocs.end(), sort_pred());
+
+    int countOtimosLocais = 0;
+    for (std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>>::iterator it=otimosLocaisAlocs.begin(); it!=otimosLocaisAlocs.end(); ++it)
+    {
+        countOtimosLocais++;
+        if (countOtimosLocais > nivelIntensifica)
+        {
+            break;
+        }
+        newAlocsMap = it->second;
+
+        // realiza busca intensificada
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+        
+        // se for melhor que best, substitui
+        if (newFitness > bestFitness)
+        {
+            bestAlocsMap = newAlocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+        }
+    }
+    
     return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
 std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILS(DadosDeEntrada dataset,
-                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, double aceitacaoLimite, double nivelIntensifica)
+                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
+                                                                                                                double aceitacaoLimite, int nivelIntensifica)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
     MovimentadorEmVizinhancas movimentador{};
@@ -202,6 +382,10 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     double partGastos;
     int partTotalFree;
 
+    // inicializa conjunto de ótimos locais
+    std::set<int> otimosLocaisFitness;
+    std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
+
     int count = 0;
     while (count < nIter)
     {
@@ -215,12 +399,11 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
         std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
 
-        // decide se intensifica
-        if (partFitness >= nivelIntensifica * bestFitness)
+        // guarda ótimo local, se novo
+        if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
         {
-            // realiza busca local intensificada
-            std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
-                                            this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+            otimosLocaisFitness.insert((int)newFitness);
+            otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
 
         // decide se aceita a nova solução
@@ -243,17 +426,47 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
             bestTotalFree = newTotalFree;
         }
     }
-    // realiza busca final
-    //std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-    //                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+
+    // faz busca final para os melhores ótimos locais
+    struct sort_pred {
+        bool operator()(const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &left, const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &right) {
+            return left.first < right.first;
+        }
+    };
+    std::sort(otimosLocaisAlocs.begin(), otimosLocaisAlocs.end(), sort_pred());
+
+    int countOtimosLocais = 0;
+    for (std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>>::iterator it=otimosLocaisAlocs.begin(); it!=otimosLocaisAlocs.end(); ++it)
+    {
+        countOtimosLocais++;
+        if (countOtimosLocais > nivelIntensifica)
+        {
+            break;
+        }
+        newAlocsMap = it->second;
+
+        // realiza busca intensificada
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+        
+        // se for melhor que best, substitui
+        if (newFitness > bestFitness)
+        {
+            bestAlocsMap = newAlocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+        }
+    }
 
     return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
-std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASPILS(DadosDeEntrada dataset,
-                                                                                                        int nIter, int modoDebug,
-                                                                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        double aceitacaoLimite, double nivelIntensifica)
+std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILSadaptativo(DadosDeEntrada dataset,
+                                                                                                                int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
+                                                                                                                double aceitacaoLimite, int nivelIntensifica, 
+                                                                                                                int nIterMelhora, int taxaPerturba, double taxaAceitacao)
 {
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
     MovimentadorEmVizinhancas movimentador{};
@@ -270,51 +483,103 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
                                              this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
 
-    // inicializa vetor de alphas
-    std::vector<double> alphas;
-    alphas.push_back(0.99);
-    alphas.push_back(0.9);
-    alphas.push_back(0.8);
-    alphas.push_back(0.7);
-    alphas.push_back(0.6);
-    alphas.push_back(0.5);
-
     // inicializa valores intermediários
     long long newTempo;
-    std::map<Sonda, std::vector<Alocacao>> newAlocsMap;
-    double newFitness;
+    std::map<Sonda, std::vector<Alocacao>> newAlocsMap = bestAlocsMap;
+    double newFitness = bestFitness;
     double newGastos;
     int newTotalFree;
+    long long partTempo;
+    std::map<Sonda, std::vector<Alocacao>> partAlocsMap;
+    double partFitness;
+    double partGastos;
+    int partTotalFree;
 
-    for (int i=0; i<nIter; i++)
+    // guarda parâmetros iniciais do ILS
+    double limiteAceitacaoInit = aceitacaoLimite;
+    int nivelPerturbaInit = this->_nivelPerturba;
+
+    // inicializa conjunto de ótimos locais
+    std::set<int> otimosLocaisFitness;
+    std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
+
+    int count = 0;
+    int countSemMelhora = 0;
+    while (count < nIter)
     {
-        // escolhe critério
-        int criterio = (rand() % 4) + 1;
-        construtor.setCriterio(criterio);
-
-        // escolhe alpha
-        int alphaIdx = rand() % alphas.size();
-        double alpha = *std::next(alphas.begin(), alphaIdx);
-        construtor.setAlpha(alpha);
-
-        // constroi nova solução
-        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+        count++;
 
         // perturba solução
-        newAlocsMap = movimentador.perturbaSolucao(newAlocsMap, dataset, this->_estrutura, this->_modoRealoc, 
+        partAlocsMap = movimentador.perturbaSolucao(newAlocsMap, dataset, this->_estrutura, this->_modoRealoc, 
                                                     this->_nivelPerturba, this->_modoPerturba, modoDebug, vizinhancasinit);
 
         // realiza busca local
-        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+        std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
 
-        // decide se intensifica
-        if (newFitness >= nivelIntensifica * bestFitness)
+        // guarda ótimo local, se novo
+        if (otimosLocaisFitness.find((int)partFitness) == otimosLocaisFitness.end())
         {
-            // realiza busca local intensificada
-            std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+            otimosLocaisFitness.insert((int)partFitness);
+            otimosLocaisAlocs.push_back(std::make_pair((int)partFitness, partAlocsMap));
         }
+
+        // decide se aceita a nova solução
+        if (partFitness >= aceitacaoLimite * newFitness)
+        {
+            newAlocsMap = partAlocsMap;
+            newFitness = partFitness;
+            newGastos = partGastos;
+            newTempo = partTempo;
+            newTotalFree = partTotalFree;
+        }
+
+        // se for melhor que best, substitui
+        if (newFitness > bestFitness)
+        {
+            bestAlocsMap = newAlocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+
+            countSemMelhora = 0;
+            aceitacaoLimite = limiteAceitacaoInit;
+            this->_nivelPerturba = nivelPerturbaInit;
+        }
+        else
+        {
+            countSemMelhora++;
+            if (countSemMelhora > nIterMelhora)
+            {
+                this->_nivelPerturba = this->_nivelPerturba + taxaPerturba;
+                aceitacaoLimite = aceitacaoLimite * taxaAceitacao;
+                countSemMelhora = 0;
+            }
+        }
+    }
+
+    // faz busca final para os melhores ótimos locais
+    struct sort_pred {
+        bool operator()(const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &left, const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &right) {
+            return left.first < right.first;
+        }
+    };
+    std::sort(otimosLocaisAlocs.begin(), otimosLocaisAlocs.end(), sort_pred());
+
+    int countOtimosLocais = 0;
+    for (std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>>::iterator it=otimosLocaisAlocs.begin(); it!=otimosLocaisAlocs.end(); ++it)
+    {
+        countOtimosLocais++;
+        if (countOtimosLocais > nivelIntensifica)
+        {
+            break;
+        }
+        newAlocsMap = it->second;
+
+        // realiza busca intensificada
+        std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -326,16 +591,15 @@ std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> Exe
             bestTotalFree = newTotalFree;
         }
     }
-    // realiza busca final
-    //std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-    //                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
 
     return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
 void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int nIter, int modoDebug,
                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                        double aceitacaoLimite, double nivelIntensifica)
+                                                        double aceitacaoLimite, int nivelIntensifica, 
+                                                        int nIterMelhora, double taxaAlpha, int nIterAlpha,
+                                                        int taxaPerturba, double taxaAceitacao)
 {
     DIR *dir; 
     struct dirent *diread;
@@ -393,6 +657,11 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIter << " "
                     << aceitacaoLimite << " "
                     << nivelIntensifica << " "
+                    << nIterMelhora << " "
+                    << taxaAlpha << " "
+                    << nIterAlpha << " "
+                    << taxaPerturba << " "
+                    << taxaAceitacao << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
@@ -417,10 +686,50 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
+            
+            // GRASP adaptativo
+            std::cout << "Rodando GRASP adaptativo" << std::endl;
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha);
+            outfile << s2 << " " 
+                    << "GRASP" << " " 
+                    << this->_estrutura << " "
+                    << this->_modoRealoc << " "
+                    << this->_criterio << " "
+                    << this->_alpha << " "
+                    << this->_modoBusca << " "
+                    << this->_modoPerturba << " "
+                    << this->_nivelPerturba << " "
+                    << nIter << " "
+                    << aceitacaoLimite << " "
+                    << nivelIntensifica << " "
+                    << tempo << " "
+                    << fitness << " "
+                    << gastos << " "
+                    <<  std::endl;
 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
             std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica);
+            outfile << s2 << " " 
+                    << "ILS" << " " 
+                    << this->_estrutura << " "
+                    << this->_modoRealoc << " "
+                    << this->_criterio << " "
+                    << this->_alpha << " "
+                    << this->_modoBusca << " "
+                    << this->_modoPerturba << " "
+                    << this->_nivelPerturba << " "
+                    << nIter << " "
+                    << aceitacaoLimite << " "
+                    << nivelIntensifica << " "
+                    << tempo << " "
+                    << fitness << " "
+                    << gastos << " "
+                    <<  std::endl;
+        
+        // ILS adaptativo
+            std::cout << "Rodando ILS adaptativo" << std::endl;
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao);
             outfile << s2 << " " 
                     << "ILS" << " " 
                     << this->_estrutura << " "

@@ -340,7 +340,7 @@ int main()
         cplex.setParam(IloCplex::Param::TimeLimit, 1800); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
 
         cplex.setParam(IloCplex::Param::WorkMem, 4096); // 1024 megabytes
-        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 100000); // 131072 megabytes
+        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 10000); // 131072 megabytes
         cplex.setParam(IloCplex::Param::Emphasis::Memory, 1); // 1: conservar memoria
         cplex.setParam(IloCplex::Param::MIP::Strategy::File, 3); // 1: em memória, 2: em disco, 3: em disco otimizado 
         cplex.setParam(IloCplex::Param::WorkDir, ".");
