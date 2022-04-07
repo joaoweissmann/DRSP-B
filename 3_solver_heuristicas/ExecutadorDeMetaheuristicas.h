@@ -37,25 +37,28 @@ class ExecutadorDeMetaheuristicas
         ExecutadorDeMetaheuristicas(int estrutura, int modoRealoc, int criterio, double alpha, int modoBusca, 
                                     int modoPerturba, int nivelPerturba);
         
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> multStartHeuristic(DadosDeEntrada dataset,
+        void setAlpha(double alpha);
+        void setNivelPerturba(int nivelPerturba);
+        
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> multStartHeuristic(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug);
 
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug, 
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                         int nivelIntensifica);
         
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPadaptativo(DadosDeEntrada dataset,
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPadaptativo(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug, 
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                         int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha);
 
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                         double aceitacaoLimite, int nivelIntensifica);
         
-        std::tuple<int, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILSadaptativo(DadosDeEntrada dataset,
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILSadaptativo(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                         double aceitacaoLimite, int nivelIntensifica, int nIterMelhora, int taxaPerturba, double taxaAceitacao);
@@ -65,6 +68,9 @@ class ExecutadorDeMetaheuristicas
                                                         double aceitacaoLimite, int nivelIntensifica,
                                                         int nIterMelhora, double taxaAlpha, int nIterAlpha,
                                                         int taxaPerturba, double taxaAceitacao);
+        
+        void rodarVariosArquivosSensibilidade(const char * caminho, int modoDebug,
+                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal);
 };
 
 #endif
