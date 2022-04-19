@@ -46,31 +46,29 @@ class ExecutadorDeMetaheuristicas
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASP(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug, 
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        int nivelIntensifica);
+                                                                                                        int nivelIntensifica, int maxIterFO);
         
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> GRASPadaptativo(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug, 
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha);
+                                                                                                        int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha, int maxIterFO);
 
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILS(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        double aceitacaoLimite, int nivelIntensifica);
+                                                                                                        double aceitacaoLimite, int nivelIntensifica, int maxIterFO);
         
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ILSadaptativo(DadosDeEntrada dataset,
                                                                                                         int nIter, int modoDebug,
                                                                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                        double aceitacaoLimite, int nivelIntensifica, int nIterMelhora, int taxaPerturba, double taxaAceitacao);
+                                                                                                        double aceitacaoLimite, int nivelIntensifica, int nIterMelhora, int taxaPerturba, double taxaAceitacao,
+                                                                                                        int nIterRestart, double alphaRestart, int maxIterFO);
 
         void rodarVariosArquivos(const char * caminho, int nIter, int modoDebug,
                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                         double aceitacaoLimite, int nivelIntensifica,
                                                         int nIterMelhora, double taxaAlpha, int nIterAlpha,
-                                                        int taxaPerturba, double taxaAceitacao);
-        
-        void rodarVariosArquivosSensibilidade(const char * caminho, int modoDebug,
-                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal);
+                                                        int taxaPerturba, double taxaAceitacao, int nIterRestart, double alphaRestart, int maxIterFO);
 };
 
 #endif

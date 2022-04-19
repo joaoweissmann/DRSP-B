@@ -49,6 +49,12 @@ bool VerificadorDeSolucao::verificarGastos(Solucao s)
     return (result);
 }
 
+bool VerificadorDeSolucao::verificarLimiteGastos(Solucao s, DadosDeEntrada dataset)
+{
+    bool result = s.getGastos() <= dataset.getCapitalTotal();
+    return (result);
+}
+
 bool VerificadorDeSolucao::verificarTotalFree(Solucao s)
 {
     double totalFree = 0;
@@ -194,7 +200,8 @@ bool VerificadorDeSolucao::verificarSolucao(Solucao s, DadosDeEntrada dataset)
     bool b5 = verificarContinuidadeTemporal(s);
     bool b6 = verificarScheduling(s, dataset);
     bool b7 = verificarTimeWindows(s);
-    bool result = b1 && b2 && b3 && b4 && b5 && b6 && b7;
+    bool b8 = verificarLimiteGastos(s, dataset);
+    bool result = b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8;
     return result;
 }
 

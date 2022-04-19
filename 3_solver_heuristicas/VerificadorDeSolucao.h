@@ -23,6 +23,7 @@ class VerificadorDeSolucao
     public:
         bool verificarFitness(Solucao s);
         bool verificarGastos(Solucao s);
+        bool verificarLimiteGastos(Solucao s, DadosDeEntrada dataset);
         bool verificarTotalFree(Solucao s);
         bool verificarUnicidadeProjetos(Solucao s);
         bool verificarTimeWindows(Solucao s);

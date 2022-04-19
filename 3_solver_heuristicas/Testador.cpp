@@ -1505,7 +1505,7 @@ void Testador::testarConstrutorHeuristico()
 
     int modoBusca = 14;
     std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(alocsMap, dataset, 
-                                        construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta(), modoBusca, modoDebug, vizinhancas);
+                                        construtor.getEstrutura(), construtor.getModoRealoc(), dataset.getDelta(), modoBusca, modoDebug, vizinhancas, 20);
 
     std::cout << std::endl;
     Solucao solucao2{newAlocsMap, construtor.getEstrutura(), dataset};
@@ -1524,59 +1524,64 @@ void Testador::testarExecutadorDeMetaheuristicas()
 
     // inicializa conjunto de vizinhanças
     std::set<int> vizinhancasInit;
-    vizinhancasInit.insert(1);
-    vizinhancasInit.insert(2);
-    vizinhancasInit.insert(3);
-    //vizinhancasInit.insert(4); //
-    //vizinhancasInit.insert(5); //
-    vizinhancasInit.insert(6);
-    vizinhancasInit.insert(7);
-    vizinhancasInit.insert(8);
-    vizinhancasInit.insert(9);
-    //vizinhancasInit.insert(10); //
-    //vizinhancasInit.insert(11); //
-    //vizinhancasInit.insert(12);
+    vizinhancasInit.insert(1); // shift_1x0_interRota
+    vizinhancasInit.insert(2); // shift_2x0_interRota
+    vizinhancasInit.insert(3); // swap_1x1_interRota
+    //vizinhancasInit.insert(4); // swap_2x1_interRota
+    //vizinhancasInit.insert(5); // swap_2x2_interRota
+    vizinhancasInit.insert(6); // reinsercao1
+    vizinhancasInit.insert(7); // reinsercao2
+    vizinhancasInit.insert(8); // inserirNovoFO
+    vizinhancasInit.insert(9); // swap_1x1_FO
+    //vizinhancasInit.insert(10); // swap_2x1_FO
+    //vizinhancasInit.insert(11); // swap_1x2_FO
+    //vizinhancasInit.insert(12); // swap_2x2_FO
 
     // inicializa conjunto de vizinhanças
     std::set<int> vizinhancasFinal;
-    vizinhancasFinal.insert(1);
-    vizinhancasFinal.insert(2);
-    vizinhancasFinal.insert(3);
-    vizinhancasFinal.insert(4); //
-    vizinhancasFinal.insert(5); //
-    vizinhancasFinal.insert(6);
-    vizinhancasFinal.insert(7);
-    vizinhancasFinal.insert(8);
-    vizinhancasFinal.insert(9);
-    vizinhancasFinal.insert(10); //
-    vizinhancasFinal.insert(11); //
-    //vizinhancasFinal.insert(12);
+    vizinhancasFinal.insert(1); // shift_1x0_interRota
+    vizinhancasFinal.insert(2); // shift_2x0_interRota
+    vizinhancasFinal.insert(3); // swap_1x1_interRota
+    vizinhancasFinal.insert(4); // swap_2x1_interRota
+    //vizinhancasFinal.insert(5); // swap_2x2_interRota
+    vizinhancasFinal.insert(6); // reinsercao1
+    vizinhancasFinal.insert(7); // reinsercao2
+    vizinhancasFinal.insert(8); // inserirNovoFO
+    vizinhancasFinal.insert(9); // swap_1x1_FO
+    vizinhancasFinal.insert(10); // swap_2x1_FO
+    vizinhancasFinal.insert(11); // swap_1x2_FO
+    //vizinhancasFinal.insert(12); // swap_2x2_FO
 
-    long long nIterAlvo = 2000000;
-    int modoDebug = 0;
-    int estrutura = 1;
-    int modoRealoc = 1;
-    int criterio = 1;
-    double alpha = 0.99;
-    int modoBusca = 13;
-    int modoPerturba = 13;
-    int nivelPerturba = 2;
-    double aceitacaoLimite = 0.99;
-    int nivelIntensifica = 0;
-    double taxaAlpha = 0.95;
-    int taxaPerturba = 2;
-    double taxaAceitacao = 0.95;
+    long long nIterAlvo = 10000 / 5; // 10000
+    int modoDebug = 0; // 0
+    int estrutura = 1; // 1
+    int modoRealoc = 1; // 1
+    int criterio = 1; // 1
+    double alpha = 0.9; // 0.99
+    int modoBusca = 13; // 14
+    int modoPerturba = 13; // 13
+    int nivelPerturba = 2; // 2
+    double aceitacaoLimite = 0.99; // 0.99
+    int nivelIntensifica = 0; // 0
+    double taxaAlpha = 0.9; // 0.95
+    int taxaPerturba = 2; // 2
+    double taxaAceitacao = 0.9; // 0.95
+    double alphaRestart = 0.9; // 0.9
     ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alpha, modoBusca, modoPerturba, nivelPerturba};
 
     // ler dataset
     std::string filename;
-    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/instancia_200projetos_10sondas_delta_t14.dat";
+    
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/instancia_270projetos_10sondas_delta_t1.dat";
+
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
 
-    int nIter = ( nIterAlvo ) / ( (int)pow(dataset.getProjetos().size(), 2) );
-    int nIterMelhora = nIter / 10;
-    int nIterAlpha = nIter / 20;
+    int nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
+    int nIterMelhora = 10; // 10
+    int nIterAlpha = 10; // 10
+    int nIterRestart = 10; // 10
+    int maxIterFO = 10;
 
     long long tempo;
     std::map<Sonda, std::vector<Alocacao>> alocsMap;
@@ -1584,10 +1589,10 @@ void Testador::testarExecutadorDeMetaheuristicas()
     double gastos;
     int totalFree;
     //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter, modoDebug);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILSadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, maxIterFO);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILSadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
 
     /*
     std::cout << std::endl;
@@ -1597,10 +1602,13 @@ void Testador::testarExecutadorDeMetaheuristicas()
     alocs.print();
     std::cout << "fitness: " << fitness << std::endl;
     std::cout << "gastos: " << gastos << std::endl;
+    std::cout << "limite gastos: " << dataset.getCapitalTotal() << std::endl;
     std::cout << "total free: " << totalFree << std::endl;
 
     VerificadorDeSolucao verificador{};
     Solucao solut{alocsMap, estrutura, dataset};
+    std::cout << "fitness solução: " << solut.getFitness() << std::endl;
+    std::cout << "gastos solução: " << solut.getGastos() << std::endl;
     bool viavel = verificador.verificarSolucao(solut, dataset);
     if (viavel)
     {
@@ -1618,11 +1626,11 @@ void Testador::testarExecutadorDeMetaheuristicas()
 
     const char * caminho = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/";
     
+    // /*
     executador.rodarVariosArquivos(caminho, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, 
                                    aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha,
-                                   taxaPerturba, taxaAceitacao);
-    
-    //executador.rodarVariosArquivosSensibilidade(caminho, modoDebug, vizinhancasInit, vizinhancasFinal);
+                                   taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+    // */
 
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;

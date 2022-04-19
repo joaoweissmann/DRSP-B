@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <chrono>
 #include <ilcplex/ilocplex.h>
 
 ILOSTLBEGIN
@@ -27,8 +28,9 @@ int main()
         cin >> filename;
         //filename="./instancias/instancia_100projetos_2sondas_delta_t28.dat";
         
-        IloTimer timer(env);
-        timer.start();
+        //IloTimer timer(env);
+        //timer.start();
+        auto start = std::chrono::high_resolution_clock::now();
 
         // reading data from file
         cout << "Lendo dados de entrada..." << endl;
@@ -600,13 +602,17 @@ int main()
         cplex.extract(model);
         cout << "Model extracted!" << endl;
         cplex.solve();
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        long long tempoTotal = duration.count();
         
         ofstream outfile;
         outfile.open("resultados_automatico.txt", ios_base::app);
-        outfile << "TI " << filename << " " << cplex.getObjValue() << " " << cplex.getStatus() << " " << cplex.getBestObjValue() << " " << cplex.getMIPRelativeGap() << " " << timer.getTime() << endl;
+        outfile << "TI " << filename << " " << cplex.getObjValue() << " " << cplex.getStatus() << " " << cplex.getBestObjValue() << " " << cplex.getMIPRelativeGap() << " " << tempoTotal << endl;
 
         // printando tempo de execução
-        env.out() << "Tempo de execução = " << timer.getTime() << endl;
+        env.out() << "Tempo de execução = " << tempoTotal << endl;
         
         // printando status da otimização
         env.out() << "Solution status = " << cplex.getStatus() << endl;

@@ -113,7 +113,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASP(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                                int nivelIntensifica)
+                                                                                                                int nivelIntensifica, int maxIterFO)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -167,7 +167,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca local
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
         
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
@@ -207,7 +207,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca intensificada
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -228,7 +228,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASPadaptativo(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                                int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha)
+                                                                                                                int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha, int maxIterFO)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -277,7 +277,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca local
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
         
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
@@ -297,6 +297,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
             countSemMelhora = 0;
             countMudouAlpha = 0;
+            construtor.setAlpha(alphaInit);
         }
         else
         {
@@ -357,7 +358,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca intensificada
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -378,7 +379,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILS(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
-                                                                                                                double aceitacaoLimite, int nivelIntensifica)
+                                                                                                                double aceitacaoLimite, int nivelIntensifica, int maxIterFO)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -395,7 +396,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
     // realiza busca local
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
     // inicializa valores intermediários
     long long newTempo;
@@ -424,7 +425,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca local
         std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
@@ -474,7 +475,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca intensificada
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -496,7 +497,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILSadaptativo(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
                                                                                                                 double aceitacaoLimite, int nivelIntensifica, 
-                                                                                                                int nIterMelhora, int taxaPerturba, double taxaAceitacao)
+                                                                                                                int nIterMelhora, int taxaPerturba, double taxaAceitacao,
+                                                                                                                int nIterRestart, double alphaRestart, int maxIterFO)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -513,7 +515,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
     // realiza busca local
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
-                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                             this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
     // inicializa valores intermediários
     long long newTempo;
@@ -537,6 +539,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
     int count = 0;
     int countSemMelhora = 0;
+    int countRestart = 0;
     while (count < nIter)
     {
         count++;
@@ -547,7 +550,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca local
         std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)partFitness) == otimosLocaisFitness.end())
@@ -576,6 +579,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestTotalFree = newTotalFree;
 
             countSemMelhora = 0;
+            countRestart = 0;
             aceitacaoLimite = limiteAceitacaoInit;
             this->_nivelPerturba = nivelPerturbaInit;
         }
@@ -587,6 +591,19 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 this->_nivelPerturba = this->_nivelPerturba + taxaPerturba;
                 aceitacaoLimite = aceitacaoLimite * taxaAceitacao;
                 countSemMelhora = 0;
+                countRestart++;
+            }
+            if (countRestart > nIterRestart)
+            {
+                // restart
+                construtor.setAlpha(alphaRestart);
+
+                // constroi solução
+                std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+
+                // realiza busca local
+                std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
+                                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
             }
         }
     }
@@ -611,7 +628,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
         // realiza busca intensificada
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
-                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal);
+                                        this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
         if (newFitness > bestFitness)
@@ -634,7 +651,8 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                                                         std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                         double aceitacaoLimite, int nivelIntensifica, 
                                                         int nIterMelhora, double taxaAlpha, int nIterAlpha,
-                                                        int taxaPerturba, double taxaAceitacao)
+                                                        int taxaPerturba, double taxaAceitacao,
+                                                        int nIterRestart, double alphaRestart, int maxIterFO)
 {
     DIR *dir; 
     struct dirent *diread;
@@ -657,6 +675,31 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
     std::ofstream outfile;
     outfile.open("resultados_automaticos_MH.txt");
 
+    outfile << "Arquivo" << " " 
+            << "Algoritmo" << " " 
+            << "estrutura" << " "
+            << "modoRealoc" << " "
+            << "criterio" << " "
+            << "alpha" << " "
+            << "modoBusca" << " "
+            << "modoPerturba" << " "
+            << "nivelPerturba" << " "
+            << "nIter" << " "
+            << "aceitacaoLimite" << " "
+            << "nivelIntensifica" << " "
+            << "nIterMelhora" << " "
+            << "taxaAlpha" << " "
+            << "nIterAlpha" << " "
+            << "taxaPerturba" << " "
+            << "taxaAceitacao" << " "
+            << "nIterRestart" << " "
+            << "alphaRestart" << " "
+            << "maxIterFO" << " "
+            << "tempo" << " "
+            << "fitness" << " "
+            << "gastos" << " "
+            <<  std::endl;
+
     std::string s1 = "instancia";
     for (std::vector<std::string>::iterator it=arquivos.begin(); it!=arquivos.end(); ++it)
     {
@@ -669,6 +712,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
 
             LeitorDeDados leitor;
             DadosDeEntrada dataset = leitor.lerDadosDeEntrada(s2);
+
+            long long nIterAlvo = 10000 / 5;
+            nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
 
             // inicializa variaveis a serem retornadas
             long long tempo;
@@ -697,6 +743,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterAlpha << " "
                     << taxaPerturba << " "
                     << taxaAceitacao << " "
+                    << nIterRestart << " "
+                    << alphaRestart << " "
+                    << maxIterFO << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
@@ -704,7 +753,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica);
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO);
             outfile << s2 << " " 
                     << "GRASP" << " " 
                     << this->_estrutura << " "
@@ -722,6 +771,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterAlpha << " "
                     << taxaPerturba << " "
                     << taxaAceitacao << " "
+                    << nIterRestart << " "
+                    << alphaRestart << " "
+                    << maxIterFO << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
@@ -729,9 +781,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha);
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
             outfile << s2 << " " 
-                    << "GRASP ada" << " " 
+                    << "GRASP_ada" << " " 
                     << this->_estrutura << " "
                     << this->_modoRealoc << " "
                     << this->_criterio << " "
@@ -747,6 +799,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterAlpha << " "
                     << taxaPerturba << " "
                     << taxaAceitacao << " "
+                    << nIterRestart << " "
+                    << alphaRestart << " "
+                    << maxIterFO << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
@@ -754,7 +809,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica);
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
             outfile << s2 << " " 
                     << "ILS" << " " 
                     << this->_estrutura << " "
@@ -772,6 +827,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterAlpha << " "
                     << taxaPerturba << " "
                     << taxaAceitacao << " "
+                    << nIterRestart << " "
+                    << alphaRestart << " "
+                    << maxIterFO << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
@@ -779,9 +837,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao);
+            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
             outfile << s2 << " " 
-                    << "ILS ada" << " " 
+                    << "ILS_ada" << " " 
                     << this->_estrutura << " "
                     << this->_modoRealoc << " "
                     << this->_criterio << " "
@@ -797,245 +855,13 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterAlpha << " "
                     << taxaPerturba << " "
                     << taxaAceitacao << " "
+                    << nIterRestart << " "
+                    << alphaRestart << " "
+                    << maxIterFO << " "
                     << tempo << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
-        }
-    }
-    outfile.close();
-}
-
-void ExecutadorDeMetaheuristicas::rodarVariosArquivosSensibilidade(const char * caminho, int modoDebug,
-                                                        std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal)
-{
-    DIR *dir; 
-    struct dirent *diread;
-    std::vector<std::string> arquivos;
-
-    // armazenando nomes dos arquivos
-    if ( (dir = opendir(caminho)) != nullptr ) 
-    {
-        while ( (diread = readdir(dir)) != nullptr ) 
-        {
-            arquivos.push_back(diread->d_name);
-        }
-        closedir (dir);
-    } 
-    else 
-    {
-        perror ("opendir");
-    }
-
-    std::ofstream outfile;
-    outfile.open("resultados_automaticos_MH.txt");
-
-    std::string s1 = "instancia";
-    for (std::vector<std::string>::iterator it=arquivos.begin(); it!=arquivos.end(); ++it)
-    {
-        std::string arquivo = *it;
-        if (arquivo.find(s1) != std::string::npos)
-        {
-            std::string s2 = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/";
-            s2.append(*it);
-            std::cout << "Rodando heurísticas para arquivo: " << s2 << std::endl;
-
-            LeitorDeDados leitor;
-            DadosDeEntrada dataset = leitor.lerDadosDeEntrada(s2);
-
-            // inicializa variaveis a serem retornadas
-            long long tempo;
-            std::map<Sonda, std::vector<Alocacao>> alocsMap;
-            double fitness;
-            double gastos;
-            int totalFree;
-
-            std::vector<int> nIterVect = {10, 20, 30, 50, 100, 150, 200, 300};
-            std::vector<double> alphaInitVect = {0.99, 0.95, 0.9, 0.85, 0.8};
-            std::vector<int> nIterMelhoraVect = {10, 20, 30, 40, 50};
-            std::vector<double> taxaAlphaVect = {0.99, 0.95, 0.9, 0.85, 0.8};
-            std::vector<int> nIterAlphaVect = {5, 10, 15, 20, 25, 30};
-            std::vector<int> nivelPerturbaVect = {2, 4, 8, 16};
-            std::vector<double> aceitacaolimiteVect = {0.99, 0.95, 0.9, 0.85, 0.8};
-            std::vector<int> taxaPerturbaVect = {2, 4, 6, 8, 10};
-            std::vector<double> taxaAceitacaoVect = {0.99, 0.95, 0.9, 0.85, 0.8};
-            std::vector<int> nivelIntensificaVect = {0};
-
-            // mult-start heuristic
-            for (auto nIter : nIterVect)
-            {
-                std::cout << "Rodando Mult-Start Heuristic" << std::endl;
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug);
-                outfile << s2 << " " 
-                        << "Mult-Start" << " " 
-                        << this->_estrutura << " "
-                        << this->_modoRealoc << " "
-                        << this->_criterio << " "
-                        << this->_alpha << " "
-                        << this->_modoBusca << " "
-                        << this->_modoPerturba << " "
-                        << this->_nivelPerturba << " "
-                        << nIter << " "
-                        << aceitacaolimiteVect[0] << " "
-                        << nivelIntensificaVect[0] << " "
-                        << nIterMelhoraVect[0] << " "
-                        << taxaAlphaVect[0] << " "
-                        << nIterAlphaVect[0] << " "
-                        << taxaPerturbaVect[0] << " "
-                        << taxaAceitacaoVect[0] << " "
-                        << tempo << " "
-                        << fitness << " "
-                        << gastos << " "
-                        <<  std::endl;
-            }
-
-            // GRASP
-            for (auto nIter : nIterVect)
-            {
-                std::cout << "Rodando GRASP" << std::endl;
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensificaVect[0]);
-                outfile << s2 << " " 
-                        << "GRASP" << " " 
-                        << this->_estrutura << " "
-                        << this->_modoRealoc << " "
-                        << this->_criterio << " "
-                        << this->_alpha << " "
-                        << this->_modoBusca << " "
-                        << this->_modoPerturba << " "
-                        << this->_nivelPerturba << " "
-                        << nIter << " "
-                        << aceitacaolimiteVect[0] << " "
-                        << nivelIntensificaVect[0] << " "
-                        << nIterMelhoraVect[0] << " "
-                        << taxaAlphaVect[0] << " "
-                        << nIterAlphaVect[0] << " "
-                        << taxaPerturbaVect[0] << " "
-                        << taxaAceitacaoVect[0] << " "
-                        << tempo << " "
-                        << fitness << " "
-                        << gastos << " "
-                        <<  std::endl;
-            }
-
-            // GRASP adaptativo
-            for (auto nIter : nIterVect)
-            {
-                for (auto alphaInit : alphaInitVect)
-                {
-                    this->setAlpha(alphaInit);
-                    for (auto nIterMelhora : nIterMelhoraVect)
-                    {
-                        for (auto taxaAlpha : taxaAlphaVect)
-                        {
-                            for (auto nIterAlpha : nIterAlphaVect)
-                            {
-                                std::cout << "Rodando GRASP adaptativo" << std::endl;
-                                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensificaVect[0], nIterMelhora, taxaAlpha, nIterAlpha);
-                                outfile << s2 << " " 
-                                        << "GRASP ada" << " " 
-                                        << this->_estrutura << " "
-                                        << this->_modoRealoc << " "
-                                        << this->_criterio << " "
-                                        << this->_alpha << " "
-                                        << this->_modoBusca << " "
-                                        << this->_modoPerturba << " "
-                                        << this->_nivelPerturba << " "
-                                        << nIter << " "
-                                        << aceitacaolimiteVect[0] << " "
-                                        << nivelIntensificaVect[0] << " "
-                                        << nIterMelhora << " "
-                                        << taxaAlpha << " "
-                                        << nIterAlpha << " "
-                                        << taxaPerturbaVect[0] << " "
-                                        << taxaAceitacaoVect[0] << " "
-                                        << tempo << " "
-                                        << fitness << " "
-                                        << gastos << " "
-                                        <<  std::endl;
-                            }
-                        }
-                    }
-                }
-            }
-
-            // ILS
-            for (auto nIter : nIterVect)
-            {
-                for (auto nivelPerturba : nivelPerturbaVect)
-                {
-                    this->setNivelPerturba(nivelPerturba);
-                    for (auto aceitacaoLimite : aceitacaolimiteVect)
-                    {
-                        std::cout << "Rodando ILS" << std::endl;
-                        std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensificaVect[0]);
-                        outfile << s2 << " " 
-                                << "ILS" << " " 
-                                << this->_estrutura << " "
-                                << this->_modoRealoc << " "
-                                << this->_criterio << " "
-                                << this->_alpha << " "
-                                << this->_modoBusca << " "
-                                << this->_modoPerturba << " "
-                                << this->_nivelPerturba << " "
-                                << nIter << " "
-                                << aceitacaoLimite << " "
-                                << nivelIntensificaVect[0] << " "
-                                << nIterMelhoraVect[0] << " "
-                                << taxaAlphaVect[0] << " "
-                                << nIterAlphaVect[0] << " "
-                                << taxaPerturbaVect[0] << " "
-                                << taxaAceitacaoVect[0] << " "
-                                << tempo << " "
-                                << fitness << " "
-                                << gastos << " "
-                                <<  std::endl;
-                    }
-                }
-            }
-
-            // ILS adaptativo
-            for (auto nIter : nIterVect)
-            {
-                for (auto nIterMelhora : nIterMelhoraVect)
-                {
-                    for (auto nivelPerturba : nivelPerturbaVect)
-                    {
-                        this->setNivelPerturba(nivelPerturba);
-                        for (auto aceitacaoLimite : aceitacaolimiteVect)
-                        {
-                            for (auto taxaPerturba : taxaPerturbaVect)
-                            {
-                                for (auto taxaAceitacao : taxaAceitacaoVect)
-                                {
-                                    std::cout << "Rodando ILS adaptativo" << std::endl;
-                                    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensificaVect[0], nIterMelhora, taxaPerturba, taxaAceitacao);
-                                    outfile << s2 << " " 
-                                            << "ILS ada" << " " 
-                                            << this->_estrutura << " "
-                                            << this->_modoRealoc << " "
-                                            << this->_criterio << " "
-                                            << this->_alpha << " "
-                                            << this->_modoBusca << " "
-                                            << this->_modoPerturba << " "
-                                            << this->_nivelPerturba << " "
-                                            << nIter << " "
-                                            << aceitacaoLimite << " "
-                                            << nivelIntensificaVect[0] << " "
-                                            << nIterMelhora << " "
-                                            << taxaAlphaVect[0] << " "
-                                            << nIterAlphaVect[0] << " "
-                                            << taxaPerturba << " "
-                                            << taxaAceitacao << " "
-                                            << tempo << " "
-                                            << fitness << " "
-                                            << gastos << " "
-                                            <<  std::endl;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
     outfile.close();

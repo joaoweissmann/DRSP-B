@@ -85,12 +85,16 @@ class MovimentadorEmVizinhancas
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaSwap2x2FO(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug);
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas);
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaVNDTosco(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO);
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas);
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO);
+        std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaRVNDTosco(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO);
         std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> buscaLocal(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca, int modoDebug,
-                                                   std::set<int> vizinhancas);
+                                                   std::set<int> vizinhancas, int maxIterFO);
         
         std::map<Sonda, std::vector<Alocacao>> perturbaShift1x0InterRota(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                                 DadosDeEntrada dataset, int estrutura, int modoRealoc, int k, int modoDebug);

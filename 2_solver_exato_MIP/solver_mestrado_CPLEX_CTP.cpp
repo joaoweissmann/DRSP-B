@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <chrono>
 #include <ilcplex/ilocplex.h>
 
 ILOSTLBEGIN
@@ -27,8 +28,9 @@ int main()
         cin >> filename;
         //filename="./instancias/instancia_100projetos_2sondas_delta_t28.dat";
         
-        IloTimer timer(env);
-        timer.start();
+        //IloTimer timer(env);
+        //timer.start();
+        auto start = std::chrono::high_resolution_clock::now();
 
         // reading data from file
         cout << "Lendo dados de entrada..." << endl;
@@ -700,13 +702,17 @@ int main()
         cplex.extract(model);
         cout << "Model extracted!" << endl;
         cplex.solve();
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        long long tempoTotal = duration.count();
         
         ofstream outfile;
         outfile.open("resultados_automatico.txt", ios_base::app);
-        outfile << "CTP " << filename << " " << cplex.getObjValue() << " " << cplex.getStatus() << " " << cplex.getBestObjValue() << " " << cplex.getMIPRelativeGap() << " " << timer.getTime() << endl;
+        outfile << "CTP " << filename << " " << cplex.getObjValue() << " " << cplex.getStatus() << " " << cplex.getBestObjValue() << " " << cplex.getMIPRelativeGap() << " " << tempoTotal << endl;
 
         // printando tempo de execução
-        env.out() << "Tempo de execução = " << timer.getTime() << endl;
+        env.out() << "Tempo de execução = " << tempoTotal << endl;
         
         // printando status da otimização
         env.out() << "Solution status = " << cplex.getStatus() << endl;
@@ -719,30 +725,30 @@ int main()
         
         /*
         // pegando valor das variáveis de decisão
-        NumMatrix3D x_vals(env, n_projetos+n_sondas);
+        //NumMatrix3D x_vals(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
-            x_vals[i] = NumMatrix2D(env, n_projetos);
+            //x_vals[i] = NumMatrix2D(env, n_projetos);
             for (int j=0; j<n_projetos; j++)
             {
-                x_vals[i][j] = IloNumArray(env, n_sondas);
+                //x_vals[i][j] = IloNumArray(env, n_sondas);
                 for (int m=0; m<n_sondas; m++)
                 {
-                    //cout << "x[" << i << "][" << j << "][" << m << "]: "  << cplex.getValue(x_var[i][j][m]) << endl;
-                    x_vals[i][j][m] = cplex.getValue(x_var[i][j][m]);
+                    cout << "x[" << i << "][" << j << "][" << m << "]: "  << cplex.getValue(x_var[i][j][m]) << endl;
+                    //x_vals[i][j][m] = cplex.getValue(x_var[i][j][m]);
                 }
             }
         }
-        NumMatrix2D c_vals(env, n_projetos+n_sondas);
-        for (int i=0; i<n_projetos+n_sondas; i++)
-        {
-            c_vals[i] = IloNumArray(env, n_sondas);
-            for (int m=0; m<n_sondas; m++)
-            {
-                //cout << "c[" << i << "][" << m << "]: " << cplex.getValue(c_var[i][m]) << endl;
-                c_vals[i][m] = cplex.getValue(c_var[i][m]);
-            }
-        }
+        //NumMatrix2D c_vals(env, n_projetos+n_sondas);
+        //for (int i=0; i<n_projetos+n_sondas; i++)
+        //{
+        //    c_vals[i] = IloNumArray(env, n_sondas);
+        //    for (int m=0; m<n_sondas; m++)
+        //    {
+        //        //cout << "c[" << i << "][" << m << "]: " << cplex.getValue(c_var[i][m]) << endl;
+        //        //c_vals[i][m] = cplex.getValue(c_var[i][m]);
+        //    }
+        //}
 
         //env.out() << "x[i][j][m] = " << x_vals << endl;
         //env.out() << "c[j][m]    = " << c_vals << endl;

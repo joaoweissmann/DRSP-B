@@ -477,25 +477,25 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
                                                              DadosDeEntrada & dataset, int estrutura, int modoRealoc,
                                                              Sonda sonda1, Projeto projeto1, int modoDebug, double fitness, double gastos, int totalFree)
 {
+    // instancia solução local
+    Solucao solucaoLocal{alocsMap, estrutura, dataset};
+
     // check de gastos
-    double custoProjetado = gastos + projeto1.getCusto();
+    double custoProjetado = solucaoLocal.getGastos() + projeto1.getCusto();
     if (custoProjetado > dataset.getCapitalTotal())
     {
-        return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+        return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
     }
 
     if (fitness != -1)
     {
         // projeta fitness
-        double fitnessProjetado = fitness + projeto1.getMiVpl();
-        if (fitnessProjetado <= fitness)
+        double fitnessProjetado = solucaoLocal.getFitness() + projeto1.getMiVpl();
+        if (fitnessProjetado <= solucaoLocal.getFitness())
         {
-            return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+            return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
         }
     }
-
-    // instancia solução local
-    Solucao solucaoLocal{alocsMap, estrutura, dataset};
 
     // inserir projeto1 na sonda1
     // fazer busca
@@ -526,25 +526,25 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     Projeto projeto2 = alocacao1.getProjeto();
     Intervalo intervalo2 = alocacao1.getIntervalo();
 
+    // instancia solução local
+    Solucao solucaoLocal{alocsMap, estrutura, dataset};
+
     // check de gastos
-    double custoProjetado = gastos - alocacao1.getProjeto().getCusto() + projeto1.getCusto();
+    double custoProjetado = solucaoLocal.getGastos() - alocacao1.getProjeto().getCusto() + projeto1.getCusto();
     if (custoProjetado > dataset.getCapitalTotal())
     {
-        return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+        return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
     }
 
     if (fitness != -1)
     {
         // projeta fitness
-        double fitnessProjetado = fitness - alocacao1.getProjeto().getMiVpl() + projeto1.getMiVpl();
-        if (fitnessProjetado <= fitness)
+        double fitnessProjetado = solucaoLocal.getFitness() - alocacao1.getProjeto().getMiVpl() + projeto1.getMiVpl();
+        if (fitnessProjetado <= solucaoLocal.getFitness())
         {
-            return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+            return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
         }
     }
-
-    // instancia solução local
-    Solucao solucaoLocal{alocsMap, estrutura, dataset};
 
     // remover projeto2 da sonda1
     bool removed2 = solucaoLocal.removerProjeto(sonda1, projeto2, intervalo2, modoDebug);
@@ -583,29 +583,29 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     Intervalo intervalo2 = alocacao1.getIntervalo();
     Intervalo intervalo3 = alocacao2.getIntervalo();
 
+    // instancia solução local
+    Solucao solucaoLocal{alocsMap, estrutura, dataset};
+
     // check de gastos
-    double custoProjetado = gastos
+    double custoProjetado = solucaoLocal.getGastos()
                             - alocacao1.getProjeto().getCusto() - alocacao2.getProjeto().getCusto() 
                             + projeto1.getCusto();
     if (custoProjetado > dataset.getCapitalTotal())
     {
-        return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+        return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
     }
 
     if (fitness != -1)
     {
         // projeta fitness
-        double fitnessProjetado = fitness 
+        double fitnessProjetado = solucaoLocal.getFitness() 
                                 - alocacao1.getProjeto().getMiVpl() - alocacao2.getProjeto().getMiVpl() 
                                 + projeto1.getMiVpl();
-        if (fitnessProjetado <= fitness)
+        if (fitnessProjetado <= solucaoLocal.getFitness())
         {
-            return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+            return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
         }
     }
-
-    // instancia solução local
-    Solucao solucaoLocal{alocsMap, estrutura, dataset};
 
     // remover projeto2 da sonda1
     bool removed2 = solucaoLocal.removerProjeto(sonda1, projeto2, intervalo2, modoDebug);
@@ -645,29 +645,29 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     Projeto projeto3 = alocacao1.getProjeto();
     Intervalo intervalo3 = alocacao1.getIntervalo();
 
+    // instancia solução local
+    Solucao solucaoLocal{alocsMap, estrutura, dataset};
+
     // check de gastos
-    double custoProjetado = gastos
+    double custoProjetado = solucaoLocal.getGastos()
                             - alocacao1.getProjeto().getCusto() 
                             + projeto1.getCusto() + projeto2.getCusto();
     if (custoProjetado > dataset.getCapitalTotal())
     {
-        return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+        return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
     }
 
     if (fitness != -1)
     {
         // projeta fitness
-        double fitnessProjetado = fitness
+        double fitnessProjetado = solucaoLocal.getFitness()
                                 - alocacao1.getProjeto().getMiVpl() 
                                 + projeto1.getMiVpl() + projeto2.getMiVpl();
-        if (fitnessProjetado <= fitness)
+        if (fitnessProjetado <= solucaoLocal.getFitness())
         {
-            return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+            return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
         }
     }
-
-    // instancia solução local
-    Solucao solucaoLocal{alocsMap, estrutura, dataset};
 
     // remover projeto3 da sonda1
     bool removed3 = solucaoLocal.removerProjeto(sonda1, projeto3, intervalo3, modoDebug);
@@ -726,29 +726,29 @@ std::tuple<std::map<Sonda, std::vector<Alocacao>>, double, double, int> Moviment
     Intervalo intervalo3 = alocacao1.getIntervalo();
     Intervalo intervalo4 = alocacao2.getIntervalo();
 
+    // instancia solução local
+    Solucao solucaoLocal{alocsMap, estrutura, dataset};
+
     // check de gastos
-    double custoProjetado = gastos 
+    double custoProjetado = solucaoLocal.getGastos()
                             - alocacao1.getProjeto().getCusto() - alocacao2.getProjeto().getCusto() 
                             + projeto1.getCusto() + projeto2.getCusto();
     if (custoProjetado > dataset.getCapitalTotal())
     {
-        return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+        return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
     }
 
     if (fitness != -1)
     {
         // projeta fitness
-        double fitnessProjetado = fitness
+        double fitnessProjetado = solucaoLocal.getFitness()
                                 - alocacao1.getProjeto().getMiVpl() - alocacao2.getProjeto().getMiVpl() 
                                 + projeto1.getMiVpl() + projeto2.getMiVpl();
-        if (fitnessProjetado <= fitness)
+        if (fitnessProjetado <= solucaoLocal.getFitness())
         {
-            return std::make_tuple(alocsMap, fitness, gastos, totalFree);
+            return std::make_tuple(alocsMap, solucaoLocal.getFitness(), solucaoLocal.getGastos(), solucaoLocal.getTotalFree());
         }
     }
-
-    // instancia solução local
-    Solucao solucaoLocal{alocsMap, estrutura, dataset};
 
     // remover projeto3 da sonda1
     bool removed3 = solucaoLocal.removerProjeto(sonda1, projeto3, intervalo3, modoDebug);
@@ -1386,13 +1386,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 std::tie(alocsMapAlt, fitnessAlt, gastosAlt, totalFreeAlt) = swap1x1FO(alocsMap, dataset, estrutura, 
                                                                                         modoRealoc, alocacao1, projeto1, modoDebug, bestFitness, bestGastos, bestTotalFree);
 
-                // se for melhor que best
+                // se melhora FO
                 if (fitnessAlt > bestFitness)
                 {
+                    // substitui bests
                     bestAlocsMap = alocsMapAlt;
                     bestFitness = fitnessAlt;
                     bestGastos = gastosAlt;
                     bestTotalFree = totalFreeAlt;
+                }
+                else if (fitnessAlt >= bestFitness)
+                {
+                    if (gastosAlt < bestGastos)
+                    {
+                        // substitui bests
+                        bestAlocsMap = alocsMapAlt;
+                        bestFitness = fitnessAlt;
+                        bestGastos = gastosAlt;
+                        bestTotalFree = totalFreeAlt;
+                    }
+                    else if (totalFreeAlt > bestTotalFree)
+                    {
+                        // substitui bests
+                        bestAlocsMap = alocsMapAlt;
+                        bestFitness = fitnessAlt;
+                        bestGastos = gastosAlt;
+                        bestTotalFree = totalFreeAlt;
+                    }
                 }
             }
         }
@@ -1452,13 +1472,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     std::tie(alocsMapAlt, fitnessAlt, gastosAlt, totalFreeAlt) = swap2x1FO(alocsMap, dataset, estrutura, 
                                                                                    modoRealoc, alocacao1, alocacao2, projeto1, modoDebug, bestFitness, bestGastos, bestTotalFree);
 
-                    // se for melhor que best
+                    // se melhora FO
                     if (fitnessAlt > bestFitness)
                     {
+                        // substitui bests
                         bestAlocsMap = alocsMapAlt;
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                    }
+                    else if (fitnessAlt >= bestFitness)
+                    {
+                        if (gastosAlt < bestGastos)
+                        {
+                            // substitui bests
+                            bestAlocsMap = alocsMapAlt;
+                            bestFitness = fitnessAlt;
+                            bestGastos = gastosAlt;
+                            bestTotalFree = totalFreeAlt;
+                        }
+                        else if (totalFreeAlt > bestTotalFree)
+                        {
+                            // substitui bests
+                            bestAlocsMap = alocsMapAlt;
+                            bestFitness = fitnessAlt;
+                            bestGastos = gastosAlt;
+                            bestTotalFree = totalFreeAlt;
+                        }
                     }
                 }
             }
@@ -1518,13 +1558,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     std::tie(alocsMapAlt, fitnessAlt, gastosAlt, totalFreeAlt) = swap1x2FO(alocsMap, dataset, estrutura, 
                                                                                    modoRealoc, alocacao1, projeto1, projeto2, modoDebug, bestFitness, bestGastos, bestTotalFree);
 
-                    // se for melhor que best
+                    // se melhora FO
                     if (fitnessAlt > bestFitness)
                     {
+                        // substitui bests
                         bestAlocsMap = alocsMapAlt;
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                    }
+                    else if (fitnessAlt >= bestFitness)
+                    {
+                        if (gastosAlt < bestGastos)
+                        {
+                            // substitui bests
+                            bestAlocsMap = alocsMapAlt;
+                            bestFitness = fitnessAlt;
+                            bestGastos = gastosAlt;
+                            bestTotalFree = totalFreeAlt;
+                        }
+                        else if (totalFreeAlt > bestTotalFree)
+                        {
+                            // substitui bests
+                            bestAlocsMap = alocsMapAlt;
+                            bestFitness = fitnessAlt;
+                            bestGastos = gastosAlt;
+                            bestTotalFree = totalFreeAlt;
+                        }
                     }
                 }
             }
@@ -1593,13 +1653,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                     modoRealoc, alocacao1, alocacao2, 
                                                                                     projeto1, projeto2, modoDebug, bestFitness, bestGastos, bestTotalFree);
 
-                        // se for melhor que best
+                        // se melhora FO
                         if (fitnessAlt > bestFitness)
                         {
+                            // substitui bests
                             bestAlocsMap = alocsMapAlt;
                             bestFitness = fitnessAlt;
                             bestGastos = gastosAlt;
                             bestTotalFree = totalFreeAlt;
+                        }
+                        else if (fitnessAlt >= bestFitness)
+                        {
+                            if (gastosAlt < bestGastos)
+                            {
+                                // substitui bests
+                                bestAlocsMap = alocsMapAlt;
+                                bestFitness = fitnessAlt;
+                                bestGastos = gastosAlt;
+                                bestTotalFree = totalFreeAlt;
+                            }
+                            else if (totalFreeAlt > bestTotalFree)
+                            {
+                                // substitui bests
+                                bestAlocsMap = alocsMapAlt;
+                                bestFitness = fitnessAlt;
+                                bestGastos = gastosAlt;
+                                bestTotalFree = totalFreeAlt;
+                            }
                         }
                     }
                 }
@@ -1614,7 +1694,157 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas)
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
+{
+    // inicializa valores a serem retornados
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+
+    int countIterFO = 0;
+
+    // inicializa bests
+    Solucao bestSolucao{alocsMap, estrutura, dataset};
+    double bestFitness = bestSolucao.getFitness();
+    double bestGastos = bestSolucao.getGastos();
+    int bestTotalFree = bestSolucao.getTotalFree();
+    long long bestTempo = 0;
+    std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // guarda conjunto de vizinhanças inicial
+    std::set<int> vizinhancasInit = vizinhancas;
+
+    // enquanto ainda tem vizinhaças
+    while (vizinhancas.empty() == false)
+    {
+        // seleciona vizinhança
+        int vizinhanca = *(vizinhancas.begin());
+
+        // remove vizinhança do conjunto
+        vizinhancas.erase(vizinhancas.begin());
+
+        // faz busca pela vizinhança
+        if (vizinhanca == 1)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift1x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 2)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift2x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 3)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 4)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 5)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 6)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao1IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 7)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao2IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 8)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaInserirNovoFO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 9)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 10)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 11)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 12)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+
+        // se melhora FO
+        if (newFitness > 1.01 * bestFitness)
+        {
+            // reinicializa conjunto de vizinhanças
+            vizinhancas = vizinhancasInit;
+
+            // substitui bests
+            bestAlocsMap = alocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+
+            countIterFO = 0;
+        }
+        else if (newFitness >= bestFitness)
+        {
+            countIterFO++;
+            if (newGastos < 0.99 * bestGastos)
+            {
+                // reinicializa conjunto de vizinhanças
+                if (countIterFO <= maxIterFO)
+                {
+                    vizinhancas = vizinhancasInit;
+                }
+        
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+            else if (newTotalFree > 1.01 * bestTotalFree)
+            {
+                // reinicializa conjunto de vizinhanças
+                if (countIterFO <= maxIterFO)
+                {
+                    vizinhancas = vizinhancasInit;
+                }
+        
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+        }
+        else
+        {
+            countIterFO++;
+        }
+    }
+    return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
+}
+
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaVNDTosco(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                                   DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
 {
     // inicializa valores a serem retornados
     double newFitness = 0;
@@ -1629,6 +1859,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     int bestTotalFree = bestSolucao.getTotalFree();
     long long bestTempo = 0;
     std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // guarda conjunto de vizinhanças inicial
+    std::set<int> vizinhancasInit = vizinhancas;
 
     // enquanto ainda tem vizinhaças
     while (vizinhancas.empty() == false)
@@ -1704,9 +1937,6 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         // se melhora FO
         if (newFitness > bestFitness)
         {
-            // reinsere vizinhança
-            vizinhancas.insert(vizinhanca);
-
             // substitui bests
             bestAlocsMap = alocsMap;
             bestFitness = newFitness;
@@ -1714,12 +1944,185 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestTempo = newTempo;
             bestTotalFree = newTotalFree;
         }
+        else if (newFitness >= bestFitness)
+        {
+            if (newGastos < bestGastos)
+            {
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+            else if (newTotalFree > bestTotalFree)
+            {
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+        }
     }
     return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas)
+                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
+{
+    // inicializa valores a serem retornados
+    double newFitness = 0;
+    double newGastos = 0;
+    int newTotalFree = 0;
+    long long newTempo = 0;
+
+    int countIterFO = 0;
+
+    // inicializa bests
+    Solucao bestSolucao{alocsMap, estrutura, dataset};
+    double bestFitness = bestSolucao.getFitness();
+    double bestGastos = bestSolucao.getGastos();
+    int bestTotalFree = bestSolucao.getTotalFree();
+    long long bestTempo = 0;
+    std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // guarda conjunto de vizinhanças inicial
+    std::set<int> vizinhancasInit = vizinhancas;
+
+    // enquanto ainda tem vizinhaças
+    while (vizinhancas.empty() == false)
+    {
+        // seleciona vizinhança
+        int idx = rand() % vizinhancas.size();
+        std::set<int>::iterator itr = std::next(vizinhancas.begin(), idx);
+        int vizinhanca = *(itr);
+
+        // remove vizinhança do conjunto
+        vizinhancas.erase(*itr);
+
+        // faz busca pela vizinhança
+        if (vizinhanca == 1)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift1x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 2)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaShift2x0InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 3)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 4)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 5)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2InterRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 6)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao1IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 7)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaReinsercao2IntraRota(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 8)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaInserirNovoFO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 9)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 10)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x1FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 11)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap1x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+        else if (vizinhanca == 12)
+        {
+            std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaSwap2x2FO(
+                                                alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
+        }
+
+        // se melhora FO
+        if (newFitness > 1.01 * bestFitness)
+        {
+            // reinicializa conjunto de vizinhanças
+            vizinhancas = vizinhancasInit;
+
+            // substitui bests
+            bestAlocsMap = alocsMap;
+            bestFitness = newFitness;
+            bestGastos = newGastos;
+            bestTempo = newTempo;
+            bestTotalFree = newTotalFree;
+
+            countIterFO = 0;
+        }
+        else if (newFitness >= bestFitness)
+        {
+            countIterFO++;
+            if (newGastos < 0.99 * bestGastos)
+            {
+                // reinicializa conjunto de vizinhanças
+                if (countIterFO <= maxIterFO)
+                {
+                    vizinhancas = vizinhancasInit;
+                }
+        
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+            else if (newTotalFree > 1.01 * bestTotalFree)
+            {
+                // reinicializa conjunto de vizinhanças
+                if (countIterFO <= maxIterFO)
+                {
+                    vizinhancas = vizinhancasInit;
+                }
+        
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+        }
+        else
+        {
+            countIterFO++;
+        }
+    }
+    return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
+}
+
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaRVNDTosco(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
+                                            DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
 {
     // inicializa valores a serem retornados
     double newFitness = 0;
@@ -1734,6 +2137,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     int bestTotalFree = bestSolucao.getTotalFree();
     long long bestTempo = 0;
     std::map<Sonda, std::vector<Alocacao>> bestAlocsMap = alocsMap;
+
+    // guarda conjunto de vizinhanças inicial
+    std::set<int> vizinhancasInit = vizinhancas;
 
     // enquanto ainda tem vizinhaças
     while (vizinhancas.empty() == false)
@@ -1811,9 +2217,6 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         // se melhora FO
         if (newFitness > bestFitness)
         {
-            // reinsere vizinhança
-            vizinhancas.insert(vizinhanca);
-
             // substitui bests
             bestAlocsMap = alocsMap;
             bestFitness = newFitness;
@@ -1821,12 +2224,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestTempo = newTempo;
             bestTotalFree = newTotalFree;
         }
+        else if (newFitness >= bestFitness)
+        {
+            if (newGastos < bestGastos)
+            {
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+            else if (newTotalFree > bestTotalFree)
+            {
+                // substitui bests
+                bestAlocsMap = alocsMap;
+                bestFitness = newFitness;
+                bestGastos = newGastos;
+                bestTempo = newTempo;
+                bestTotalFree = newTotalFree;
+            }
+        }
     }
     return std::make_tuple(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaLocal(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
-                                          DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca, int modoDebug, std::set<int> vizinhancas)
+                                          DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int vizinhanca, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
 {
     // inicializa valores a serem retornados
     double newFitness = 0;
@@ -1898,12 +2322,22 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     else if (vizinhanca == 13)
     {
         std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaVND(
-                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas);
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas, maxIterFO);
     }
     else if (vizinhanca == 14)
     {
         std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaRVND(
-                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas);
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas, maxIterFO);
+    }
+    else if (vizinhanca == 15)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaVNDTosco(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas, maxIterFO);
+    }
+    else if (vizinhanca == 16)
+    {
+        std::tie(newTempo, alocsMap, newFitness, newGastos, newTotalFree) = buscaRVNDTosco(
+                                            alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug, vizinhancas, maxIterFO);
     }
     return std::make_tuple(newTempo, alocsMap, newFitness, newGastos, newTotalFree);
 }
