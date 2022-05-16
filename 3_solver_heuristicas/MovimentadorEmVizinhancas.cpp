@@ -1696,6 +1696,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                                    DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel)
+    {
+        std::cout << std::endl;
+        std::cout << "Realizando busca VND";
+        std::cout << std::endl;
+    }
+    
     // inicializa valores a serem retornados
     double newFitness = 0;
     double newGastos = 0;
@@ -1786,11 +1795,79 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                 alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
         }
 
-        // se melhora FO
-        if (newFitness > 1.01 * bestFitness)
+        if (modoDebugAltoNivel)
         {
-            // reinicializa conjunto de vizinhanças
-            vizinhancas = vizinhancasInit;
+            std::cout << std::endl;
+            std::cout << "Movimento realizado" << std::endl;
+            std::cout << "best fitness: " << bestFitness << std::endl;
+            std::cout << "new fitness: " << newFitness << std::endl;
+            std::cout << "best gastos: " << bestGastos << std::endl;
+            std::cout << "new gastos: " << newGastos << std::endl;
+            std::cout << "best totalFree: " << bestTotalFree << std::endl;
+            std::cout << "new totalFree: " << newTotalFree << std::endl;
+            std::cout << "contagem sem melhorar FO: " << countIterFO << std::endl;
+        }
+        
+        // se melhora FO
+        if ((int)newFitness > (int)bestFitness)
+        {
+            if (modoDebugAltoNivel)
+            {
+                std::cout << std::endl << "Melhora fitness" << std::endl;
+            }
+
+            if ((newFitness >= 0) && (bestFitness >= 0))
+            {
+                if ((int)newFitness > (int)(1.01 * bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+                    
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness >= 0) && (bestFitness < 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness < 0) && (bestFitness >= 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness < 0) && (bestFitness < 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
 
             // substitui bests
             bestAlocsMap = alocsMap;
@@ -1801,15 +1878,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
             countIterFO = 0;
         }
-        else if (newFitness >= bestFitness)
+        else if ((int)newFitness >= (int)bestFitness)
         {
-            countIterFO++;
-            if (newGastos < 0.99 * bestGastos)
+            if (modoDebugAltoNivel)
             {
+                std::cout << std::endl << "Não melhora fitness, mas não piora." << std::endl;
+            }
+            
+            countIterFO++;
+            if ((int)newGastos < (int)bestGastos)
+            {
+                if (modoDebugAltoNivel)
+                {
+                   std::cout << std::endl << "Melhora gastos" << std::endl; 
+                }
+                
                 // reinicializa conjunto de vizinhanças
                 if (countIterFO <= maxIterFO)
                 {
-                    vizinhancas = vizinhancasInit;
+                    if ((int)newGastos < (int)(0.99 * bestGastos))
+                    {
+                        if (modoDebugAltoNivel)
+                        {
+                            std::cout << std::endl << "reinicializa vizinhanças" << std::endl;
+                        }
+                        
+                        vizinhancas = vizinhancasInit;
+                    }
                 }
         
                 // substitui bests
@@ -1819,11 +1914,21 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 bestTempo = newTempo;
                 bestTotalFree = newTotalFree;
             }
-            else if (newTotalFree > 1.01 * bestTotalFree)
+            else if ((int)newTotalFree > (int)bestTotalFree)
             {
+                if (modoDebugAltoNivel)
+                {
+                    std::cout << std::endl << "Melhora totalFree" << std::endl;
+                }
+                
                 // reinicializa conjunto de vizinhanças
                 if (countIterFO <= maxIterFO)
                 {
+                    if (modoDebugAltoNivel)
+                    {
+                       std::cout << std::endl << "reinicializa vizinhanças" << std::endl; 
+                    }
+                    
                     vizinhancas = vizinhancasInit;
                 }
         
@@ -1837,6 +1942,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         else
         {
+            if (modoDebugAltoNivel)
+            {
+                std::cout << std::endl << "Piora fitness" << std::endl;
+            }
+            
             countIterFO++;
         }
     }
@@ -1972,6 +2082,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> MovimentadorEmVizinhancas::buscaRVND(std::map<Sonda, std::vector<Alocacao>> alocsMap, 
                                             DadosDeEntrada dataset, int estrutura, int modoRealoc, int deltaT, int modoDebug, std::set<int> vizinhancas, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel)
+    {
+        std::cout << std::endl;
+        std::cout << "Realizando busca RVND";
+        std::cout << std::endl;
+    }
+    
     // inicializa valores a serem retornados
     double newFitness = 0;
     double newGastos = 0;
@@ -2064,11 +2183,79 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                 alocsMap, dataset, estrutura, modoRealoc, dataset.getDelta(), modoDebug);
         }
 
-        // se melhora FO
-        if (newFitness > 1.01 * bestFitness)
+        if (modoDebugAltoNivel)
         {
-            // reinicializa conjunto de vizinhanças
-            vizinhancas = vizinhancasInit;
+            std::cout << std::endl;
+            std::cout << "Movimento realizado" << std::endl;
+            std::cout << "best fitness: " << bestFitness << std::endl;
+            std::cout << "new fitness: " << newFitness << std::endl;
+            std::cout << "best gastos: " << bestGastos << std::endl;
+            std::cout << "new gastos: " << newGastos << std::endl;
+            std::cout << "best totalFree: " << bestTotalFree << std::endl;
+            std::cout << "new totalFree: " << newTotalFree << std::endl;
+            std::cout << "contagem sem melhorar FO: " << countIterFO << std::endl;
+        }
+        
+        // se melhora FO
+        if ((int)newFitness > (int)bestFitness)
+        {
+            if (modoDebugAltoNivel)
+            {
+                std::cout << std::endl << "Melhora fitness" << std::endl;
+            }
+
+            if ((newFitness >= 0) && (bestFitness >= 0))
+            {
+                if ((int)newFitness > (int)(1.01 * bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+                    
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness >= 0) && (bestFitness < 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness < 0) && (bestFitness >= 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
+            else if ((newFitness < 0) && (bestFitness < 0))
+            {
+                if ((int)newFitness > (int)(bestFitness))
+                {
+                    if (modoDebugAltoNivel)
+                    {
+                        std::cout << std::endl << "Reinicializa vizinhanças" << std::endl;
+                    }
+                    
+                    // reinicializa conjunto de vizinhanças
+                    vizinhancas = vizinhancasInit;
+                }
+            }
 
             // substitui bests
             bestAlocsMap = alocsMap;
@@ -2079,15 +2266,33 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
             countIterFO = 0;
         }
-        else if (newFitness >= bestFitness)
+        else if ((int)newFitness >= (int)bestFitness)
         {
-            countIterFO++;
-            if (newGastos < 0.99 * bestGastos)
+            if (modoDebugAltoNivel)
             {
+                std::cout << std::endl << "Não melhora fitness, mas não piora." << std::endl;
+            }
+            
+            countIterFO++;
+            if ((int)newGastos < (int)bestGastos)
+            {
+                if (modoDebugAltoNivel)
+                {
+                   std::cout << std::endl << "Melhora gastos" << std::endl; 
+                }
+                
                 // reinicializa conjunto de vizinhanças
                 if (countIterFO <= maxIterFO)
                 {
-                    vizinhancas = vizinhancasInit;
+                    if ((int)newGastos < (int)(0.99 * bestGastos))
+                    {
+                        if (modoDebugAltoNivel)
+                        {
+                            std::cout << std::endl << "reinicializa vizinhanças" << std::endl;
+                        }
+                        
+                        vizinhancas = vizinhancasInit;
+                    }
                 }
         
                 // substitui bests
@@ -2097,11 +2302,21 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 bestTempo = newTempo;
                 bestTotalFree = newTotalFree;
             }
-            else if (newTotalFree > 1.01 * bestTotalFree)
+            else if ((int)newTotalFree > (int)bestTotalFree)
             {
+                if (modoDebugAltoNivel)
+                {
+                    std::cout << std::endl << "Melhora totalFree" << std::endl;
+                }
+                
                 // reinicializa conjunto de vizinhanças
                 if (countIterFO <= maxIterFO)
                 {
+                    if (modoDebugAltoNivel)
+                    {
+                       std::cout << std::endl << "reinicializa vizinhanças" << std::endl; 
+                    }
+                    
                     vizinhancas = vizinhancasInit;
                 }
         
@@ -2115,6 +2330,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         else
         {
+            if (modoDebugAltoNivel)
+            {
+                std::cout << std::endl << "Piora fitness" << std::endl;
+            }
+            
             countIterFO++;
         }
     }

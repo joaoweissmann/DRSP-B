@@ -96,7 +96,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
@@ -115,6 +115,13 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                                 int nivelIntensifica, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl;
+    std::cout << "Rodando GRASP";
+    std::cout << std::endl;}
+
     auto start = std::chrono::high_resolution_clock::now();
 
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
@@ -126,6 +133,12 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl;
+    std::cout << "Construindo solução inicial";
+    std::cout << std::endl;}
+
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     // inicializa vetor de alphas
@@ -153,6 +166,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl;
+        std::cout << "Rodando iteração: " << count;
+        std::cout << std::endl;}
+
         // escolhe critério
         int criterio = (rand() % 4) + 1;
         construtor.setCriterio(criterio);
@@ -169,16 +187,29 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
         
+        if (modoDebugAltoNivel){
+        std::cout << std::endl;
+        std::cout << "Novos valores após iteração: " << count << std::endl;
+        std::cout << "best fitness: " << bestFitness << std::endl;
+        std::cout << "new fitness: " << newFitness << std::endl;
+        std::cout << std::endl;}
+
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Guardando ótimo local" << std::endl;}
+
             otimosLocaisFitness.insert((int)newFitness);
             otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
 
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Substituindo best" << std::endl;}
+
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
             bestGastos = newGastos;
@@ -186,6 +217,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestTotalFree = newTotalFree;
         }
     }
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "GRASP finalizado sem intensificações finais" << std::endl;}
 
     // faz busca final para os melhores ótimos locais
     struct sort_pred {
@@ -210,7 +244,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
@@ -223,6 +257,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     long long tempoTotal = duration.count();
 
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "GRASP finalizado com intensificações finais" << std::endl;}
+
     return std::make_tuple(tempoTotal, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
@@ -230,6 +267,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
                                                                                                                 int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Rodando GRASP adaptativo" << std::endl;}
+
     auto start = std::chrono::high_resolution_clock::now();
 
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
@@ -241,6 +283,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Construindo solução inicial" << std::endl;}
+
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
     // inicializa valores intermediários
@@ -272,6 +318,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
+
         // constroi nova solução
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
@@ -279,16 +328,31 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = movimentador.buscaLocal(newAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
         
+        if (modoDebugAltoNivel){
+        std::cout << std::endl;
+        std::cout << "Novos valores após iteração: " << count << std::endl;
+        std::cout << "best fitness: " << bestFitness << std::endl;
+        std::cout << "new fitness: " << newFitness << std::endl;
+        std::cout << "Contagem sem melhorar FO: " << countSemMelhora << std::endl;
+        std::cout << "Contagem mudou alpha: " << countMudouAlpha << std::endl;
+        std::cout << std::endl;}
+
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Guardando ótimo local" << std::endl;}
+
             otimosLocaisFitness.insert((int)newFitness);
             otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
 
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Atualizando best" << std::endl;}
+
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
             bestGastos = newGastos;
@@ -304,6 +368,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             countSemMelhora++;
             if (countSemMelhora > nIterMelhora)
             {
+                if (modoDebugAltoNivel){
+                std::cout << std::endl << "Alterando alpha para maior exploração" << std::endl;}
+
                 double newAlpha = taxaAlpha * construtor.getAlpha();
                 construtor.setAlpha(newAlpha);
                 countSemMelhora = 0;
@@ -311,6 +378,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             }
             if (countMudouAlpha > nIterAlpha)
             {
+                if (modoDebugAltoNivel){
+                std::cout << std::endl << "Alterando critério guloso para maior exploração" << std::endl;}
+
                 if (criterios.empty())
                 {
                     criterios.insert(1);
@@ -338,6 +408,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
     }
 
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "GRASP adaptativo finalizado sem intensificações finais" << std::endl;}
+
     // faz busca final para os melhores ótimos locais
     struct sort_pred {
         bool operator()(const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &left, const std::pair<int, std::map<Sonda, std::vector<Alocacao>>> &right) {
@@ -361,7 +434,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
@@ -374,6 +447,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     long long tempoTotal = duration.count();
 
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "GRASP adaptativo finalizado com intensificações finais" << std::endl;}
+
     return std::make_tuple(tempoTotal, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
@@ -381,6 +457,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
                                                                                                                 double aceitacaoLimite, int nivelIntensifica, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Rodando ILS" << std::endl;}
+
     auto start = std::chrono::high_resolution_clock::now();
 
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
@@ -392,7 +473,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Construindo solução inicial" << std::endl;}
+
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Fazendo busca local inicial" << std::endl;}
 
     // realiza busca local
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
@@ -419,6 +507,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
+
         // perturba solução
         partAlocsMap = movimentador.perturbaSolucao(newAlocsMap, dataset, this->_estrutura, this->_modoRealoc, 
                                                     this->_nivelPerturba, this->_modoPerturba, modoDebug, vizinhancasinit);
@@ -427,16 +518,30 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl;
+        std::cout << "Novos valores após iteração: " << count << std::endl;
+        std::cout << "best fitness: " << bestFitness << std::endl;
+        std::cout << "new fitness: " << newFitness << std::endl;
+        std::cout << "part fitness: " << partFitness << std::endl;
+        std::cout << std::endl;}
+
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)newFitness) == otimosLocaisFitness.end())
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Guardando ótimo local" << std::endl;}
+
             otimosLocaisFitness.insert((int)newFitness);
             otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
 
         // decide se aceita a nova solução
-        if (partFitness >= aceitacaoLimite * newFitness)
+        if ((int)partFitness >= (int)(aceitacaoLimite * newFitness))
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Aceita solução nova" << std::endl;}
+
             newAlocsMap = partAlocsMap;
             newFitness = partFitness;
             newGastos = partGastos;
@@ -445,8 +550,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
 
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Atualiza best" << std::endl;}
+
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
             bestGastos = newGastos;
@@ -454,6 +562,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestTotalFree = newTotalFree;
         }
     }
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "ILS finalizado sem intensificações finais" << std::endl;}
 
     // faz busca final para os melhores ótimos locais
     struct sort_pred {
@@ -478,7 +589,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
@@ -491,6 +602,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     long long tempoTotal = duration.count();
 
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "ILS finalizado com intensificações finais" << std::endl;}
+
     return std::make_tuple(tempoTotal, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }
 
@@ -500,6 +614,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                                                 int nIterMelhora, int taxaPerturba, double taxaAceitacao,
                                                                                                                 int nIterRestart, double alphaRestart, int maxIterFO)
 {
+    int modoDebugAltoNivel = 0;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Rodando ILS adaptativo" << std::endl;}
+
     auto start = std::chrono::high_resolution_clock::now();
 
     ConstrutorHeuristico construtor{this->_alpha, this->_criterio, this->_estrutura, this->_modoRealoc};
@@ -511,7 +630,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     double bestFitness;
     double bestGastos;
     int bestTotalFree;
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Construindo solução inicial" << std::endl;}
+
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "Rodando busca local inicial" << std::endl;}
 
     // realiza busca local
     std::tie(bestTempo, bestAlocsMap, bestFitness, bestGastos, bestTotalFree) = movimentador.buscaLocal(bestAlocsMap, dataset, 
@@ -544,6 +670,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
+
         // perturba solução
         partAlocsMap = movimentador.perturbaSolucao(newAlocsMap, dataset, this->_estrutura, this->_modoRealoc, 
                                                     this->_nivelPerturba, this->_modoPerturba, modoDebug, vizinhancasinit);
@@ -552,16 +681,32 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         std::tie(partTempo, partAlocsMap, partFitness, partGastos, partTotalFree) = movimentador.buscaLocal(partAlocsMap, dataset, 
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
 
+        if (modoDebugAltoNivel){
+        std::cout << std::endl;
+        std::cout << "Novos valores após iteração: " << count << std::endl;
+        std::cout << "best fitness: " << bestFitness << std::endl;
+        std::cout << "new fitness: " << newFitness << std::endl;
+        std::cout << "part fitness: " << partFitness << std::endl;
+        std::cout << "count sem melhorar FO: " << countSemMelhora << std::endl;
+        std::cout << "count para restart: " << countRestart << std::endl;
+        std::cout << std::endl;}
+
         // guarda ótimo local, se novo
         if (otimosLocaisFitness.find((int)partFitness) == otimosLocaisFitness.end())
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Guardando ótimo local" << std::endl;}
+
             otimosLocaisFitness.insert((int)partFitness);
             otimosLocaisAlocs.push_back(std::make_pair((int)partFitness, partAlocsMap));
         }
 
         // decide se aceita a nova solução
-        if (partFitness >= aceitacaoLimite * newFitness)
+        if ((int)partFitness >= (int)(aceitacaoLimite * newFitness))
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Aceita nova solução" << std::endl;}
+
             newAlocsMap = partAlocsMap;
             newFitness = partFitness;
             newGastos = partGastos;
@@ -570,8 +715,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
 
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
+            if (modoDebugAltoNivel){
+            std::cout << std::endl << "Atualiza best" << std::endl;}
+
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
             bestGastos = newGastos;
@@ -588,6 +736,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             countSemMelhora++;
             if (countSemMelhora > nIterMelhora)
             {
+                if (modoDebugAltoNivel){
+                std::cout << std::endl << "Alterando taxaAceitacao e nivelPerturba para mais exploração" << std::endl;}
+
                 this->_nivelPerturba = this->_nivelPerturba + taxaPerturba;
                 aceitacaoLimite = aceitacaoLimite * taxaAceitacao;
                 countSemMelhora = 0;
@@ -595,6 +746,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             }
             if (countRestart > nIterRestart)
             {
+                if (modoDebugAltoNivel){
+                std::cout << std::endl << "Realizando restart" << std::endl;}
+
                 // restart
                 construtor.setAlpha(alphaRestart);
 
@@ -607,6 +761,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             }
         }
     }
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "ILS adaptativo finalizado sem intensificações finais" << std::endl;}
 
     // faz busca final para os melhores ótimos locais
     struct sort_pred {
@@ -631,7 +788,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasFinal, maxIterFO);
         
         // se for melhor que best, substitui
-        if (newFitness > bestFitness)
+        if ((int)newFitness > (int)bestFitness)
         {
             bestAlocsMap = newAlocsMap;
             bestFitness = newFitness;
@@ -643,6 +800,9 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     long long tempoTotal = duration.count();
+
+    if (modoDebugAltoNivel){
+    std::cout << std::endl << "ILS adaptativo finalizado com intensificações finais" << std::endl;}
 
     return std::make_tuple(tempoTotal, bestAlocsMap, bestFitness, bestGastos, bestTotalFree);
 }

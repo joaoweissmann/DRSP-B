@@ -339,7 +339,7 @@ int main()
         // definindo parametros
         cout << "Definindo parametros do CPLEX..." << endl;
 
-        cplex.setParam(IloCplex::Param::TimeLimit, 1800); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
+        cplex.setParam(IloCplex::Param::TimeLimit, 3600); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
 
         cplex.setParam(IloCplex::Param::WorkMem, 4096); // 1024 megabytes
         cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 20000); // 131072 megabytes
