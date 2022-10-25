@@ -1527,15 +1527,15 @@ void Testador::testarExecutadorDeMetaheuristicas()
     vizinhancasInit.insert(1); // shift_1x0_interRota
     vizinhancasInit.insert(2); // shift_2x0_interRota
     vizinhancasInit.insert(3); // swap_1x1_interRota
-    //vizinhancasInit.insert(4); // swap_2x1_interRota
-    //vizinhancasInit.insert(5); // swap_2x2_interRota
+    //vizinhancasInit.insert(4); // swap_2x1_interRota //
+    //vizinhancasInit.insert(5); // swap_2x2_interRota //
     vizinhancasInit.insert(6); // reinsercao1
     vizinhancasInit.insert(7); // reinsercao2
     vizinhancasInit.insert(8); // inserirNovoFO
     vizinhancasInit.insert(9); // swap_1x1_FO
-    //vizinhancasInit.insert(10); // swap_2x1_FO
-    //vizinhancasInit.insert(11); // swap_1x2_FO
-    //vizinhancasInit.insert(12); // swap_2x2_FO
+    //vizinhancasInit.insert(10); // swap_2x1_FO //
+    //vizinhancasInit.insert(11); // swap_1x2_FO //
+    //vizinhancasInit.insert(12); // swap_2x2_FO //
 
     // inicializa conjunto de vizinhanças
     std::set<int> vizinhancasFinal;
@@ -1552,7 +1552,15 @@ void Testador::testarExecutadorDeMetaheuristicas()
     vizinhancasFinal.insert(11); // swap_1x2_FO
     //vizinhancasFinal.insert(12); // swap_2x2_FO
 
-    long long nIterAlvo = 10000 * 2; // 10000
+    // ler dataset
+    std::string filename;
+    
+    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/instancia_10projetos_10sondas_delta_t1.dat";
+
+    LeitorDeDados leitor;
+    DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
+
+    long long nIterAlvo = 10000  ; // 10000
     int modoDebug = 0; // 0
     int estrutura = 1; // 1
     int modoRealoc = 1; // 1
@@ -1560,25 +1568,17 @@ void Testador::testarExecutadorDeMetaheuristicas()
     double alpha = 0.99; // 0.99
     int modoBusca = 14; // 14
     int modoPerturba = 13; // 13
-    int nivelPerturba = 2; // 2
-    double aceitacaoLimite = 0.99; // 0.99
+    int nivelPerturba = ( (int)dataset.getProjetos().size() ) / 10 ; // 2
+    double aceitacaoLimite = 1.0 ; // 0.99
     int nivelIntensifica = 0; // 0
-    double taxaAlpha = 0.9; // 0.95
-    int taxaPerturba = 2; // 2
-    double taxaAceitacao = 0.9; // 0.95
-    double alphaRestart = 0.7; // 0.9
+    double taxaAlpha = 0.95; // 0.95
+    int taxaPerturba = ( (int)dataset.getProjetos().size() ) / 20 ; // 2
+    double taxaAceitacao = 0.99 ; // 0.95
+    double alphaRestart = 0.9; // 0.9
     ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alpha, modoBusca, modoPerturba, nivelPerturba};
 
-    // ler dataset
-    std::string filename;
-    
-    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/instancia_100projetos_10sondas_delta_t7.dat";
-
-    LeitorDeDados leitor;
-    DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
-
-    int nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
-    int nIterMelhora = 10; // 10
+    int nIter = 10; // ( nIterAlvo ) / ( (int)dataset.getProjetos().size() ) // 10
+    int nIterMelhora = 10; // 10 // 20 
     int nIterAlpha = 10; // 10
     int nIterRestart = 10; // 10
     int maxIterFO = 10; // 10
@@ -1590,11 +1590,11 @@ void Testador::testarExecutadorDeMetaheuristicas()
     int totalFree;
     //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter, modoDebug);
     //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, maxIterFO);
-    std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
     //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
     //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILSadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
 
-    // /*
+    /*
     std::cout << std::endl;
     std::cout << "A solução tem: " << std::endl;
     std::cout << "Alocações:" << std::endl;
@@ -1622,15 +1622,15 @@ void Testador::testarExecutadorDeMetaheuristicas()
         std::cout << "Solução INviável: " << viavel;
         std::cout << std::endl;
     }
-    // */
+    */
 
     const char * caminho = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/";
     
-    /*
+    // /*
     executador.rodarVariosArquivos(caminho, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, 
                                    aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha,
                                    taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
-    */
+    // */
 
     std::cout << std::endl;
     std::cout << "################### Teste concluído ###################" << std::endl;

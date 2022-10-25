@@ -574,8 +574,7 @@ def Exporta_Instancia(projetos, sondas, n_projetos, n_sondas, t_init, t_final, d
         for i, it in enumerate(sondas[col]):
             sondas[col][i] = round(sondas[col][i], 2)
     
-    with open('instancia_' + str(n_projetos) + 'projetos_' + 
-              str(n_sondas) + 'sondas_delta_t' + str(delta_t) + '.dat', 'w') as f:
+    with open( str(n_projetos) + 'p_' + str(n_sondas) + 's_' + str(delta_t) +'dt' + '.dat', 'w') as f:
         
         # DADOS GERAIS
         print (n_projetos, round(sum(projetos['Custo do poço'])/np.random.choice([1.5, 2, 2.5]), 2), t_init, t_final, delta_t, n_periodos, file=f)
@@ -677,7 +676,7 @@ def Gerar_Instancias_Batch(n_projetos=[10, 20], n_sondas=[2, 5], delta_t=[1*7*4,
 
 def main():
 
-    n_projetos = [130] # [10, 40, 70, 100, 130, 160, 200, 220, 250, 270]
+    n_projetos = [10] # [10, 40, 70, 100, 130, 160, 200, 220, 250, 270]
     n_sondas = [2] # [2, 5, 10]
     delta_t = [14] # [1*7*4, 1*7*2, 1*7, 1]
     Gerar_Instancias_Batch(n_projetos, n_sondas, delta_t)

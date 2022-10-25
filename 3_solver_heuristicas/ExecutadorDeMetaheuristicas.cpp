@@ -83,6 +83,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        auto stopPart = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
+        long long tempoPart = duration.count();
+        if (tempoPart >= 3600000)
+        {
+            break;
+        }
+
         // escolhe critério
         int criterio = (rand() % 4) + 1;
         construtor.setCriterio(criterio);
@@ -165,6 +173,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     while (count < nIter)
     {
         count++;
+
+        auto stopPart = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
+        long long tempoPart = duration.count();
+        if (tempoPart >= 3600000)
+        {
+            break;
+        }
 
         if (modoDebugAltoNivel){
         std::cout << std::endl;
@@ -317,6 +333,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     while (count < nIter)
     {
         count++;
+
+        auto stopPart = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
+        long long tempoPart = duration.count();
+        if (tempoPart >= 3600000)
+        {
+            break;
+        }
 
         if (modoDebugAltoNivel){
         std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
@@ -507,6 +531,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        auto stopPart = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
+        long long tempoPart = duration.count();
+        if (tempoPart >= 3600000)
+        {
+            break;
+        }
+
         if (modoDebugAltoNivel){
         std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
 
@@ -670,6 +702,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     {
         count++;
 
+        auto stopPart = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
+        long long tempoPart = duration.count();
+        if (tempoPart >= 3600000)
+        {
+            break;
+        }
+
         if (modoDebugAltoNivel){
         std::cout << std::endl << "Rodando iteração: " << count << std::endl;}
 
@@ -748,6 +788,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             {
                 if (modoDebugAltoNivel){
                 std::cout << std::endl << "Realizando restart" << std::endl;}
+
+                countSemMelhora = 0;
+                countRestart = 0;
+                aceitacaoLimite = limiteAceitacaoInit;
+                this->_nivelPerturba = nivelPerturbaInit;
 
                 // restart
                 construtor.setAlpha(alphaRestart);
@@ -873,11 +918,14 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             LeitorDeDados leitor;
             DadosDeEntrada dataset = leitor.lerDadosDeEntrada(s2);
 
-            long long nIterAlvo = 10000 / 5;
+            long long nIterAlvo = 7000;
             nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
+            this->setNivelPerturba( ( (int)dataset.getProjetos().size() ) / 10);
+            taxaPerturba = std::max(1, ( (int)dataset.getProjetos().size() ) / 20 );
 
             // inicializa variaveis a serem retornadas
             long long tempo;
+            long long tempoMedio;
             std::map<Sonda, std::vector<Alocacao>> alocsMap;
             double fitness;
             double gastos;
@@ -885,7 +933,15 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
 
             // mult-start heuristic
             std::cout << "Rodando Mult-Start Heuristic" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug);
+
+            tempoMedio = 0;
+            for (int repete=0; repete<10; repete++)
+            {
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug);
+                tempoMedio = tempoMedio + tempo;
+            }
+            tempoMedio = tempoMedio / 10;
+
             outfile << s2 << " " 
                     << "Mult-Start" << " " 
                     << this->_estrutura << " "
@@ -906,14 +962,22 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterRestart << " "
                     << alphaRestart << " "
                     << maxIterFO << " "
-                    << tempo << " "
+                    << tempoMedio << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO);
+
+            tempoMedio = 0;
+            for (int repete=0; repete<10; repete++)
+            {
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO);
+                tempoMedio = tempoMedio + tempo;
+            }
+            tempoMedio = tempoMedio / 10;
+            
             outfile << s2 << " " 
                     << "GRASP" << " " 
                     << this->_estrutura << " "
@@ -934,14 +998,22 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterRestart << " "
                     << alphaRestart << " "
                     << maxIterFO << " "
-                    << tempo << " "
+                    << tempoMedio << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
             
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
+            
+            tempoMedio = 0;
+            for (int repete=0; repete<10; repete++)
+            {
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
+                tempoMedio = tempoMedio + tempo;
+            }
+            tempoMedio = tempoMedio / 10;
+
             outfile << s2 << " " 
                     << "GRASP_ada" << " " 
                     << this->_estrutura << " "
@@ -962,14 +1034,22 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterRestart << " "
                     << alphaRestart << " "
                     << maxIterFO << " "
-                    << tempo << " "
+                    << tempoMedio << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
+            
+            tempoMedio = 0;
+            for (int repete=0; repete<10; repete++)
+            {
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
+                tempoMedio = tempoMedio + tempo;
+            }
+            tempoMedio = tempoMedio / 10;
+
             outfile << s2 << " " 
                     << "ILS" << " " 
                     << this->_estrutura << " "
@@ -990,14 +1070,22 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterRestart << " "
                     << alphaRestart << " "
                     << maxIterFO << " "
-                    << tempo << " "
+                    << tempoMedio << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
         
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
-            std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+            
+            tempoMedio = 0;
+            for (int repete=0; repete<10; repete++)
+            {
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+                tempoMedio = tempoMedio + tempo;
+            }
+            tempoMedio = tempoMedio / 10;
+            
             outfile << s2 << " " 
                     << "ILS_ada" << " " 
                     << this->_estrutura << " "
@@ -1018,7 +1106,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << nIterRestart << " "
                     << alphaRestart << " "
                     << maxIterFO << " "
-                    << tempo << " "
+                    << tempoMedio << " "
                     << fitness << " "
                     << gastos << " "
                     <<  std::endl;
