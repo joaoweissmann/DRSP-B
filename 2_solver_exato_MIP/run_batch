@@ -1,10 +1,10 @@
 
 rm -rf resultados_automatico.txt
 
-yourfilenames=`ls /home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/*`
+yourfilenames=`ls /home/joaoweissmann/Documents/repos/projects_optimization/1_gerador_instancias_sinteticas/instancias/*`
 
 for eachfile in $yourfilenames
 do
-   #make ctp ARGS=$eachfile
-   make ti ARGS=$eachfile
+   make ctp ARGS=$eachfile
+   #make ti ARGS=$eachfile
 done

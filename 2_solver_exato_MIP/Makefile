@@ -1,12 +1,12 @@
 SYSTEM     = x86-64_linux
 LIBFORMAT  = static_pic
 
-CPLEXDIR      = /opt/ibm/ILOG/CPLEX_Studio1210/cplex
-CONCERTDIR    = /opt/ibm/ILOG/CPLEX_Studio1210/concert
+CPLEXDIR      = /opt/ibm/ILOG/CPLEX_Studio221/cplex
+CONCERTDIR    = /opt/ibm/ILOG/CPLEX_Studio221/concert
 
-CCC = g++ -O0
+CCC = g++
 
-CCOPT = -m64 -O -fPIC -fno-strict-aliasing -fexceptions -DNDEBUG -DIL_STD
+CCOPT = -m64 -fPIC -fno-strict-aliasing -fexceptions -DNDEBUG
 
 CPLEXBINDIR   = $(CPLEXDIR)/bin/$(BINDIST)
 CPLEXLIBDIR   = $(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
@@ -14,7 +14,7 @@ CONCERTLIBDIR = $(CONCERTDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
 
 # For dynamic linking
 CPLEXBINDIR   = $(CPLEXDIR)/bin/$(SYSTEM)
-CPLEXLIB      = cplex$(dynamic:yes=12100)
+CPLEXLIB      = cplex$(dynamic:yes=2210)
 run           = $(dynamic:yes=LD_LIBRARY_PATH=$(CPLEXBINDIR))
 
 CCLNDIRS  = -L$(CPLEXLIBDIR) -L$(CONCERTLIBDIR) $(dynamic:yes=-L$(CPLEXBINDIR))

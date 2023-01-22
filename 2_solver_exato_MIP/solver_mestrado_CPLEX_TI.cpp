@@ -341,8 +341,8 @@ int main()
 
         cplex.setParam(IloCplex::Param::TimeLimit, 3600); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
 
-        cplex.setParam(IloCplex::Param::WorkMem, 16000); // 1024 megabytes
-        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 20000); // 131072 megabytes
+        cplex.setParam(IloCplex::Param::WorkMem, 8000); // 1024 megabytes
+        //cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 16000); // 131072 megabytes
         cplex.setParam(IloCplex::Param::Emphasis::Memory, 1); // 1: conservar memoria
         cplex.setParam(IloCplex::Param::MIP::Strategy::File, 3); // 1: em memória, 2: em disco, 3: em disco otimizado 
         cplex.setParam(IloCplex::Param::WorkDir, ".");
@@ -368,6 +368,7 @@ int main()
             for (int m=0; m<n_sondas; m++)
             {
                 x_var[i][m] = IloNumVarArray(env, n_periodos+1, 0, 1, ILOINT);
+                //x_var[i][m] = IloNumVarArray(env, n_periodos+1, 0, 1, IloNum); // LINEAR RELAXATION
                 //for (int t=0; t<n_periodos; t++)
                 //{
                 //    if (i<n_sondas)
@@ -394,6 +395,7 @@ int main()
 
         // criando a variável de decisão y_{j}
         IloNumVarArray y_var(env, n_projetos, 0, 1, ILOINT);
+        //IloNumVarArray y_var(env, n_projetos, 0, 1, IloNum); // LINEAR RELAXATION
         //for (int j=0; j<n_projetos; j++)
         //{
         //    y_var[j] = IloNumVar(env, 0, 1, ILOINT, "y_var");
@@ -464,9 +466,9 @@ int main()
         
         // 5. restrição de preempção
         cout << "Criando restrição de preempção..." << endl;
-        IloInt inicio_t=0, final_t=0;
-        IloInt inicio_s=0, final_s=0;
-        IloInt inicio_j=0;
+        int inicio_t=0, final_t=0; // antes estava IloInt
+        int inicio_s=0, final_s=0; // antes estava IloInt
+        int inicio_j=0; // antes estava IloInt
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
             if (i < n_sondas)
@@ -523,10 +525,12 @@ int main()
                         {
                             final_s = n_periodos;
                         }
+                        //cout << "inicio_s = " << inicio_s << " ; final_s = " << final_s << endl; // DEBUG
                         for (int s_temp=inicio_s; s_temp<final_s+1; s_temp++)
                         {
                             expr4 += x_var[i][m][s_temp];
                         }
+                        //cout << "chega aqui..." << endl; // DEBUG
                         IloConstraint c4(expr4 <= 1);
                         c4.setName("preempção");
                         model.add(c4);

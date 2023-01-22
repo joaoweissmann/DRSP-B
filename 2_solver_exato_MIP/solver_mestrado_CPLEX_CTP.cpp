@@ -367,8 +367,8 @@ int main()
 
         cplex.setParam(IloCplex::Param::TimeLimit, 3600); // in seconds: 3600, 7200, 14400, 21600, 43200, 86400
 
-        cplex.setParam(IloCplex::Param::WorkMem, 16000); // 1024 megabytes
-        cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 20000); // 131072 megabytes
+        cplex.setParam(IloCplex::Param::WorkMem, 8000); // 1024 megabytes
+        //cplex.setParam(IloCplex::Param::MIP::Limits::TreeMemory, 16000); // 131072 megabytes
         cplex.setParam(IloCplex::Param::Emphasis::Memory, 1); // 1: conservar memoria
         cplex.setParam(IloCplex::Param::MIP::Strategy::File, 3); // 1: em memória, 2: em disco, 3: em disco otimizado 
         cplex.setParam(IloCplex::Param::WorkDir, ".");
@@ -394,6 +394,7 @@ int main()
             for (int j=0; j<n_projetos; j++)
             {
                 x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1, ILOINT);
+                //x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1, IloNum); // LINEAR RELAXATION
             }
         }
         
@@ -404,6 +405,7 @@ int main()
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
             c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos, ILOINT);
+            //c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos, IloNum); // LINEAR RELAXATION
             //for (int m=0; m<n_sondas; m++)
             //{
             //    if (i < n_sondas)
