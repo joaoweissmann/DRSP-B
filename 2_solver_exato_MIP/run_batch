@@ -5,6 +5,6 @@ yourfilenames=`ls /home/joaoweissmann/Documents/repos/projects_optimization/1_ge
 
 for eachfile in $yourfilenames
 do
-   make ctp ARGS=$eachfile
-   #make ti ARGS=$eachfile
+   #make ctp ARGS=$eachfile
+   make ti ARGS=$eachfile
 done
