@@ -1524,14 +1524,14 @@ void Testador::testarExecutadorDeMetaheuristicas()
 
     // inicializa conjunto de vizinhanças
     std::set<int> vizinhancasInit;
-    vizinhancasInit.insert(1); // shift_1x0_interRota
-    vizinhancasInit.insert(2); // shift_2x0_interRota
-    vizinhancasInit.insert(3); // swap_1x1_interRota
+    //vizinhancasInit.insert(1); // shift_1x0_interRota
+    //vizinhancasInit.insert(2); // shift_2x0_interRota
+    //vizinhancasInit.insert(3); // swap_1x1_interRota
     //vizinhancasInit.insert(4); // swap_2x1_interRota //
     //vizinhancasInit.insert(5); // swap_2x2_interRota //
-    vizinhancasInit.insert(6); // reinsercao1
-    vizinhancasInit.insert(7); // reinsercao2
-    vizinhancasInit.insert(8); // inserirNovoFO
+    //vizinhancasInit.insert(6); // reinsercao1
+    //vizinhancasInit.insert(7); // reinsercao2
+    //vizinhancasInit.insert(8); // inserirNovoFO
     vizinhancasInit.insert(9); // swap_1x1_FO
     //vizinhancasInit.insert(10); // swap_2x1_FO //
     //vizinhancasInit.insert(11); // swap_1x2_FO //
@@ -1555,7 +1555,7 @@ void Testador::testarExecutadorDeMetaheuristicas()
     // ler dataset
     std::string filename;
     
-    filename = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/instancia_10projetos_10sondas_delta_t1.dat";
+    filename = "/home/joaoweissmann/Documents/repos/projects_optimization/1_gerador_instancias_sinteticas/instancias/10p_2s_7dt.dat";
 
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
@@ -1624,7 +1624,7 @@ void Testador::testarExecutadorDeMetaheuristicas()
     }
     */
 
-    const char * caminho = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/";
+    const char * caminho = "/home/joaoweissmann/Documents/repos/projects_optimization/1_gerador_instancias_sinteticas/instancias/";
     
     // /*
     executador.rodarVariosArquivos(caminho, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, 

@@ -393,8 +393,8 @@ int main()
             x_var[i] = NumVarMatrix2D(env, n_projetos);
             for (int j=0; j<n_projetos; j++)
             {
-                //x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1, ILOINT);
-                x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1); // LINEAR RELAXATION
+                x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1, ILOINT);
+                //x_var[i][j] = IloNumVarArray(env, n_sondas, 0, 1); // LINEAR RELAXATION
             }
         }
         
@@ -404,8 +404,8 @@ int main()
         NumVarMatrix2D c_var(env, n_projetos+n_sondas);
         for (int i=0; i<n_projetos+n_sondas; i++)
         {
-            //c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos, ILOINT);
-            c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos); // LINEAR RELAXATION
+            c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos, ILOINT);
+            //c_var[i] = IloNumVarArray(env, n_sondas, 0, n_periodos); // LINEAR RELAXATION
             
             //for (int m=0; m<n_sondas; m++)
             //{

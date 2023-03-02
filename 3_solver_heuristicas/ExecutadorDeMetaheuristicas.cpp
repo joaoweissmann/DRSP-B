@@ -869,6 +869,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         while ( (diread = readdir(dir)) != nullptr ) 
         {
             arquivos.push_back(diread->d_name);
+            //std::cout << diread->d_name << std::endl;
         }
         closedir (dir);
     } 
@@ -905,20 +906,20 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             << "gastos" << " "
             <<  std::endl;
 
-    std::string s1 = "instancia";
+    std::string s1 = ".dat";
     for (std::vector<std::string>::iterator it=arquivos.begin(); it!=arquivos.end(); ++it)
     {
         std::string arquivo = *it;
         if (arquivo.find(s1) != std::string::npos)
         {
-            std::string s2 = "/home/joaoweissmann/Documents/repos/synthetic_instance_generator/synthetic_instance_generator/1_gerador_instancias_sinteticas/instancias/";
+            std::string s2 = "/home/joaoweissmann/Documents/repos/projects_optimization/1_gerador_instancias_sinteticas/instancias/";
             s2.append(*it);
             std::cout << "Rodando heurísticas para arquivo: " << s2 << std::endl;
 
             LeitorDeDados leitor;
             DadosDeEntrada dataset = leitor.lerDadosDeEntrada(s2);
 
-            long long nIterAlvo = 7000;
+            long long nIterAlvo = 7000 / 4; // 7000 -> meia hora no pior caso
             nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
             this->setNivelPerturba( ( (int)dataset.getProjetos().size() ) / 10);
             taxaPerturba = std::max(1, ( (int)dataset.getProjetos().size() ) / 20 );
@@ -928,19 +929,33 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             long long tempoMedio;
             std::map<Sonda, std::vector<Alocacao>> alocsMap;
             double fitness;
+            double fitnessMedio;
             double gastos;
+            double gastosMedio;
             int totalFree;
+
+            int repetitionsMultiStart = 5; // DEFAULT É 10
+            int repetitionsGRASP = 5; // DEFAULT É 10
+            int repetitionsGRASPada = 5; // DEFAULT É 10
+            int repetitionsILS = 5; // DEFAULT É 10
+            int repetitionsILSada = 5; // DEFAULT É 10
 
             // mult-start heuristic
             std::cout << "Rodando Mult-Start Heuristic" << std::endl;
 
             tempoMedio = 0;
-            for (int repete=0; repete<10; repete++)
+            fitnessMedio = 0;
+            gastosMedio = 0;
+            for (int repete=0; repete<repetitionsMultiStart; repete++)
             {
                 std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug);
                 tempoMedio = tempoMedio + tempo;
+                fitnessMedio = fitnessMedio + fitness;
+                gastosMedio = gastosMedio + gastos;
             }
-            tempoMedio = tempoMedio / 10;
+            tempoMedio = tempoMedio / std::max(repetitionsMultiStart, 1);
+            fitnessMedio = fitnessMedio / std::max(repetitionsMultiStart, 1);
+            gastosMedio = gastosMedio / std::max(repetitionsMultiStart, 1);
 
             outfile << s2 << " " 
                     << "Mult-Start" << " " 
@@ -963,20 +978,26 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << alphaRestart << " "
                     << maxIterFO << " "
                     << tempoMedio << " "
-                    << fitness << " "
-                    << gastos << " "
+                    << fitnessMedio << " "
+                    << gastosMedio << " "
                     <<  std::endl;
 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
 
             tempoMedio = 0;
-            for (int repete=0; repete<10; repete++)
+            fitnessMedio = 0;
+            gastosMedio = 0;
+            for (int repete=0; repete<repetitionsGRASP; repete++)
             {
                 std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO);
                 tempoMedio = tempoMedio + tempo;
+                fitnessMedio = fitnessMedio + fitness;
+                gastosMedio = gastosMedio + gastos;
             }
-            tempoMedio = tempoMedio / 10;
+            tempoMedio = tempoMedio / std::max(repetitionsGRASP, 1);
+            fitnessMedio = fitnessMedio / std::max(repetitionsGRASP, 1);
+            gastosMedio = gastosMedio / std::max(repetitionsGRASP, 1);
             
             outfile << s2 << " " 
                     << "GRASP" << " " 
@@ -999,20 +1020,26 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << alphaRestart << " "
                     << maxIterFO << " "
                     << tempoMedio << " "
-                    << fitness << " "
-                    << gastos << " "
+                    << fitnessMedio << " "
+                    << gastosMedio << " "
                     <<  std::endl;
             
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
             
             tempoMedio = 0;
-            for (int repete=0; repete<10; repete++)
+            fitnessMedio = 0;
+            gastosMedio = 0;
+            for (int repete=0; repete<repetitionsGRASPada; repete++)
             {
                 std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
                 tempoMedio = tempoMedio + tempo;
+                fitnessMedio = fitnessMedio + fitness;
+                gastosMedio = gastosMedio + gastos;
             }
-            tempoMedio = tempoMedio / 10;
+            tempoMedio = tempoMedio / std::max(repetitionsGRASPada, 1);
+            fitnessMedio = fitnessMedio / std::max(repetitionsGRASPada, 1);
+            gastosMedio = gastosMedio / std::max(repetitionsGRASPada, 1);
 
             outfile << s2 << " " 
                     << "GRASP_ada" << " " 
@@ -1035,20 +1062,26 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << alphaRestart << " "
                     << maxIterFO << " "
                     << tempoMedio << " "
-                    << fitness << " "
-                    << gastos << " "
+                    << fitnessMedio << " "
+                    << gastosMedio << " "
                     <<  std::endl;
 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
             
             tempoMedio = 0;
-            for (int repete=0; repete<10; repete++)
+            fitnessMedio = 0;
+            gastosMedio = 0;
+            for (int repete=0; repete<repetitionsILS; repete++)
             {
                 std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
                 tempoMedio = tempoMedio + tempo;
+                fitnessMedio = fitnessMedio + fitness;
+                gastosMedio = gastosMedio + gastos;
             }
-            tempoMedio = tempoMedio / 10;
+            tempoMedio = tempoMedio / std::max(repetitionsILS, 1);
+            fitnessMedio = fitnessMedio / std::max(repetitionsILS, 1);
+            gastosMedio = gastosMedio / std::max(repetitionsILS, 1);
 
             outfile << s2 << " " 
                     << "ILS" << " " 
@@ -1071,20 +1104,26 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << alphaRestart << " "
                     << maxIterFO << " "
                     << tempoMedio << " "
-                    << fitness << " "
-                    << gastos << " "
+                    << fitnessMedio << " "
+                    << gastosMedio << " "
                     <<  std::endl;
         
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
             
             tempoMedio = 0;
-            for (int repete=0; repete<10; repete++)
+            fitnessMedio = 0;
+            gastosMedio = 0;
+            for (int repete=0; repete<repetitionsILSada; repete++)
             {
                 std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
                 tempoMedio = tempoMedio + tempo;
+                fitnessMedio = fitnessMedio + fitness;
+                gastosMedio = gastosMedio + gastos;
             }
-            tempoMedio = tempoMedio / 10;
+            tempoMedio = tempoMedio / std::max(repetitionsILSada, 1);
+            fitnessMedio = fitnessMedio / std::max(repetitionsILSada, 1);
+            gastosMedio = gastosMedio / std::max(repetitionsILSada, 1);
             
             outfile << s2 << " " 
                     << "ILS_ada" << " " 
@@ -1107,8 +1146,8 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                     << alphaRestart << " "
                     << maxIterFO << " "
                     << tempoMedio << " "
-                    << fitness << " "
-                    << gastos << " "
+                    << fitnessMedio << " "
+                    << gastosMedio << " "
                     <<  std::endl;
         }
     }
