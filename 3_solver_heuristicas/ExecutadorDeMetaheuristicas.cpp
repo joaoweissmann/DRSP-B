@@ -912,7 +912,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         std::string arquivo = *it;
         if (arquivo.find(s1) != std::string::npos)
         {
-            std::string s2 = "/home/joaoweissmann/Documents/repos/projects_optimization/1_gerador_instancias_sinteticas/instancias/";
+            std::string s2 = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/";
             s2.append(*it);
             std::cout << "Rodando heurísticas para arquivo: " << s2 << std::endl;
 

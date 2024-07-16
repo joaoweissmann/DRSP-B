@@ -1,5 +1,4 @@
 
-
 def Cria_Grid(x_min, x_max, y_min, y_max, print_grid=False):
     
     import numpy as np
@@ -676,9 +675,9 @@ def Gerar_Instancias_Batch(n_projetos=[10, 20], n_sondas=[2, 5], delta_t=[1*7*4,
 
 def main():
 
-    n_projetos = [10] # [10, 40, 70, 100, 130, 160, 200, 220, 250, 270]
-    n_sondas = [2] # [2, 5, 10]
-    delta_t = [14] # [1*7*4, 1*7*2, 1*7, 1]
+    n_projetos = [10, 20, 30] # [10, 40, 70, 100, 130, 160, 200, 220, 250, 270]
+    n_sondas = [2, 5] # [2, 5, 10]
+    delta_t = [1*7*4, 1*7*2] # [1*7*4, 1*7*2, 1*7, 1]
     Gerar_Instancias_Batch(n_projetos, n_sondas, delta_t)
 
 
