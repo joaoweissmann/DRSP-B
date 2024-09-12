@@ -5,6 +5,6 @@ yourfilenames=`ls /home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancia
 
 for eachfile in $yourfilenames
 do
-   make ctp ARGS=$eachfile
-   #make ti ARGS=$eachfile
+   #make ctp ARGS=$eachfile
+   make ti ARGS=$eachfile
 done

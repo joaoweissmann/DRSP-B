@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <bits/stdc++.h>
+#include <cmath>
 #include "Testador.h"
 
 void Testador::testarProjeto()
@@ -1555,51 +1556,74 @@ void Testador::testarExecutadorDeMetaheuristicas()
     // ler dataset
     std::string filename;
     
-    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/10p_2s_14dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/10p_2s_1dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/70p_2s_7dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/100p_5s_14dt.dat";
+    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/160p_10s_1dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/200p_2s_7dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/250p_5s_14dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/270p_10s_14dt.dat";
 
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
 
-    long long nIterAlvo = 10000  ; // 10000
+    // parâmetros
+    int nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3)); // 100
+    int nIterConverge = nIter / 5; // 20
+    int maxIterFO = 10; // 10
+    int nIterMelhoraGRASPada = 20; // manual=10; IRACE1=26; IRACE2=29; IRACE3=24;
+    int nIterMelhoraILSada = 16; // manual = 10; IRACE1=16; IRACE2=15; IRACE3=10;
+    int nIterAlpha = 20; // manual=10; IRACE1=18; IRACE2=23; IRACE3=11;
+    int nIterRestart = 15; // manual=10; IRACE1=16; IRACE2=14; IRACE3=10;
     int modoDebug = 0; // 0
     int estrutura = 1; // 1
     int modoRealoc = 1; // 1
     int criterio = 1; // 1
-    double alpha = 0.99; // 0.99
+    double alphaGRASP = 0.9; // 0.99
+    double alphaGRASPada = 0.7; // manual=0.99; IRACE1=0.6; IRACE2=0.6; IRACE3=0.6;
+    double alphaILS = 0.9; // 0.99
+    double alphaILSada = 0.9; // manual=0.99; IRACE1=0.9; IRACE2=0.9; IRACE3=0.9;
     int modoBusca = 14; // 14
     int modoPerturba = 13; // 13
-    int nivelPerturba = ( (int)dataset.getProjetos().size() ) / 10 ; // 2
-    double aceitacaoLimite = 1.0 ; // 0.99
+    int nivelPerturbaILS = 2; // 2
+    int nivelPerturbaILSada = 2; // manual=2; IRACE1=2; IRACE2=2; IRACE3=2;
+    double aceitacaoLimiteILS = 1.0 ; // 1.0
+    double aceitacaoLimiteILSada = 1.0 ; // manual=1.0; IRACE1=1.0; IRACE2=1.0; IRACE3=1.0;
     int nivelIntensifica = 0; // 0
-    double taxaAlpha = 0.95; // 0.95
-    int taxaPerturba = ( (int)dataset.getProjetos().size() ) / 20 ; // 2
-    double taxaAceitacao = 0.99 ; // 0.95
-    double alphaRestart = 0.9; // 0.9
-    ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alpha, modoBusca, modoPerturba, nivelPerturba};
-
-    int nIter = 10; // ( nIterAlvo ) / ( (int)dataset.getProjetos().size() ) // 10
-    int nIterMelhora = 10; // 10 // 20 
-    int nIterAlpha = 10; // 10
-    int nIterRestart = 10; // 10
-    int maxIterFO = 10; // 10
+    double taxaAlpha = 0.7; // manual=0.95; IRACE1=0.6; IRACE2=0.7; IRACE3=0.6;
+    int taxaPerturba = 4; // manual=2; IRACE1=4; IRACE2=2; IRACE3=2;
+    double taxaAceitacao = 0.8 ; // manual=0.95; IRACE1=0.8; IRACE2=0.7; IRACE3=0.99;
+    double alphaRestart = 0.9; // manual=0.9; IRACE1=0.9; IRACE2=0.8; IRACE3=0.9;
 
     long long tempo;
     std::map<Sonda, std::vector<Alocacao>> alocsMap;
     double fitness;
     double gastos;
     int totalFree;
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter, modoDebug);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, maxIterFO);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
-    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILSadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+    
+    //ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alphaGRASP, modoBusca, modoPerturba, nivelPerturbaILS};
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.multStartHeuristic(dataset, nIter, modoDebug, nIterConverge);
+    
+    //ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alphaGRASP, modoBusca, modoPerturba, nivelPerturbaILS};
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASP(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, maxIterFO, nIterConverge);
+    
+    ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alphaGRASPada, modoBusca, modoPerturba, nivelPerturbaILS};
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, nivelIntensifica, nIterMelhoraGRASPada, taxaAlpha, nIterAlpha, maxIterFO, nIterConverge);
+    
+    //ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alphaILS, modoBusca, modoPerturba, nivelPerturbaILS};
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILS(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimiteILS, nivelIntensifica, maxIterFO, nIterConverge);
+    
+    //ExecutadorDeMetaheuristicas executador{estrutura, modoRealoc, criterio, alphaILSada, modoBusca, modoPerturba, nivelPerturbaILSada};
+    //std::tie(tempo, alocsMap, fitness, gastos, totalFree) = executador.ILSadaptativo(dataset, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, aceitacaoLimiteILSada, nivelIntensifica, nIterMelhoraILSada, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO, nIterConverge);
 
     /*
     std::cout << std::endl;
+    std::cout << "nIter: " << nIter << std::endl;
+    std::cout << "nIterConverge: " << nIterConverge << std::endl;
     std::cout << "A solução tem: " << std::endl;
-    std::cout << "Alocações:" << std::endl;
-    AlocacoesVector alocs{alocsMap, dataset.getDelta()};
-    alocs.print();
+    //std::cout << "Alocações:" << std::endl;
+    //AlocacoesVector alocs{alocsMap, dataset.getDelta()};
+    //alocs.print();
     std::cout << "fitness: " << fitness << std::endl;
     std::cout << "gastos: " << gastos << std::endl;
     std::cout << "limite gastos: " << dataset.getCapitalTotal() << std::endl;
@@ -1607,8 +1631,8 @@ void Testador::testarExecutadorDeMetaheuristicas()
 
     VerificadorDeSolucao verificador{};
     Solucao solut{alocsMap, estrutura, dataset};
-    std::cout << "fitness solução: " << solut.getFitness() << std::endl;
-    std::cout << "gastos solução: " << solut.getGastos() << std::endl;
+    //std::cout << "fitness solução: " << solut.getFitness() << std::endl;
+    //std::cout << "gastos solução: " << solut.getGastos() << std::endl;
     bool viavel = verificador.verificarSolucao(solut, dataset);
     if (viavel)
     {
@@ -1619,7 +1643,7 @@ void Testador::testarExecutadorDeMetaheuristicas()
     else
     {
         std::cout << std::endl;
-        std::cout << "Solução INviável: " << viavel;
+        std::cout << "Solução Inviável: " << viavel;
         std::cout << std::endl;
     }
     */
@@ -1628,8 +1652,8 @@ void Testador::testarExecutadorDeMetaheuristicas()
     
     ///*
     executador.rodarVariosArquivos(caminho, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, 
-                                   aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha,
-                                   taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+                                   aceitacaoLimiteILSada, nivelIntensifica, nIterMelhoraGRASPada, taxaAlpha, nIterAlpha,
+                                   taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO, nIterConverge);
     //*/
 
     std::cout << std::endl;

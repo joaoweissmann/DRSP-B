@@ -48,7 +48,7 @@ void ExecutadorDeMetaheuristicas::setNivelPerturba(int nivelPerturba)
     this->_nivelPerturba = nivelPerturba;
 }
 
-std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::multStartHeuristic(DadosDeEntrada dataset, int nIter, int modoDebug)
+std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::multStartHeuristic(DadosDeEntrada dataset, int nIter, int modoDebug, int nIterConverge)
 {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -79,6 +79,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     int newTotalFree;
 
     int count = 0;
+    int countConverge = 0;
     while (count < nIter)
     {
         count++;
@@ -86,7 +87,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         auto stopPart = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
         long long tempoPart = duration.count();
-        if (tempoPart >= 3600000)
+        if (tempoPart >= 1800000)
         {
             break;
         }
@@ -103,6 +104,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         // constroi nova solução
         std::tie(newTempo, newAlocsMap, newFitness, newGastos, newTotalFree) = construtor.ConstruirSolucao(dataset, modoDebug);
 
+        if ((int)newFitness >= 1.01 * (int)bestFitness) 
+        {
+            countConverge = 0;
+        }
+        else
+        {
+            countConverge++;
+        }
+
         // se for melhor que best, substitui
         if ((int)newFitness > (int)bestFitness)
         {
@@ -111,6 +121,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestGastos = newGastos;
             bestTempo = newTempo;
             bestTotalFree = newTotalFree;
+        }
+        
+        if (countConverge >= nIterConverge)
+        {
+            break;
         }
     }
     auto stop = std::chrono::high_resolution_clock::now();
@@ -121,7 +136,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASP(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                                int nivelIntensifica, int maxIterFO)
+                                                                                                                int nivelIntensifica, int maxIterFO, int nIterConverge)
 {
     int modoDebugAltoNivel = 0;
 
@@ -170,6 +185,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
 
     int count = 0;
+    int countConverge = 0;
     while (count < nIter)
     {
         count++;
@@ -177,7 +193,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         auto stopPart = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
         long long tempoPart = duration.count();
-        if (tempoPart >= 3600000)
+        if (tempoPart >= 1800000)
         {
             break;
         }
@@ -220,6 +236,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
         }
 
+        if ((int)newFitness > 1.01 * (int)bestFitness) 
+        {
+            countConverge = 0;
+        }
+        else 
+        {
+            countConverge++;
+        }
+
         // se for melhor que best, substitui
         if ((int)newFitness > (int)bestFitness)
         {
@@ -231,6 +256,11 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestGastos = newGastos;
             bestTempo = newTempo;
             bestTotalFree = newTotalFree;
+        }
+
+        if (countConverge >= nIterConverge) 
+        {
+            break;
         }
     }
 
@@ -281,7 +311,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::GRASPadaptativo(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal,
-                                                                                                                int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha, int maxIterFO)
+                                                                                                                int nivelIntensifica, int nIterMelhora, double taxaAlpha, int nIterAlpha, int maxIterFO, int nIterConverge)
 {
     int modoDebugAltoNivel = 0;
 
@@ -330,6 +360,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     int count = 0;
     int countSemMelhora = 0;
     int countMudouAlpha = 0;
+    int countConverge = 0;
     while (count < nIter)
     {
         count++;
@@ -337,7 +368,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         auto stopPart = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
         long long tempoPart = duration.count();
-        if (tempoPart >= 3600000)
+        if (tempoPart >= 1800000)
         {
             break;
         }
@@ -369,6 +400,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
             otimosLocaisFitness.insert((int)newFitness);
             otimosLocaisAlocs.push_back(std::make_pair((int)newFitness, newAlocsMap));
+        }
+
+        if ((int)newFitness > 1.01 * (int)bestFitness) 
+        {
+            countConverge = 0;
+        }
+        else 
+        {
+            countConverge++;
         }
 
         // se for melhor que best, substitui
@@ -430,6 +470,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
             }
         }
+        if (countConverge >= nIterConverge) 
+        {
+            break;
+        }
     }
 
     if (modoDebugAltoNivel){
@@ -479,7 +523,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
 std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, int> ExecutadorDeMetaheuristicas::ILS(DadosDeEntrada dataset,
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
-                                                                                                                double aceitacaoLimite, int nivelIntensifica, int maxIterFO)
+                                                                                                                double aceitacaoLimite, int nivelIntensifica, int maxIterFO, int nIterConverge)
 {
     int modoDebugAltoNivel = 0;
 
@@ -527,6 +571,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     std::vector<std::pair<int, std::map<Sonda, std::vector<Alocacao>>>> otimosLocaisAlocs;
 
     int count = 0;
+    int countConverge = 0;
     while (count < nIter)
     {
         count++;
@@ -534,7 +579,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         auto stopPart = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
         long long tempoPart = duration.count();
-        if (tempoPart >= 3600000)
+        if (tempoPart >= 1800000)
         {
             break;
         }
@@ -579,6 +624,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             newGastos = partGastos;
             newTempo = partTempo;
             newTotalFree = partTotalFree;
+
+            if ((int)newFitness > 1.01 * (int)bestFitness) 
+            {
+                countConverge = 0;
+            }
+            else 
+            {
+                countConverge++;
+            }
         }
 
         // se for melhor que best, substitui
@@ -592,6 +646,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             bestGastos = newGastos;
             bestTempo = newTempo;
             bestTotalFree = newTotalFree;
+        }
+        if (countConverge >= nIterConverge) 
+        {
+            break;
         }
     }
 
@@ -644,7 +702,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                                                                                 int nIter, int modoDebug, std::set<int> vizinhancasinit, std::set<int> vizinhancasFinal, 
                                                                                                                 double aceitacaoLimite, int nivelIntensifica, 
                                                                                                                 int nIterMelhora, int taxaPerturba, double taxaAceitacao,
-                                                                                                                int nIterRestart, double alphaRestart, int maxIterFO)
+                                                                                                                int nIterRestart, double alphaRestart, int maxIterFO, int nIterConverge)
 {
     int modoDebugAltoNivel = 0;
 
@@ -698,6 +756,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     int count = 0;
     int countSemMelhora = 0;
     int countRestart = 0;
+    int countConverge = 0;
     while (count < nIter)
     {
         count++;
@@ -705,7 +764,7 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         auto stopPart = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stopPart - start);
         long long tempoPart = duration.count();
-        if (tempoPart >= 3600000)
+        if (tempoPart >= 1800000)
         {
             break;
         }
@@ -752,6 +811,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
             newGastos = partGastos;
             newTempo = partTempo;
             newTotalFree = partTotalFree;
+
+            if ((int)newFitness > 1.01 * (int)bestFitness) 
+            {
+                countConverge = 0;
+            }
+            else 
+            {
+                countConverge++;
+            }
         }
 
         // se for melhor que best, substitui
@@ -805,6 +873,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                                         this->_estrutura, this->_modoRealoc, dataset.getDelta(), this->_modoBusca, modoDebug, vizinhancasinit, maxIterFO);
             }
         }
+        if (countConverge >= nIterConverge) 
+        {
+            break;
+        }
     }
 
     if (modoDebugAltoNivel){
@@ -857,7 +929,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
                                                         double aceitacaoLimite, int nivelIntensifica, 
                                                         int nIterMelhora, double taxaAlpha, int nIterAlpha,
                                                         int taxaPerturba, double taxaAceitacao,
-                                                        int nIterRestart, double alphaRestart, int maxIterFO)
+                                                        int nIterRestart, double alphaRestart, int maxIterFO, int nIterConverge)
 {
     DIR *dir; 
     struct dirent *diread;
@@ -907,22 +979,19 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             <<  std::endl;
 
     std::string s1 = ".dat";
+    int count_arquivos = 0;
     for (std::vector<std::string>::iterator it=arquivos.begin(); it!=arquivos.end(); ++it)
     {
         std::string arquivo = *it;
         if (arquivo.find(s1) != std::string::npos)
         {
+            count_arquivos++;
             std::string s2 = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/";
             s2.append(*it);
-            std::cout << "Rodando heurísticas para arquivo: " << s2 << std::endl;
+            std::cout << "(" << count_arquivos << "/" << arquivos.size() - 2 << ")" << "Rodando heurísticas para arquivo: " << s2 << std::endl;
 
             LeitorDeDados leitor;
             DadosDeEntrada dataset = leitor.lerDadosDeEntrada(s2);
-
-            long long nIterAlvo = 7000 / 4; // 7000 -> meia hora no pior caso
-            nIter = ( nIterAlvo ) / ( (int)dataset.getProjetos().size() );
-            this->setNivelPerturba( ( (int)dataset.getProjetos().size() ) / 10);
-            taxaPerturba = std::max(1, ( (int)dataset.getProjetos().size() ) / 20 );
 
             // inicializa variaveis a serem retornadas
             long long tempo;
@@ -934,11 +1003,14 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             double gastosMedio;
             int totalFree;
 
-            int repetitionsMultiStart = 5; // DEFAULT É 10
-            int repetitionsGRASP = 5; // DEFAULT É 10
-            int repetitionsGRASPada = 5; // DEFAULT É 10
-            int repetitionsILS = 5; // DEFAULT É 10
-            int repetitionsILSada = 5; // DEFAULT É 10
+            int repetitionsMultiStart = 10; // DEFAULT É 10
+            int repetitionsGRASP = 10; // DEFAULT É 10
+            int repetitionsGRASPada = 10; // DEFAULT É 10
+            int repetitionsILS = 10; // DEFAULT É 10
+            int repetitionsILSada = 10; // DEFAULT É 10
+
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            nIterConverge = nIter / 5;
 
             // mult-start heuristic
             std::cout << "Rodando Mult-Start Heuristic" << std::endl;
@@ -948,7 +1020,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             gastosMedio = 0;
             for (int repete=0; repete<repetitionsMultiStart; repete++)
             {
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug);
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->multStartHeuristic(dataset, nIter, modoDebug, nIterConverge);
                 tempoMedio = tempoMedio + tempo;
                 fitnessMedio = fitnessMedio + fitness;
                 gastosMedio = gastosMedio + gastos;
@@ -985,12 +1057,14 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
 
+            this->setAlpha(0.90);
+
             tempoMedio = 0;
             fitnessMedio = 0;
             gastosMedio = 0;
             for (int repete=0; repete<repetitionsGRASP; repete++)
             {
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO);
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASP(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, maxIterFO, nIterConverge);
                 tempoMedio = tempoMedio + tempo;
                 fitnessMedio = fitnessMedio + fitness;
                 gastosMedio = gastosMedio + gastos;
@@ -1026,13 +1100,18 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
-            
+
+            this->setAlpha(0.7);
+            nIterMelhora = 20;
+            taxaAlpha = 0.7;
+            nIterAlpha = 20;
+
             tempoMedio = 0;
             fitnessMedio = 0;
             gastosMedio = 0;
             for (int repete=0; repete<repetitionsGRASPada; repete++)
             {
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO);
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->GRASPadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, nivelIntensifica, nIterMelhora, taxaAlpha, nIterAlpha, maxIterFO, nIterConverge);
                 tempoMedio = tempoMedio + tempo;
                 fitnessMedio = fitnessMedio + fitness;
                 gastosMedio = gastosMedio + gastos;
@@ -1068,13 +1147,17 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
-            
+
+            this->setAlpha(0.9);
+            this->setNivelPerturba(2);
+            aceitacaoLimite = 1.0;
+
             tempoMedio = 0;
             fitnessMedio = 0;
             gastosMedio = 0;
             for (int repete=0; repete<repetitionsILS; repete++)
             {
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO);
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILS(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, maxIterFO, nIterConverge);
                 tempoMedio = tempoMedio + tempo;
                 fitnessMedio = fitnessMedio + fitness;
                 gastosMedio = gastosMedio + gastos;
@@ -1110,13 +1193,22 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
-            
+
+            this->setAlpha(0.8);
+            this->setNivelPerturba(2);
+            aceitacaoLimite = 1.0;
+            nIterMelhora = 16;
+            taxaPerturba = 4;
+            taxaAceitacao = 0.8;
+            nIterRestart = 15;
+            alphaRestart = 0.9;
+
             tempoMedio = 0;
             fitnessMedio = 0;
             gastosMedio = 0;
             for (int repete=0; repete<repetitionsILSada; repete++)
             {
-                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO);
+                std::tie(tempo, alocsMap, fitness, gastos, totalFree) = this->ILSadaptativo(dataset, nIter, modoDebug, vizinhancasinit, vizinhancasFinal, aceitacaoLimite, nivelIntensifica, nIterMelhora, taxaPerturba, taxaAceitacao, nIterRestart, alphaRestart, maxIterFO, nIterConverge);
                 tempoMedio = tempoMedio + tempo;
                 fitnessMedio = fitnessMedio + fitness;
                 gastosMedio = gastosMedio + gastos;

@@ -814,9 +814,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1 = sondas.begin(); itS1 != sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -824,11 +829,19 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1 = alocsMap[sonda1].begin(); itA1 != alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             Projeto projeto1 = (*itA1).getProjeto();
             Intervalo intervalo1 = (*itA1).getIntervalo();
             for (std::set<Sonda>::iterator itS2 = sondas.begin(); itS2 != sondas.end(); ++itS2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Sonda sonda2 = *itS2;
                 if (sonda1 == sonda2)
                 {
@@ -851,6 +864,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                        parar = 1;
+                        break;
                     }
                 }
             }
@@ -878,9 +893,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -888,11 +908,19 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             Projeto projeto1 = (*itA1).getProjeto();
             Intervalo intervalo1 = (*itA1).getIntervalo();
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 Projeto projeto2 = (*itA2).getProjeto();
                 Intervalo intervalo2 = (*itA2).getIntervalo();
@@ -902,6 +930,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::set<Sonda>::iterator itS2=sondas.begin(); itS2!=sondas.end(); ++itS2)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Sonda sonda2 = *itS2;
                     if (sonda1 == sonda2)
                     {
@@ -924,6 +956,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                             bestFitness = fitnessAlt;
                             bestGastos = gastosAlt;
                             bestTotalFree = totalFreeAlt;
+                            parar = 1;
+                            break;
                         }
                     }
                 }
@@ -952,9 +986,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -962,9 +1001,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::set<Sonda>::iterator itS2=sondas.begin(); itS2!=sondas.end(); ++itS2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Sonda sonda2 = *itS2;
                 if (alocsMap[sonda2].empty())
                 {
@@ -976,6 +1023,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda2].begin(); itA2!=alocsMap[sonda2].end(); ++itA2)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Alocacao alocacao2 = *itA2;
 
                     // realiza movimento
@@ -995,6 +1046,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                             bestFitness = fitnessAlt;
                             bestGastos = gastosAlt;
                             bestTotalFree = totalFreeAlt;
+                            parar = 1;
+                            break;
                         }
                     }
                 }
@@ -1023,9 +1076,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1033,9 +1091,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 if (alocacao1 == alocacao2)
                 {
@@ -1043,6 +1109,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::set<Sonda>::iterator itS2=sondas.begin(); itS2!=sondas.end(); ++itS2)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Sonda sonda2 = *itS2;
                     if (alocsMap[sonda2].empty())
                     {
@@ -1054,6 +1124,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     }
                     for (std::vector<Alocacao>::iterator itA3=alocsMap[sonda2].begin(); itA3!=alocsMap[sonda2].end(); ++itA3)
                     {
+                        if (parar == 1) 
+                        {
+                            break;
+                        }
                         Alocacao alocacao3 = *itA3;
 
                         // realiza movimento
@@ -1074,6 +1148,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                 bestFitness = fitnessAlt;
                                 bestGastos = gastosAlt;
                                 bestTotalFree = totalFreeAlt;
+                                parar = 1;
+                                break;
                             }
                         }
                     }
@@ -1103,9 +1179,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1113,9 +1194,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 if (alocacao1 == alocacao2)
                 {
@@ -1123,6 +1212,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::set<Sonda>::iterator itS2=sondas.begin(); itS2!=sondas.end(); ++itS2)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Sonda sonda2 = *itS2;
                     if (alocsMap[sonda2].empty())
                     {
@@ -1134,9 +1227,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     }
                     for (std::vector<Alocacao>::iterator itA3=alocsMap[sonda2].begin(); itA3!=alocsMap[sonda2].end(); ++itA3)
                     {
+                        if (parar == 1) 
+                        {
+                            break;
+                        }
                         Alocacao alocacao3 = *itA3;
                         for (std::vector<Alocacao>::iterator itA4=alocsMap[sonda2].begin(); itA4!=alocsMap[sonda2].end(); ++itA4)
                         {
+                            if (parar == 1) 
+                            {
+                                break;
+                            }
                             Alocacao alocacao4 = *itA4;
                             if (alocacao3 == alocacao4)
                             {
@@ -1162,6 +1263,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                                     bestFitness = fitnessAlt;
                                     bestGastos = gastosAlt;
                                     bestTotalFree = totalFreeAlt;
+                                    parar = 1;
+                                    break;
                                 }
                             }
                         }
@@ -1192,9 +1295,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1202,6 +1310,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
 
             // realiza movimento
@@ -1221,6 +1333,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     bestFitness = fitnessAlt;
                     bestGastos = gastosAlt;
                     bestTotalFree = totalFreeAlt;
+                    parar = 1;
+                    break;
                 }
             }
         }
@@ -1247,9 +1361,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de sondas
     std::set<Sonda> sondas = bestSolucao.getSondas();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1257,9 +1376,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 if (alocacao1 == alocacao2)
                 {
@@ -1282,6 +1409,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                        parar = 1;
+                        break;
                     }
                 }
             }
@@ -1312,12 +1441,21 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de projetos não alocados
     std::set<Projeto> projetosNaoAloc = bestSolucao.getProjetosNaoAlocados();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Projeto>::iterator itP1=projetosNaoAloc.begin(); itP1!=projetosNaoAloc.end(); ++itP1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Projeto projeto1 = *itP1;
         for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Sonda sonda1 = *itS1;
 
             // realiza movimento
@@ -1335,6 +1473,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 bestFitness = fitnessAlt;
                 bestGastos = gastosAlt;
                 bestTotalFree = totalFreeAlt;
+                parar = 1;
+                break;
             }
         }
     }
@@ -1363,9 +1503,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de projetos não alocados
     std::set<Projeto> projetosNaoAloc = bestSolucao.getProjetosNaoAlocados();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1373,9 +1518,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::set<Projeto>::iterator itP1=projetosNaoAloc.begin(); itP1!=projetosNaoAloc.end(); ++itP1)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Projeto projeto1 = *itP1;
 
                 // realiza movimento
@@ -1394,6 +1547,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                     bestFitness = fitnessAlt;
                     bestGastos = gastosAlt;
                     bestTotalFree = totalFreeAlt;
+                    parar = 1;
+                    break;
                 }
                 else if (fitnessAlt >= bestFitness)
                 {
@@ -1442,9 +1597,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de projetos não alocados
     std::set<Projeto> projetosNaoAloc = bestSolucao.getProjetosNaoAlocados();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1452,9 +1612,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 if (alocacao1 == alocacao2)
                 {
@@ -1462,6 +1630,10 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::set<Projeto>::iterator itP1=projetosNaoAloc.begin(); itP1!=projetosNaoAloc.end(); ++itP1)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Projeto projeto1 = *itP1;
 
                     // realiza movimento
@@ -1480,6 +1652,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                        parar = 1;
+                        break;
                     }
                     else if (fitnessAlt >= bestFitness)
                     {
@@ -1529,9 +1703,14 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
     // inicializa conjunto de projetos não alocados
     std::set<Projeto> projetosNaoAloc = bestSolucao.getProjetosNaoAlocados();
 
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1539,12 +1718,24 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::set<Projeto>::iterator itP1=projetosNaoAloc.begin(); itP1!=projetosNaoAloc.end(); ++itP1)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Projeto projeto1 = *itP1;
                 for (std::set<Projeto>::iterator itP2=projetosNaoAloc.begin(); itP2!=projetosNaoAloc.end(); ++itP2)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Projeto projeto2 = *itP2;
                     if (projeto1 == projeto2)
                     {
@@ -1566,6 +1757,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                         bestFitness = fitnessAlt;
                         bestGastos = gastosAlt;
                         bestTotalFree = totalFreeAlt;
+                        parar = 1;
+                        break;
                     }
                     else if (fitnessAlt >= bestFitness)
                     {
@@ -1614,10 +1807,15 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
 
     // inicializa conjunto de projetos não alocados
     std::set<Projeto> projetosNaoAloc = bestSolucao.getProjetosNaoAlocados();
-   
+
+    int parar = 0;
     // percorre combinações    
     for (std::set<Sonda>::iterator itS1=sondas.begin(); itS1!=sondas.end(); ++itS1)
     {
+        if (parar == 1) 
+        {
+            break;
+        }
         Sonda sonda1 = *itS1;
         if (alocsMap[sonda1].empty())
         {
@@ -1625,9 +1823,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
         }
         for (std::vector<Alocacao>::iterator itA1=alocsMap[sonda1].begin(); itA1!=alocsMap[sonda1].end(); ++itA1)
         {
+            if (parar == 1) 
+            {
+                break;
+            }
             Alocacao alocacao1 = *itA1;
             for (std::vector<Alocacao>::iterator itA2=alocsMap[sonda1].begin(); itA2!=alocsMap[sonda1].end(); ++itA2)
             {
+                if (parar == 1) 
+                {
+                    break;
+                }
                 Alocacao alocacao2 = *itA2;
                 if (alocacao1 == alocacao2)
                 {
@@ -1635,9 +1841,17 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                 }
                 for (std::set<Projeto>::iterator itP1=projetosNaoAloc.begin(); itP1!=projetosNaoAloc.end(); ++itP1)
                 {
+                    if (parar == 1) 
+                    {
+                        break;
+                    }
                     Projeto projeto1 = *itP1;
                     for (std::set<Projeto>::iterator itP2=projetosNaoAloc.begin(); itP2!=projetosNaoAloc.end(); ++itP2)
                     {
+                        if (parar == 1) 
+                        {
+                            break;
+                        }
                         Projeto projeto2 = *itP2;
                         if (projeto1 == projeto2)
                         {
@@ -1661,6 +1875,8 @@ std::tuple<long long, std::map<Sonda, std::vector<Alocacao>>, double, double, in
                             bestFitness = fitnessAlt;
                             bestGastos = gastosAlt;
                             bestTotalFree = totalFreeAlt;
+                            parar = 1;
+                            break;
                         }
                         else if (fitnessAlt >= bestFitness)
                         {
