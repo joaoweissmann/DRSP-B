@@ -986,7 +986,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         if (arquivo.find(s1) != std::string::npos)
         {
             count_arquivos++;
-            std::string s2 = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/";
+            std::string s2 = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_1/instancias/";
             s2.append(*it);
             std::cout << "(" << count_arquivos << "/" << arquivos.size() - 2 << ")" << "Rodando heurísticas para arquivo: " << s2 << std::endl;
 
@@ -1003,13 +1003,14 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             double gastosMedio;
             int totalFree;
 
-            int repetitionsMultiStart = 10; // DEFAULT É 10
-            int repetitionsGRASP = 10; // DEFAULT É 10
+            int repetitionsMultiStart = 1; // DEFAULT É 10
+            int repetitionsGRASP = 1; // DEFAULT É 10
             int repetitionsGRASPada = 10; // DEFAULT É 10
-            int repetitionsILS = 10; // DEFAULT É 10
-            int repetitionsILSada = 10; // DEFAULT É 10
+            int repetitionsILS = 1; // DEFAULT É 10
+            int repetitionsILSada = 1; // DEFAULT É 10
 
-            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            //nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            nIter = 10000 / (dataset.getNProjetos() / 3);
             nIterConverge = nIter / 5;
 
             // mult-start heuristic
@@ -1057,6 +1058,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
 
+            nIter = 10;
+            nIterConverge = 2;
+
             this->setAlpha(0.90);
 
             tempoMedio = 0;
@@ -1100,6 +1104,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
+
+            nIter = 10000 / (dataset.getNProjetos() / 3);
+            nIterConverge = nIter / 5;
 
             this->setAlpha(0.7);
             nIterMelhora = 20;
@@ -1148,6 +1155,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
 
+            nIter = 10;
+            nIterConverge = 2;
+
             this->setAlpha(0.9);
             this->setNivelPerturba(2);
             aceitacaoLimite = 1.0;
@@ -1193,6 +1203,9 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
         
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
+
+            nIter = 10;
+            nIterConverge = 2;
 
             this->setAlpha(0.8);
             this->setNivelPerturba(2);

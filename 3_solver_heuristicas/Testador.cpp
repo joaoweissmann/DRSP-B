@@ -1556,19 +1556,14 @@ void Testador::testarExecutadorDeMetaheuristicas()
     // ler dataset
     std::string filename;
     
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/10p_2s_1dt.dat";
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/70p_2s_7dt.dat";
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/100p_5s_14dt.dat";
-    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/160p_10s_1dt.dat";
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/200p_2s_7dt.dat";
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/250p_5s_14dt.dat";
-    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/270p_10s_14dt.dat";
+    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/160p_10s_1dt.dat";
 
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
 
     // parâmetros
-    int nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3)); // 100
+    //int nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3)); // 100
+    int nIter = 10000 / (dataset.getNProjetos() / 3);
     int nIterConverge = nIter / 5; // 20
     int maxIterFO = 10; // 10
     int nIterMelhoraGRASPada = 20; // manual=10; IRACE1=26; IRACE2=29; IRACE3=24;
@@ -1648,7 +1643,7 @@ void Testador::testarExecutadorDeMetaheuristicas()
     }
     */
 
-    const char * caminho = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/";
+    const char * caminho = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_1/instancias/";
     
     ///*
     executador.rodarVariosArquivos(caminho, nIter, modoDebug, vizinhancasInit, vizinhancasFinal, 
