@@ -1003,14 +1003,13 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             double gastosMedio;
             int totalFree;
 
-            int repetitionsMultiStart = 1; // DEFAULT É 10
-            int repetitionsGRASP = 1; // DEFAULT É 10
+            int repetitionsMultiStart = 10; // DEFAULT É 10
+            int repetitionsGRASP = 10; // DEFAULT É 10
             int repetitionsGRASPada = 10; // DEFAULT É 10
-            int repetitionsILS = 1; // DEFAULT É 10
-            int repetitionsILSada = 1; // DEFAULT É 10
+            int repetitionsILS = 10; // DEFAULT É 10
+            int repetitionsILSada = 10; // DEFAULT É 10
 
-            //nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
-            nIter = 10000 / (dataset.getNProjetos() / 3);
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
             nIterConverge = nIter / 5;
 
             // mult-start heuristic
@@ -1058,8 +1057,8 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // GRASP
             std::cout << "Rodando GRASP" << std::endl;
 
-            nIter = 10;
-            nIterConverge = 2;
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            nIterConverge = nIter / 5;
 
             this->setAlpha(0.90);
 
@@ -1105,7 +1104,7 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // GRASP adaptativo
             std::cout << "Rodando GRASP adaptativo" << std::endl;
 
-            nIter = 10000 / (dataset.getNProjetos() / 3);
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
             nIterConverge = nIter / 5;
 
             this->setAlpha(0.7);
@@ -1155,8 +1154,8 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // ILS
             std::cout << "Rodando ILS" << std::endl;
 
-            nIter = 10;
-            nIterConverge = 2;
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            nIterConverge = nIter / 5;
 
             this->setAlpha(0.9);
             this->setNivelPerturba(2);
@@ -1204,8 +1203,8 @@ void ExecutadorDeMetaheuristicas::rodarVariosArquivos(const char * caminho, int 
             // ILS adaptativo
             std::cout << "Rodando ILS adaptativo" << std::endl;
 
-            nIter = 10;
-            nIterConverge = 2;
+            nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3));
+            nIterConverge = nIter / 5;
 
             this->setAlpha(0.8);
             this->setNivelPerturba(2);

@@ -1556,14 +1556,16 @@ void Testador::testarExecutadorDeMetaheuristicas()
     // ler dataset
     std::string filename;
     
-    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/160p_10s_1dt.dat";
+    filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/10p_2s_14dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/10p_10s_14dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/100p_10s_1dt.dat";
+    //filename = "/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/200p_5s_14dt.dat";
 
     LeitorDeDados leitor;
     DadosDeEntrada dataset = leitor.lerDadosDeEntrada(filename);
 
     // parâmetros
-    //int nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3)); // 100
-    int nIter = 10000 / (dataset.getNProjetos() / 3);
+    int nIter = 1000 / (std::sqrt(dataset.getNProjetos() / 3)); // 100
     int nIterConverge = nIter / 5; // 20
     int maxIterFO = 10; // 10
     int nIterMelhoraGRASPada = 20; // manual=10; IRACE1=26; IRACE2=29; IRACE3=24;

@@ -7,5 +7,5 @@
 
 # Empty lines and comments are ignored.
 
-/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/10p_2s_14dt.dat
-/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instancias/30p_5s_14dt.dat
+/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/10p_2s_14dt.dat
+/home/joaoweissmann/Documents/repos/DRSP-B/1_gerador_instancias_sinteticas/instance_set_2/instancias/30p_5s_14dt.dat
